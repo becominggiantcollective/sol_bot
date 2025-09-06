@@ -71,6 +71,22 @@ MAX_FLASHLOAN_AMOUNT=100000     # $100k maximum flashloan amount
 
 ## Usage
 
+### Quick Start
+```bash
+# 1. Setup environment
+cp .env.example .env
+# Edit .env with your wallet configuration
+
+# 2. Test bot setup
+npm run example
+
+# 3. Start monitoring dashboard
+npm run monitor
+
+# 4. Start the bot (in production)
+npm start
+```
+
 ### Development Mode
 ```bash
 npm run dev
@@ -91,6 +107,23 @@ npm test
 ```bash
 npm run lint
 npm run format
+```
+
+### Environment Configurations
+
+The bot supports multiple environment configurations:
+
+- **Development**: `.env` (default)
+- **Devnet Testing**: `.env.devnet`
+- **Mainnet Production**: `.env.mainnet`
+
+Copy the appropriate configuration:
+```bash
+# For devnet testing
+cp .env.devnet .env
+
+# For mainnet production
+cp .env.mainnet .env
 ```
 
 ## Strategies
