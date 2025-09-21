@@ -1,6 +1,6 @@
-import { PublicKey, TransactionInstruction } from '@solana/web3.js';
+import { PublicKey } from '@solana/web3.js';
 import { SolanaConnection } from './connection';
-import { LiquidationOpportunity, LendingProtocol, ProtocolPosition } from '../types';
+import { LiquidationOpportunity } from '../types';
 import { Logger } from '../utils';
 import axios from 'axios';
 

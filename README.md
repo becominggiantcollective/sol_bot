@@ -88,11 +88,28 @@ cp .env.example .env
 # 2. Test bot setup
 npm run example
 
+# 2a. Test liquidation bot (NEW!)
+npm run liquidation-example
+
 # 3. Start monitoring dashboard
 npm run monitor
 
 # 4. Start the bot (in production)
 npm start
+```
+
+### Liquidation Bot Demo
+To see the aggressive liquidation strategies in action:
+```bash
+npm run liquidation-example
+```
+
+This demonstrates:
+- ⚡ Real-time liquidation opportunity detection across Solend, Mango, and Port Finance
+- 💰 Flash loan-based execution for zero-capital liquidations  
+- 🚀 Priority fee optimization to outcompete other liquidators
+- 📊 Parallel execution with performance metrics
+- 🎯 Health factor monitoring and urgency classification
 ```
 
 ### Development Mode

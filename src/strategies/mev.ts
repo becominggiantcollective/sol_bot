@@ -188,13 +188,13 @@ export class LiquidationStrategy implements MEVStrategy {
     this.protocols.set('port', new PortProtocol(this.solanaConnection));
   }
 
-  isViable(opportunity: ArbitrageOpportunity): boolean {
+  isViable(_opportunity: ArbitrageOpportunity): boolean {
     // This strategy doesn't use traditional arbitrage opportunities
     // Instead, it scans for liquidation opportunities independently
     return false;
   }
 
-  async execute(opportunity: ArbitrageOpportunity): Promise<string> {
+  async execute(_opportunity: ArbitrageOpportunity): Promise<string> {
     // This method is not used for liquidations
     // Use executeLiquidation instead
     throw new Error('Use executeLiquidation method for liquidation strategy');
@@ -359,7 +359,6 @@ export class LiquidationStrategy implements MEVStrategy {
   private async optimizeTransactionForSpeed(transaction: Transaction): Promise<void> {
     try {
       // Set high priority fee to outcompete other liquidators
-      const baseFee = 5000; // Base fee in lamports
       const priorityFee = 50000; // High priority fee in lamports
       
       // Add compute budget instruction for higher priority
@@ -407,17 +406,12 @@ class SolendProtocol implements LendingProtocol {
   constructor(private solanaConnection: SolanaConnection) {}
 
   async getPositions(): Promise<ProtocolPosition[]> {
-    try {
-      // In a real implementation, this would scan Solend's on-chain data
-      // for all borrower positions. For now, return mock data for testing.
-      return [];
-    } catch (error) {
-      console.error('Error getting Solend positions:', error);
-      return [];
-    }
+    // In a real implementation, this would scan Solend's on-chain data
+    // for all borrower positions. For now, return mock data for testing.
+    return [];
   }
 
-  async getLiquidationInstruction(opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
+  async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
     // Create Solend liquidation instruction
     return new TransactionInstruction({
       keys: [
@@ -437,16 +431,11 @@ class MangoProtocol implements LendingProtocol {
   constructor(private solanaConnection: SolanaConnection) {}
 
   async getPositions(): Promise<ProtocolPosition[]> {
-    try {
-      // In a real implementation, this would scan Mango's perpetual positions
-      return [];
-    } catch (error) {
-      console.error('Error getting Mango positions:', error);
-      return [];
-    }
+    // In a real implementation, this would scan Mango's perpetual positions
+    return [];
   }
 
-  async getLiquidationInstruction(opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
+  async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
     return new TransactionInstruction({
       keys: [],
       programId: this.programId,
@@ -463,16 +452,11 @@ class PortProtocol implements LendingProtocol {
   constructor(private solanaConnection: SolanaConnection) {}
 
   async getPositions(): Promise<ProtocolPosition[]> {
-    try {
-      // In a real implementation, this would scan Port Finance positions
-      return [];
-    } catch (error) {
-      console.error('Error getting Port positions:', error);
-      return [];
-    }
+    // In a real implementation, this would scan Port Finance positions
+    return [];
   }
 
-  async getLiquidationInstruction(opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
+  async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
     return new TransactionInstruction({
       keys: [],
       programId: this.programId,

@@ -120,20 +120,3 @@ export interface LendingProtocol {
   getPositions(): Promise<ProtocolPosition[]>;
   getLiquidationInstruction(opportunity: LiquidationOpportunity): Promise<TransactionInstruction>;
 }
-
-export interface ProtocolPosition {
-  protocol: string;
-  borrower: PublicKey;
-  collateral: {
-    mint: PublicKey;
-    amount: number;
-    value: number;
-  };
-  borrows: {
-    mint: PublicKey;
-    amount: number;
-    value: number;
-  }[];
-  healthFactor: number;
-  liquidationThreshold: number;
-}
