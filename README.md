@@ -6,10 +6,13 @@ A sophisticated Solana trading bot that executes flashloan arbitrage and MEV (Ma
 
 - **Flashloan Arbitrage**: Executes arbitrage opportunities using flashloans from Solend and Mango Markets
 - **MEV Strategies**: Implements sandwich attacks and liquidation strategies
+- **Aggressive Liquidation Bot**: Fast liquidation execution using flash loans with priority fee optimization
+- **Multi-Protocol Support**: Monitors Solend, Mango Markets, and Port Finance for liquidation opportunities
 - **Multi-DEX Support**: Monitors Jupiter, Orca, and Raydium for arbitrage opportunities
-- **Real-time Monitoring**: Continuously scans for profitable trading opportunities
+- **Real-time Monitoring**: Continuously scans for profitable trading and liquidation opportunities
 - **Risk Management**: Built-in slippage protection and gas fee limits
-- **Configurable**: Easily customizable trading parameters
+- **Speed Optimization**: Priority fees, parallel execution, and optimized transaction construction
+- **Configurable**: Easily customizable trading and liquidation parameters
 
 ## Architecture
 
@@ -67,6 +70,11 @@ MAX_POSITION_SIZE=1000          # $1000 maximum position size
 
 # Flashloan Settings
 MAX_FLASHLOAN_AMOUNT=100000     # $100k maximum flashloan amount
+
+# Liquidation Settings
+MAX_CONCURRENT_LIQUIDATIONS=3   # Maximum parallel liquidations
+LIQUIDATION_MIN_PROFIT=0.02     # 2% minimum profit threshold
+PRIORITY_FEE_MULTIPLIER=2.0     # Multiplier for priority fees
 ```
 
 ## Usage
@@ -138,9 +146,13 @@ cp .env.mainnet .env
 - Front-runs and back-runs profitable trades
 - **Note**: Use ethically and in compliance with platform terms
 
-### 3. Liquidation Hunting
-- Monitors lending protocols for undercollateralized positions
-- Executes liquidations for profit
+### 3. Aggressive Liquidation Bot
+- Monitors lending protocols (Solend, Mango, Port) for undercollateralized positions
+- Uses flash loans for capital-efficient liquidations
+- Implements high-priority fees to outcompete other liquidators
+- Parallel execution for maximum speed
+- Real-time health factor monitoring
+- Automatic profit optimization and collateral swapping
 
 ## Risk Management
 

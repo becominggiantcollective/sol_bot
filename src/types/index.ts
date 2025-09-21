@@ -1,4 +1,4 @@
-import { PublicKey } from '@solana/web3.js';
+import { PublicKey, TransactionInstruction } from '@solana/web3.js';
 
 export interface Config {
   solana: {
@@ -15,6 +15,12 @@ export interface Config {
     maxGasFee: number;
     minProfitThreshold: number;
     maxPositionSize: number;
+  };
+  liquidation: {
+    enabled: boolean;
+    maxConcurrentLiquidations: number;
+    minProfitThreshold: number;
+    priorityFeeMultiplier: number;
   };
   flashloan: {
     providers: string[];
@@ -49,6 +55,23 @@ export interface TradingRoute {
   priceImpact: number;
 }
 
+export interface ProtocolPosition {
+  protocol: string;
+  borrower: PublicKey;
+  collateral: {
+    mint: PublicKey;
+    amount: number;
+    value: number;
+  };
+  borrows: {
+    mint: PublicKey;
+    amount: number;
+    value: number;
+  }[];
+  healthFactor: number;
+  liquidationThreshold: number;
+}
+
 export interface FlashloanProvider {
   name: string;
   programId: PublicKey;
@@ -71,4 +94,46 @@ export interface PriceData {
   liquidity: number;
   timestamp: number;
   source: string;
+}
+
+export interface LiquidationOpportunity {
+  protocol: string;
+  borrower: PublicKey;
+  collateralMint: PublicKey;
+  borrowMint: PublicKey;
+  collateralAmount: number;
+  borrowAmount: number;
+  healthFactor: number;
+  liquidationThreshold: number;
+  maxLiquidationAmount: number;
+  estimatedProfit: number;
+  profitPercent: number;
+  flashloanRequired: boolean;
+  urgency: 'low' | 'medium' | 'high' | 'critical';
+  lastUpdated: number;
+}
+
+export interface LendingProtocol {
+  name: string;
+  programId: PublicKey;
+  isActive: boolean;
+  getPositions(): Promise<ProtocolPosition[]>;
+  getLiquidationInstruction(opportunity: LiquidationOpportunity): Promise<TransactionInstruction>;
+}
+
+export interface ProtocolPosition {
+  protocol: string;
+  borrower: PublicKey;
+  collateral: {
+    mint: PublicKey;
+    amount: number;
+    value: number;
+  };
+  borrows: {
+    mint: PublicKey;
+    amount: number;
+    value: number;
+  }[];
+  healthFactor: number;
+  liquidationThreshold: number;
 }
