@@ -16,6 +16,12 @@ export const config: Config = {
     minProfitThreshold: parseFloat(process.env.MIN_PROFIT_THRESHOLD || '0.001'), // 0.1%
     maxPositionSize: parseFloat(process.env.MAX_POSITION_SIZE || '1000'), // 1000 USD
   },
+  liquidation: {
+    enabled: true,
+    maxConcurrentLiquidations: parseInt(process.env.MAX_CONCURRENT_LIQUIDATIONS || '3'),
+    minProfitThreshold: parseFloat(process.env.LIQUIDATION_MIN_PROFIT || '0.02'), // 2%
+    priorityFeeMultiplier: parseFloat(process.env.PRIORITY_FEE_MULTIPLIER || '2.0'),
+  },
   flashloan: {
     providers: ['solend', 'mango'],
     maxAmount: parseFloat(process.env.MAX_FLASHLOAN_AMOUNT || '100000'), // 100k USD

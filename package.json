@@ -8,6 +8,7 @@
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "example": "ts-node example.ts",
+    "liquidation-example": "ts-node liquidation-example.ts",
     "monitor": "ts-node monitor.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",

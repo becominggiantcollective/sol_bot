@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { SolanaConnection } from './core/connection';
 import { ArbitrageDetector } from './core/arbitrage';
 import { FlashloanManager } from './core/flashloan';
-import { FlashloanArbitrageStrategy, SandwichAttackStrategy } from './strategies/mev';
+import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy } from './strategies/mev';
 import { COMMON_TOKENS, Logger, sleep } from './utils';
 import { config } from './config';
 
@@ -14,6 +14,7 @@ export class SolanaArbitrageBot {
   private arbitrageDetector: ArbitrageDetector;
   private flashloanManager: FlashloanManager;
   private strategies: any[] = [];
+  private liquidationStrategy?: LiquidationStrategy;
   private logger: Logger;
   private isRunning = false;
 
@@ -31,6 +32,12 @@ export class SolanaArbitrageBot {
         new FlashloanArbitrageStrategy(this.solanaConnection, this.flashloanManager),
         new SandwichAttackStrategy(this.solanaConnection),
       ];
+
+      // Initialize liquidation strategy if enabled
+      if (config.liquidation.enabled) {
+        this.liquidationStrategy = new LiquidationStrategy(this.solanaConnection, this.flashloanManager);
+        this.logger.info('Liquidation strategy enabled');
+      }
       
       this.logger.info('Solana Arbitrage Bot initialized successfully');
     } catch (error) {
@@ -74,11 +81,20 @@ export class SolanaArbitrageBot {
     
     while (this.isRunning) {
       try {
-        this.logger.debug('Scanning for arbitrage opportunities...');
+        this.logger.debug('Scanning for trading opportunities...');
         
-        // Detect arbitrage opportunities
-        const opportunities = await this.arbitrageDetector.detectOpportunities(tokens);
+        // Run arbitrage detection and liquidation scanning in parallel for maximum speed
+        const [opportunities, liquidationTxs] = await Promise.all([
+          this.arbitrageDetector.detectOpportunities(tokens),
+          this.liquidationStrategy ? this.liquidationStrategy.scanAndExecuteLiquidations() : Promise.resolve([])
+        ]);
         
+        // Report liquidation results
+        if (liquidationTxs.length > 0) {
+          this.logger.info(`Executed ${liquidationTxs.length} liquidations: ${liquidationTxs.join(', ')}`);
+        }
+
+        // Process arbitrage opportunities
         if (opportunities.length > 0) {
           this.logger.info(`Found ${opportunities.length} arbitrage opportunities`);
           
@@ -86,14 +102,14 @@ export class SolanaArbitrageBot {
           const bestOpportunity = opportunities[0];
           await this.executeOpportunity(bestOpportunity);
         } else {
-          this.logger.debug('No profitable opportunities found');
+          this.logger.debug('No profitable arbitrage opportunities found');
         }
         
-        // Wait before next scan
-        await sleep(5000); // 5 seconds
+        // Shorter wait time for aggressive liquidation monitoring
+        await sleep(2000); // 2 seconds for more aggressive scanning
       } catch (error) {
         this.logger.error('Error in trading loop:', error);
-        await sleep(10000); // Wait longer on error
+        await sleep(5000); // Wait longer on error
       }
     }
   }
