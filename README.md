@@ -5,7 +5,8 @@ A sophisticated Solana trading bot that executes flashloan arbitrage and MEV (Ma
 ## ⚠️ Production Status & Assessment
 
 **Before deploying to production, please read:**
-- 📋 [**Pre-Go-Live Assessment**](PRE_GO_LIVE_ASSESSMENT.md) - Comprehensive readiness evaluation
+- 📋 [**Assessment Summary**](ASSESSMENT_SUMMARY.md) - Quick reference guide (5 min read)
+- 📊 [**Pre-Go-Live Assessment**](PRE_GO_LIVE_ASSESSMENT.md) - Comprehensive readiness evaluation (30 min read)
 - 🚀 [**Production Deployment Guide**](PRODUCTION_DEPLOYMENT_GUIDE.md) - Step-by-step deployment instructions
 - ✅ Run `npm run pre-deploy-check` before any production deployment
 
