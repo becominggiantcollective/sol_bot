@@ -4,6 +4,7 @@ import { ArbitrageDetector } from './core/arbitrage';
 import { FlashloanManager } from './core/flashloan';
 import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy } from './strategies/mev';
 import { COMMON_TOKENS, Logger, sleep } from './utils';
+import { ProfitabilityTracker, Trade } from './utils/profitability';
 import { config } from './config';
 
 // Load environment variables
@@ -16,7 +17,9 @@ export class SolanaArbitrageBot {
   private strategies: any[] = [];
   private liquidationStrategy?: LiquidationStrategy;
   private logger: Logger;
+  private profitTracker: ProfitabilityTracker;
   private isRunning = false;
+  private metricsDisplayInterval?: NodeJS.Timeout;
 
   constructor() {
     this.logger = Logger.getInstance();
@@ -26,6 +29,7 @@ export class SolanaArbitrageBot {
       this.solanaConnection = new SolanaConnection();
       this.arbitrageDetector = new ArbitrageDetector(this.solanaConnection);
       this.flashloanManager = new FlashloanManager(this.solanaConnection);
+      this.profitTracker = new ProfitabilityTracker(0); // Initialize with 0, will be updated on start
       
       // Initialize strategies
       this.strategies = [
@@ -63,6 +67,16 @@ export class SolanaArbitrageBot {
       
       this.isRunning = true;
       
+      // Start metrics display interval (every 5 minutes)
+      this.metricsDisplayInterval = setInterval(() => {
+        this.profitTracker.displayMetrics();
+        
+        // Check if bot is performing well
+        if (!this.profitTracker.isPerformingWell(55, 0.5)) {
+          this.logger.warn('Bot performance is below target. Consider adjusting parameters.');
+        }
+      }, 5 * 60 * 1000);
+      
       // Start main trading loop
       await this.tradingLoop();
     } catch (error) {
@@ -74,6 +88,13 @@ export class SolanaArbitrageBot {
   async stop(): Promise<void> {
     this.logger.info('Stopping Solana Arbitrage Bot...');
     this.isRunning = false;
+    
+    if (this.metricsDisplayInterval) {
+      clearInterval(this.metricsDisplayInterval);
+    }
+    
+    // Display final metrics
+    this.profitTracker.displayMetrics();
   }
 
   private async tradingLoop(): Promise<void> {
@@ -132,10 +153,41 @@ export class SolanaArbitrageBot {
       const signature = await viableStrategy.execute(opportunity);
       this.logger.info(`Opportunity executed successfully: ${signature}`);
       
-      // Log profit
-      this.logger.info(`Estimated profit: ${opportunity.profit} tokens (${opportunity.profitPercent * 100}%)`);
+      // Log profit and record trade
+      const profit = opportunity.profit;
+      this.logger.info(`Estimated profit: ${profit} tokens (${opportunity.profitPercent * 100}%)`);
+      
+      // Record successful trade
+      const trade: Trade = {
+        timestamp: new Date(),
+        type: 'arbitrage',
+        profit,
+        success: true,
+        details: {
+          inputToken: opportunity.inputMint.toString(),
+          outputToken: opportunity.outputMint.toString(),
+          inputAmount: opportunity.inputAmount,
+          outputAmount: opportunity.expectedOutput,
+          gasUsed: opportunity.gasEstimate,
+        },
+      };
+      this.profitTracker.recordTrade(trade);
     } catch (error) {
       this.logger.error('Failed to execute opportunity:', error);
+      
+      // Record failed trade
+      const trade: Trade = {
+        timestamp: new Date(),
+        type: 'arbitrage',
+        profit: -opportunity.gasEstimate, // Loss is the gas fee
+        success: false,
+        details: {
+          inputToken: opportunity.inputMint.toString(),
+          outputToken: opportunity.outputMint.toString(),
+          gasUsed: opportunity.gasEstimate,
+        },
+      };
+      this.profitTracker.recordTrade(trade);
     }
   }
 
@@ -162,6 +214,14 @@ export class SolanaArbitrageBot {
 
   isActive(): boolean {
     return this.isRunning;
+  }
+
+  getProfitMetrics() {
+    return this.profitTracker.getMetrics();
+  }
+
+  exportMetrics(): string {
+    return this.profitTracker.exportToJSON();
   }
 }
 
