@@ -2,6 +2,7 @@
   "name": "sol_bot",
   "version": "1.0.0",
   "description": "Solana flashloan arbitrage and MEV bot",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
