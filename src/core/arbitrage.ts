@@ -11,23 +11,24 @@ export class ArbitrageDetector {
 
   async detectOpportunities(tokens: PublicKey[]): Promise<ArbitrageOpportunity[]> {
     const opportunities: ArbitrageOpportunity[] = [];
-    
+
     // Get latest prices from multiple DEXes
     await this.updatePrices(tokens);
-    
+
     // Compare prices across DEXes to find arbitrage opportunities
     for (let i = 0; i < tokens.length; i++) {
       for (let j = i + 1; j < tokens.length; j++) {
         const tokenA = tokens[i];
         const tokenB = tokens[j];
-        
+
         const opportunity = await this.findArbitrageOpportunity(tokenA, tokenB);
-        if (opportunity && opportunity.profitPercent > 0.001) { // Minimum 0.1% profit
+        if (opportunity && opportunity.profitPercent > 0.001) {
+          // Minimum 0.1% profit
           opportunities.push(opportunity);
         }
       }
     }
-    
+
     return opportunities.sort((a, b) => b.profitPercent - a.profitPercent);
   }
 
@@ -40,33 +41,33 @@ export class ArbitrageDetector {
       const jupiterRoute = await this.getJupiterRoute(tokenA, tokenB, 1000);
       const orcaRoute = await this.getOrcaRoute(tokenA, tokenB, 1000);
       const raydiumRoute = await this.getRaydiumRoute(tokenA, tokenB, 1000);
-      
+
       const routes = [jupiterRoute, orcaRoute, raydiumRoute].filter(Boolean);
-      
+
       if (routes.length < 2) {
         return null; // Need at least 2 routes for arbitrage
       }
-      
+
       // Find the best buy and sell routes
       const bestBuy = routes.reduce((best, current) =>
         current!.outputAmount > best!.outputAmount ? current : best
       );
-      
+
       const bestSell = routes.reduce((best, current) =>
         current!.inputAmount < best!.inputAmount ? current : best
       );
-      
+
       if (!bestBuy || !bestSell || bestBuy === bestSell) {
         return null;
       }
-      
+
       const profit = bestBuy.outputAmount - bestSell.inputAmount;
       const profitPercent = profit / bestSell.inputAmount;
-      
+
       if (profit <= 0) {
         return null;
       }
-      
+
       return {
         inputMint: tokenA,
         outputMint: tokenB,
@@ -90,9 +91,10 @@ export class ArbitrageDetector {
   ): Promise<TradingRoute | null> {
     try {
       const response = await axios.get(
-        `https://quote-api.jup.ag/v6/quote?inputMint=${inputMint.toString()}&outputMint=${outputMint.toString()}&amount=${amount}&slippageBps=50`
+        `https://quote-api.jup.ag/v6/quote?inputMint=${inputMint.toString()}&outputMint=${outputMint.toString()}&amount=${amount}&slippageBps=50`,
+        { timeout: 5000 }
       );
-      
+
       if (response.data && response.data.outAmount) {
         return {
           dex: 'jupiter',
@@ -104,9 +106,17 @@ export class ArbitrageDetector {
         };
       }
     } catch (error) {
-      console.error('Jupiter API error:', error);
+      if (axios.isAxiosError(error)) {
+        if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
+          console.warn('Jupiter API unavailable, skipping route');
+        } else {
+          console.error('Jupiter API error:', error.message);
+        }
+      } else {
+        console.error('Jupiter API error:', error);
+      }
     }
-    
+
     return null;
   }
 
@@ -158,11 +168,11 @@ export class ArbitrageDetector {
 
   private async updatePrices(tokens: PublicKey[]): Promise<void> {
     const now = Date.now();
-    
+
     for (const token of tokens) {
       const cacheKey = token.toString();
       const cached = this.priceCache.get(cacheKey);
-      
+
       if (!cached || now - cached.timestamp > this.CACHE_DURATION) {
         // Update price cache
         try {
@@ -174,7 +184,7 @@ export class ArbitrageDetector {
             timestamp: now,
             source: 'mock',
           };
-          
+
           this.priceCache.set(cacheKey, priceData);
         } catch (error) {
           console.error(`Failed to update price for ${token.toString()}:`, error);

@@ -19,14 +19,14 @@ describe('Liquidation System', () => {
     // Create mocked instances
     solanaConnection = new SolanaConnection() as jest.Mocked<SolanaConnection>;
     flashloanManager = new FlashloanManager(solanaConnection) as jest.Mocked<FlashloanManager>;
-    
+
     // Setup mock methods
     solanaConnection.getBalance = jest.fn().mockResolvedValue(10); // 10 SOL
     solanaConnection.sendTransaction = jest.fn().mockResolvedValue('mock_signature');
     flashloanManager.getBestProvider = jest.fn().mockResolvedValue({
       name: 'mock_provider',
       maxAmount: 1000000,
-      fee: 0.001
+      fee: 0.001,
     });
     flashloanManager.executeFlashloan = jest.fn().mockResolvedValue('flashloan_signature');
 
@@ -37,7 +37,7 @@ describe('Liquidation System', () => {
   describe('LiquidationDetector', () => {
     it('should detect liquidation opportunities', async () => {
       const opportunities = await liquidationDetector.detectLiquidationOpportunities();
-      
+
       expect(Array.isArray(opportunities)).toBe(true);
       // Should find mock liquidation opportunity
       expect(opportunities.length).toBeGreaterThanOrEqual(0);
@@ -45,17 +45,17 @@ describe('Liquidation System', () => {
 
     it('should return opportunities sorted by urgency and profit', async () => {
       const opportunities = await liquidationDetector.detectLiquidationOpportunities();
-      
+
       if (opportunities.length > 1) {
         // Check that opportunities are sorted correctly
         for (let i = 0; i < opportunities.length - 1; i++) {
           const current = opportunities[i];
           const next = opportunities[i + 1];
-          
+
           const urgencyWeight = { critical: 4, high: 3, medium: 2, low: 1 };
           const currentUrgency = urgencyWeight[current.urgency];
           const nextUrgency = urgencyWeight[next.urgency];
-          
+
           expect(currentUrgency).toBeGreaterThanOrEqual(nextUrgency);
         }
       }
@@ -65,7 +65,9 @@ describe('Liquidation System', () => {
   describe('LiquidationStrategy', () => {
     it('should initialize with correct properties', () => {
       expect(liquidationStrategy.name).toBe('aggressive-liquidation');
-      expect(liquidationStrategy.description).toBe('Executes liquidations using flash loans with maximum speed and aggression');
+      expect(liquidationStrategy.description).toBe(
+        'Executes liquidations using flash loans with maximum speed and aggression'
+      );
     });
 
     it('should return false for isViable with arbitrage opportunities', () => {
@@ -77,7 +79,7 @@ describe('Liquidation System', () => {
         profit: 50,
         profitPercent: 0.05,
         route: [],
-        gasEstimate: 5000
+        gasEstimate: 5000,
       };
 
       expect(liquidationStrategy.isViable(mockArbitrageOpportunity)).toBe(false);
@@ -92,20 +94,20 @@ describe('Liquidation System', () => {
         profit: 50,
         profitPercent: 0.05,
         route: [],
-        gasEstimate: 5000
+        gasEstimate: 5000,
       };
 
-      await expect(liquidationStrategy.execute(mockArbitrageOpportunity))
-        .rejects
-        .toThrow('Use executeLiquidation method for liquidation strategy');
+      await expect(liquidationStrategy.execute(mockArbitrageOpportunity)).rejects.toThrow(
+        'Use executeLiquidation method for liquidation strategy'
+      );
     });
 
     it('should scan and execute liquidations', async () => {
       const results = await liquidationStrategy.scanAndExecuteLiquidations();
-      
+
       expect(Array.isArray(results)).toBe(true);
       // Results should be transaction signatures
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(typeof result).toBe('string');
       });
     });
@@ -129,7 +131,7 @@ describe('Liquidation System', () => {
       };
 
       const signature = await liquidationStrategy.executeLiquidation(mockOpportunity);
-      
+
       expect(typeof signature).toBe('string');
       expect(flashloanManager.executeFlashloan).toHaveBeenCalled();
     });
@@ -153,7 +155,7 @@ describe('Liquidation System', () => {
       };
 
       const signature = await liquidationStrategy.executeLiquidation(mockOpportunity);
-      
+
       expect(typeof signature).toBe('string');
       expect(solanaConnection.sendTransaction).toHaveBeenCalled();
       expect(flashloanManager.executeFlashloan).not.toHaveBeenCalled();
@@ -164,11 +166,11 @@ describe('Liquidation System', () => {
     it('should handle the complete liquidation flow', async () => {
       // Test the complete flow from detection to execution
       const opportunities = await liquidationDetector.detectLiquidationOpportunities();
-      
+
       if (opportunities.length > 0) {
         const opportunity = opportunities[0];
         const signature = await liquidationStrategy.executeLiquidation(opportunity);
-        
+
         expect(typeof signature).toBe('string');
         expect(signature.length).toBeGreaterThan(0);
       }

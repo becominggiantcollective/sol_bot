@@ -31,17 +31,16 @@ export class LiquidationDetector {
 
       // Sort by urgency and profit potential
       return allOpportunities
-        .filter(opp => opp.healthFactor <= this.HEALTH_FACTOR_THRESHOLD)
+        .filter((opp) => opp.healthFactor <= this.HEALTH_FACTOR_THRESHOLD)
         .sort((a, b) => {
           // First by urgency (critical > high > medium > low)
           const urgencyWeight = { critical: 4, high: 3, medium: 2, low: 1 };
           const urgencyDiff = urgencyWeight[b.urgency] - urgencyWeight[a.urgency];
           if (urgencyDiff !== 0) return urgencyDiff;
-          
+
           // Then by profit percentage
           return b.profitPercent - a.profitPercent;
         });
-
     } catch (error) {
       this.logger.error('Error detecting liquidation opportunities:', error);
       return [];
@@ -51,7 +50,7 @@ export class LiquidationDetector {
   private async createMockLiquidationOpportunities(): Promise<LiquidationOpportunity[]> {
     // Create some mock liquidation opportunities for testing
     const opportunities: LiquidationOpportunity[] = [];
-    
+
     // Mock undercollateralized position
     const mockBorrower = new PublicKey('11111111111111111111111111111112');
     const solMint = new PublicKey('So11111111111111111111111111111111111111112');
@@ -144,7 +143,7 @@ export class LiquidationDetector {
       if (response.data) {
         // Map CoinGecko IDs to Solana mint addresses
         const tokenMapping = {
-          'solana': 'So11111111111111111111111111111111111111112',
+          solana: 'So11111111111111111111111111111111111111112',
           'usd-coin': 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
         };
 
@@ -163,4 +162,3 @@ export class LiquidationDetector {
     }
   }
 }
-

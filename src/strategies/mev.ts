@@ -1,5 +1,11 @@
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
-import { ArbitrageOpportunity, MEVStrategy, LiquidationOpportunity, LendingProtocol, ProtocolPosition } from '../types';
+import {
+  ArbitrageOpportunity,
+  MEVStrategy,
+  LiquidationOpportunity,
+  LendingProtocol,
+  ProtocolPosition,
+} from '../types';
 import { SolanaConnection } from '../core/connection';
 import { FlashloanManager } from '../core/flashloan';
 import { LiquidationDetector } from '../core/liquidation';
@@ -16,23 +22,23 @@ export class FlashloanArbitrageStrategy implements MEVStrategy {
 
   isViable(opportunity: ArbitrageOpportunity): boolean {
     // Check if opportunity is profitable after fees
-    const estimatedFees = opportunity.gasEstimate + (opportunity.inputAmount * 0.0003); // Flashloan fee
+    const estimatedFees = opportunity.gasEstimate + opportunity.inputAmount * 0.0003; // Flashloan fee
     return opportunity.profit > estimatedFees;
   }
 
   async execute(opportunity: ArbitrageOpportunity): Promise<string> {
     try {
       console.log(`Executing flashloan arbitrage for ${opportunity.inputMint.toString()}`);
-      
+
       // Get the best flashloan provider
       const provider = await this.flashloanManager.getBestProvider(opportunity.inputAmount);
       if (!provider) {
         throw new Error('No flashloan provider available');
       }
-      
+
       // Build arbitrage instructions
       const arbitrageInstructions = await this.buildArbitrageInstructions(opportunity);
-      
+
       // Execute flashloan with arbitrage
       const signature = await this.flashloanManager.executeFlashloan(
         provider,
@@ -40,7 +46,7 @@ export class FlashloanArbitrageStrategy implements MEVStrategy {
         opportunity.inputMint,
         arbitrageInstructions
       );
-      
+
       console.log(`Flashloan arbitrage executed: ${signature}`);
       return signature;
     } catch (error) {
@@ -53,7 +59,7 @@ export class FlashloanArbitrageStrategy implements MEVStrategy {
     opportunity: ArbitrageOpportunity
   ): Promise<TransactionInstruction[]> {
     const instructions: TransactionInstruction[] = [];
-    
+
     // Add instructions for each route in the arbitrage
     for (const route of opportunity.route) {
       const instruction = await this.buildSwapInstruction(route);
@@ -61,14 +67,14 @@ export class FlashloanArbitrageStrategy implements MEVStrategy {
         instructions.push(instruction);
       }
     }
-    
+
     return instructions;
   }
 
   private async buildSwapInstruction(_route: any): Promise<TransactionInstruction | null> {
     // This is a simplified implementation
     // In reality, you'd build specific instructions for each DEX
-    
+
     switch (_route.dex) {
       case 'jupiter':
         return this.buildJupiterSwapInstruction(_route);
@@ -124,18 +130,18 @@ export class SandwichAttackStrategy implements MEVStrategy {
   async execute(opportunity: ArbitrageOpportunity): Promise<string> {
     try {
       console.log('Executing sandwich attack strategy');
-      
+
       // 1. Front-run: Buy before the large transaction
       const frontRunTx = await this.buildFrontRunTransaction(opportunity);
       const frontRunSig = await this.solanaConnection.sendTransaction(frontRunTx);
-      
+
       // 2. Wait for the target transaction to be processed
       await this.waitForTargetTransaction();
-      
+
       // 3. Back-run: Sell after the large transaction
       const backRunTx = await this.buildBackRunTransaction(opportunity);
       const backRunSig = await this.solanaConnection.sendTransaction(backRunTx);
-      
+
       console.log(`Sandwich attack completed: ${frontRunSig}, ${backRunSig}`);
       return `${frontRunSig},${backRunSig}`;
     } catch (error) {
@@ -160,7 +166,7 @@ export class SandwichAttackStrategy implements MEVStrategy {
 
   private async waitForTargetTransaction(): Promise<void> {
     // Wait logic for the target transaction to be processed
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }
 
@@ -203,10 +209,10 @@ export class LiquidationStrategy implements MEVStrategy {
   async scanAndExecuteLiquidations(): Promise<string[]> {
     try {
       this.logger.info('Starting aggressive liquidation scan...');
-      
+
       // Detect liquidation opportunities
       const opportunities = await this.liquidationDetector.detectLiquidationOpportunities();
-      
+
       if (opportunities.length === 0) {
         this.logger.debug('No liquidation opportunities found');
         return [];
@@ -221,7 +227,10 @@ export class LiquidationStrategy implements MEVStrategy {
           try {
             return await this.executeLiquidation(opportunity);
           } catch (error) {
-            this.logger.error(`Failed to execute liquidation for ${opportunity.borrower.toString()}:`, error);
+            this.logger.error(
+              `Failed to execute liquidation for ${opportunity.borrower.toString()}:`,
+              error
+            );
             return null;
           }
         });
@@ -233,7 +242,6 @@ export class LiquidationStrategy implements MEVStrategy {
 
       this.logger.info(`Successfully executed ${successfulTxs.length} liquidations`);
       return successfulTxs;
-
     } catch (error) {
       this.logger.error('Error in liquidation scan and execution:', error);
       return [];
@@ -244,8 +252,8 @@ export class LiquidationStrategy implements MEVStrategy {
     try {
       this.logger.info(
         `Executing ${opportunity.urgency} liquidation: ${opportunity.borrower.toString()}, ` +
-        `Health Factor: ${opportunity.healthFactor.toFixed(4)}, ` +
-        `Profit: ${opportunity.estimatedProfit.toFixed(4)} (${(opportunity.profitPercent * 100).toFixed(2)}%)`
+          `Health Factor: ${opportunity.healthFactor.toFixed(4)}, ` +
+          `Profit: ${opportunity.estimatedProfit.toFixed(4)} (${(opportunity.profitPercent * 100).toFixed(2)}%)`
       );
 
       const protocol = this.protocols.get(opportunity.protocol);
@@ -264,7 +272,6 @@ export class LiquidationStrategy implements MEVStrategy {
 
       this.logger.info(`Liquidation executed successfully: ${signature}`);
       return signature;
-
     } catch (error) {
       this.logger.error('Liquidation execution failed:', error);
       throw error;
@@ -360,7 +367,7 @@ export class LiquidationStrategy implements MEVStrategy {
     try {
       // Set high priority fee to outcompete other liquidators
       const priorityFee = 50000; // High priority fee in lamports
-      
+
       // Add compute budget instruction for higher priority
       const computeBudgetIx = new TransactionInstruction({
         keys: [],
@@ -385,8 +392,8 @@ export class LiquidationStrategy implements MEVStrategy {
       // In a real implementation, this would fetch current price
       // For now, return mock price
       const mockPrices: { [key: string]: number } = {
-        'So11111111111111111111111111111111111111112': 100, // SOL
-        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 1, // USDC
+        So11111111111111111111111111111111111111112: 100, // SOL
+        EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v: 1, // USDC
       };
 
       return mockPrices[mint.toString()] || 1;
@@ -411,7 +418,9 @@ class SolendProtocol implements LendingProtocol {
     return [];
   }
 
-  async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
+  async getLiquidationInstruction(
+    _opportunity: LiquidationOpportunity
+  ): Promise<TransactionInstruction> {
     // Create Solend liquidation instruction
     return new TransactionInstruction({
       keys: [
@@ -435,7 +444,9 @@ class MangoProtocol implements LendingProtocol {
     return [];
   }
 
-  async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
+  async getLiquidationInstruction(
+    _opportunity: LiquidationOpportunity
+  ): Promise<TransactionInstruction> {
     return new TransactionInstruction({
       keys: [],
       programId: this.programId,
@@ -456,7 +467,9 @@ class PortProtocol implements LendingProtocol {
     return [];
   }
 
-  async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
+  async getLiquidationInstruction(
+    _opportunity: LiquidationOpportunity
+  ): Promise<TransactionInstruction> {
     return new TransactionInstruction({
       keys: [],
       programId: this.programId,

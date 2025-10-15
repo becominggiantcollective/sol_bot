@@ -27,14 +27,10 @@ export function solToLamports(sol: number): number {
 }
 
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function retry<T>(
-  fn: () => Promise<T>,
-  retries = 3,
-  delay = 1000
-): Promise<T> {
+export function retry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
   return fn().catch(async (error) => {
     if (retries > 0) {
       await sleep(delay);

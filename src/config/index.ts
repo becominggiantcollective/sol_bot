@@ -23,7 +23,7 @@ export const config: Config = {
     priorityFeeMultiplier: parseFloat(process.env.PRIORITY_FEE_MULTIPLIER || '2.0'),
   },
   flashloan: {
-    providers: ['solend', 'mango'],
+    providers: ['solend'],
     maxAmount: parseFloat(process.env.MAX_FLASHLOAN_AMOUNT || '100000'), // 100k USD
   },
   dexes: {

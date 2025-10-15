@@ -1,4 +1,10 @@
-import { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
+import {
+  Connection,
+  PublicKey,
+  Keypair,
+  Transaction,
+  sendAndConfirmTransaction,
+} from '@solana/web3.js';
 import { config } from '../config';
 
 export class SolanaConnection {
@@ -10,14 +16,12 @@ export class SolanaConnection {
       commitment: config.solana.commitment,
       wsEndpoint: config.solana.wsUrl,
     });
-    
+
     if (!config.wallet.privateKey) {
       throw new Error('Wallet private key not configured');
     }
-    
-    this.wallet = Keypair.fromSecretKey(
-      Uint8Array.from(JSON.parse(config.wallet.privateKey))
-    );
+
+    this.wallet = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(config.wallet.privateKey)));
   }
 
   getConnection(): Connection {
@@ -39,12 +43,10 @@ export class SolanaConnection {
 
   async sendTransaction(transaction: Transaction): Promise<string> {
     try {
-      transaction.recentBlockhash = (
-        await this.connection.getLatestBlockhash()
-      ).blockhash;
-      
+      transaction.recentBlockhash = (await this.connection.getLatestBlockhash()).blockhash;
+
       transaction.sign(this.wallet);
-      
+
       const signature = await sendAndConfirmTransaction(
         this.connection,
         transaction,
@@ -54,7 +56,7 @@ export class SolanaConnection {
           maxRetries: 3,
         }
       );
-      
+
       return signature;
     } catch (error) {
       console.error('Failed to send transaction:', error);
@@ -63,12 +65,10 @@ export class SolanaConnection {
   }
 
   async simulateTransaction(transaction: Transaction): Promise<any> {
-    transaction.recentBlockhash = (
-      await this.connection.getLatestBlockhash()
-    ).blockhash;
-    
+    transaction.recentBlockhash = (await this.connection.getLatestBlockhash()).blockhash;
+
     transaction.sign(this.wallet);
-    
+
     return await this.connection.simulateTransaction(transaction);
   }
 }
