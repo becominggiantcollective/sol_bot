@@ -1,7 +1,7 @@
-import { LiquidationDetector } from '../core/liquidation';
-import { LiquidationStrategy } from '../strategies/mev';
-import { SolanaConnection } from '../core/connection';
-import { FlashloanManager } from '../core/flashloan';
+import { LiquidationDetector } from '../core/liquidation.js';
+import { LiquidationStrategy } from '../strategies/mev.js';
+import { SolanaConnection } from '../core/connection.js';
+import { FlashloanManager } from '../core/flashloan.js';
 import { PublicKey } from '@solana/web3.js';
 
 // Mock the external dependencies

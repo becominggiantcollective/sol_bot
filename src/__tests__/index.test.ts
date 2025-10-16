@@ -1,4 +1,4 @@
-import { COMMON_TOKENS, formatNumber, formatPercent, isValidPublicKey } from '../utils';
+import { COMMON_TOKENS, formatNumber, formatPercent, isValidPublicKey } from '../utils/index.js';
 
 describe('Utils', () => {
   it('should have common tokens defined', () => {

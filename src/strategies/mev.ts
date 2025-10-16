@@ -1,9 +1,9 @@
-import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
-import { ArbitrageOpportunity, MEVStrategy, LiquidationOpportunity, LendingProtocol, ProtocolPosition } from '../types';
-import { SolanaConnection } from '../core/connection';
-import { FlashloanManager } from '../core/flashloan';
-import { LiquidationDetector } from '../core/liquidation';
-import { Logger } from '../utils';
+import { PublicKey, Transaction, Keypair, LAMPORTS_PER_SOL, TransactionInstruction } from '@solana/web3.js';
+import { ArbitrageOpportunity, MEVStrategy, LiquidationOpportunity, LendingProtocol, ProtocolPosition } from '../types/index.js';
+import { SolanaConnection } from '../core/connection.js';
+import { FlashloanManager } from '../core/flashloan.js';
+// import { LiquidationDetector } from '../core/liquidation.js'; // Temporarily disabled
+import { Logger } from '../utils/index.js';
 
 export class FlashloanArbitrageStrategy implements MEVStrategy {
   name = 'flashloan-arbitrage';
@@ -164,6 +164,8 @@ export class SandwichAttackStrategy implements MEVStrategy {
   }
 }
 
+/*
+// Liquidation Strategy temporarily disabled - requires liquidation detector implementation
 export class LiquidationStrategy implements MEVStrategy {
   name = 'aggressive-liquidation';
   description = 'Executes liquidations using flash loans with maximum speed and aggression';
@@ -463,4 +465,4 @@ class PortProtocol implements LendingProtocol {
       data: Buffer.from([]),
     });
   }
-}
+}*/

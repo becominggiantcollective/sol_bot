@@ -1,5 +1,5 @@
-import { ArbitrageOpportunity } from '../types';
-import { Logger } from './index';
+import { ArbitrageOpportunity } from '../types/index.js';
+import { Logger } from './index.js';
 
 export interface BacktestResult {
   totalTrades: number;

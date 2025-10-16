@@ -1,4 +1,4 @@
-import { Logger } from './index';
+import { Logger } from './index.js';
 
 export interface ProfitMetrics {
   totalTrades: number;

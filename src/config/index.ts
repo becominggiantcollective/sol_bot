@@ -1,4 +1,4 @@
-import { Config } from '../types';
+import { Config } from '../types/index.js';
 
 export const config: Config = {
   solana: {
@@ -23,7 +23,7 @@ export const config: Config = {
     priorityFeeMultiplier: parseFloat(process.env.PRIORITY_FEE_MULTIPLIER || '3.0'), // Increased from 2.0 for better competitiveness
   },
   flashloan: {
-    providers: ['solend', 'mango'],
+    providers: ['solend'],
     maxAmount: parseFloat(process.env.MAX_FLASHLOAN_AMOUNT || '500000'), // 500k USD - increased from 100k
   },
   dexes: {

@@ -1,4 +1,4 @@
-import { SolanaArbitrageBot } from './src/index';
+import { SolanaArbitrageBot } from './src/index.js';
 import dotenv from 'dotenv';
 
 // Load environment variables

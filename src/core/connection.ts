@@ -1,5 +1,5 @@
 import { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
-import { config } from '../config';
+import { config } from '../config/index.js';
 
 export class SolanaConnection {
   private connection: Connection;

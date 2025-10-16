@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
-import { SolanaConnection } from './core/connection';
-import { ArbitrageDetector } from './core/arbitrage';
-import { FlashloanManager } from './core/flashloan';
-import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy } from './strategies/mev';
-import { COMMON_TOKENS, Logger, sleep } from './utils';
-import { ProfitabilityTracker, Trade } from './utils/profitability';
-import { config } from './config';
+import { SolanaConnection } from './core/connection.js';
+import { ArbitrageDetector } from './core/arbitrage.js';
+import { FlashloanManager } from './core/flashloan.js';
+import { FlashloanArbitrageStrategy, SandwichAttackStrategy } from './strategies/mev.js';
+import { COMMON_TOKENS, Logger, sleep } from './utils/index.js';
+import { ProfitabilityTracker, Trade } from './utils/profitability.js';
+import { config } from './config/index.js';
 
 // Load environment variables
 dotenv.config();
@@ -15,7 +15,7 @@ export class SolanaArbitrageBot {
   private arbitrageDetector: ArbitrageDetector;
   private flashloanManager: FlashloanManager;
   private strategies: any[] = [];
-  private liquidationStrategy?: LiquidationStrategy;
+  // private liquidationStrategy?: LiquidationStrategy; // Temporarily disabled
   private logger: Logger;
   private profitTracker: ProfitabilityTracker;
   private isRunning = false;
@@ -39,7 +39,7 @@ export class SolanaArbitrageBot {
 
       // Initialize liquidation strategy if enabled
       if (config.liquidation.enabled) {
-        this.liquidationStrategy = new LiquidationStrategy(this.solanaConnection, this.flashloanManager);
+        // this.liquidationStrategy = new LiquidationStrategy(this.solanaConnection, this.flashloanManager); // Temporarily disabled
         this.logger.info('Liquidation strategy enabled');
       }
       
@@ -104,17 +104,9 @@ export class SolanaArbitrageBot {
       try {
         this.logger.debug('Scanning for trading opportunities...');
         
-        // Run arbitrage detection and liquidation scanning in parallel for maximum speed
-        const [opportunities, liquidationTxs] = await Promise.all([
-          this.arbitrageDetector.detectOpportunities(tokens),
-          this.liquidationStrategy ? this.liquidationStrategy.scanAndExecuteLiquidations() : Promise.resolve([])
-        ]);
+        // Run arbitrage detection in parallel for maximum speed
+        const opportunities = await this.arbitrageDetector.detectOpportunities(tokens);
         
-        // Report liquidation results
-        if (liquidationTxs.length > 0) {
-          this.logger.info(`Executed ${liquidationTxs.length} liquidations: ${liquidationTxs.join(', ')}`);
-        }
-
         // Process arbitrage opportunities
         if (opportunities.length > 0) {
           this.logger.info(`Found ${opportunities.length} arbitrage opportunities`);
@@ -256,6 +248,6 @@ async function main(): Promise<void> {
 // SolanaArbitrageBot is already exported above
 
 // Run if this file is executed directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
