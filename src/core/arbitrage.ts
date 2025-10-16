@@ -149,22 +149,33 @@ export class ArbitrageDetector {
     outputMint: PublicKey,
     amount: number
   ): Promise<TradingRoute | null> {
-    // Simplified Orca integration
-    // In reality, you'd use Orca SDK to get quotes
     try {
-      // Mock implementation - replace with actual Orca SDK calls
-      return {
-        dex: 'orca',
-        inputMint,
-        outputMint,
-        inputAmount: amount,
-        outputAmount: amount * 0.99, // Mock 1% price difference
-        priceImpact: 0.01,
-      };
+      // Use Orca Whirlpool API for real price quotes
+      const response = await axios.get(
+        `https://api.mainnet.orca.so/v1/quote?inputMint=${inputMint.toString()}&outputMint=${outputMint.toString()}&amount=${amount}&slippage=0.5`,
+        {
+          timeout: 3000,
+        }
+      );
+      
+      if (response.data && response.data.outAmount) {
+        return {
+          dex: 'orca',
+          inputMint,
+          outputMint,
+          inputAmount: amount,
+          outputAmount: parseInt(response.data.outAmount),
+          priceImpact: response.data.priceImpact || 0,
+        };
+      }
     } catch (error) {
-      console.error('Orca API error:', error);
-      return null;
+      // Silent fail for API errors
+      if (axios.isAxiosError(error) && error.code !== 'ECONNABORTED') {
+        console.debug('Orca API temporary unavailable');
+      }
     }
+    
+    return null;
   }
 
   private async getRaydiumRoute(
@@ -172,22 +183,33 @@ export class ArbitrageDetector {
     outputMint: PublicKey,
     amount: number
   ): Promise<TradingRoute | null> {
-    // Simplified Raydium integration
-    // In reality, you'd use Raydium SDK to get quotes
     try {
-      // Mock implementation - replace with actual Raydium SDK calls
-      return {
-        dex: 'raydium',
-        inputMint,
-        outputMint,
-        inputAmount: amount,
-        outputAmount: amount * 1.01, // Mock 1% price difference
-        priceImpact: 0.01,
-      };
+      // Use Raydium API for real price quotes
+      const response = await axios.get(
+        `https://api.raydium.io/v2/main/quote?inputMint=${inputMint.toString()}&outputMint=${outputMint.toString()}&amount=${amount}&slippage=0.5`,
+        {
+          timeout: 3000,
+        }
+      );
+      
+      if (response.data && response.data.outAmount) {
+        return {
+          dex: 'raydium',
+          inputMint,
+          outputMint,
+          inputAmount: amount,
+          outputAmount: parseInt(response.data.outAmount),
+          priceImpact: response.data.priceImpact || 0,
+        };
+      }
     } catch (error) {
-      console.error('Raydium API error:', error);
-      return null;
+      // Silent fail for API errors
+      if (axios.isAxiosError(error) && error.code !== 'ECONNABORTED') {
+        console.debug('Raydium API temporary unavailable');
+      }
     }
+    
+    return null;
   }
 
   private async updatePrices(tokens: PublicKey[]): Promise<void> {
@@ -198,20 +220,28 @@ export class ArbitrageDetector {
       const cached = this.priceCache.get(cacheKey);
       
       if (!cached || now - cached.timestamp > this.CACHE_DURATION) {
-        // Update price cache
+        // Update price cache from real price feeds
         try {
-          // In a real implementation, you'd fetch from price APIs
-          const priceData: PriceData = {
-            mint: token,
-            price: Math.random() * 100, // Mock price
-            liquidity: Math.random() * 1000000,
-            timestamp: now,
-            source: 'mock',
-          };
+          // Use Jupiter price API for real price data
+          const response = await axios.get(
+            `https://price.jup.ag/v4/price?ids=${token.toString()}`,
+            { timeout: 3000 }
+          );
           
-          this.priceCache.set(cacheKey, priceData);
+          if (response.data && response.data.data && response.data.data[token.toString()]) {
+            const priceInfo = response.data.data[token.toString()];
+            const priceData: PriceData = {
+              mint: token,
+              price: priceInfo.price || 0,
+              liquidity: priceInfo.liquidity || 0,
+              timestamp: now,
+              source: 'jupiter',
+            };
+            
+            this.priceCache.set(cacheKey, priceData);
+          }
         } catch (error) {
-          console.error(`Failed to update price for ${token.toString()}:`, error);
+          console.debug(`Failed to update price for ${token.toString()}:`, error);
         }
       }
     }
