@@ -12,7 +12,8 @@
     "liquidation-example": "ts-node liquidation-example.ts",
     "monitor": "ts-node monitor.ts",
     "backtest": "ts-node backtest-example.ts",
-    "flashloan-demo": "ts-node flashloan-demo.ts",
+    "flashloan-demo": "npx tsx flashloan-demo.ts",
+    "trade-simulation": "npx tsx successful-trade-simulation.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write src/**/*.ts"
