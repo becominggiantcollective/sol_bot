@@ -28,7 +28,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@coral-xyz/anchor": "^0.31.1",
+    "@coral-xyz/anchor": "~0.29.0",
+    "@jup-ag/api": "^6.0.45",
     "@kamino-finance/klend-sdk": "^7.1.10",
     "@mrgnlabs/marginfi-client-v2": "^6.2.1",
     "@orca-so/whirlpools-sdk": "^0.16.0",
@@ -42,7 +43,7 @@
     "bn.js": "^5.2.2",
     "cors": "^2.8.5",
     "decimal.js": "^10.6.0",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "socket.io": "^4.8.1"
   },
@@ -60,5 +61,14 @@
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/becominggiantcollective/sol_bot.git"
+  },
+  "types": "./dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/becominggiantcollective/sol_bot/issues"
+  },
+  "homepage": "https://github.com/becominggiantcollective/sol_bot#readme"
 }
