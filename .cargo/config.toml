@@ -1,0 +1,9 @@
+# Windows MSVC configuration
+[target.x86_64-pc-windows-msvc]
+# Don't add extra linker flags that might cause issues
+# Let rustc handle linker setup automatically
+
+# Use single-threaded build to avoid race conditions
+[build]
+jobs = 1
+

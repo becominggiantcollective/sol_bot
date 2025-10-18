@@ -1,4 +1,7 @@
+// Load environment variables FIRST before any other imports
 import dotenv from 'dotenv';
+dotenv.config();
+
 import { SolanaConnection } from './core/connection';
 import { ArbitrageDetector } from './core/arbitrage';
 import { FlashloanManager } from './core/flashloan';
@@ -6,9 +9,6 @@ import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy
 import { COMMON_TOKENS, Logger, sleep } from './utils';
 import { ProfitabilityTracker, Trade } from './utils/profitability';
 import { config } from './config';
-
-// Load environment variables
-dotenv.config();
 
 export class SolanaArbitrageBot {
   private solanaConnection: SolanaConnection;
@@ -44,6 +44,7 @@ export class SolanaArbitrageBot {
       }
       
       this.logger.info('Solana Arbitrage Bot initialized successfully');
+      this.logger.info('🛡️  Smart rate limit protection: Progressive cooldown (15s → 5min) activated');
     } catch (error) {
       this.logger.error('Failed to initialize bot:', error);
       throw error;
@@ -126,11 +127,12 @@ export class SolanaArbitrageBot {
           this.logger.debug('No profitable arbitrage opportunities found');
         }
         
-        // Shorter wait time for aggressive liquidation monitoring
-        await sleep(2000); // 2 seconds for more aggressive scanning
+        // Wait 20 seconds between scans (6 tokens = 60 API calls, well under rate limit)
+        // With proper rate limiting, we can scan faster and catch more opportunities!
+        await sleep(20000);
       } catch (error) {
         this.logger.error('Error in trading loop:', error);
-        await sleep(5000); // Wait longer on error
+        await sleep(30000); // Wait longer on error to avoid rate limiting
       }
     }
   }

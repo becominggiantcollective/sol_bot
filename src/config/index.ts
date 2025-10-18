@@ -17,13 +17,13 @@ export const config: Config = {
     maxPositionSize: parseFloat(process.env.MAX_POSITION_SIZE || '5000'), // $5000 - larger for better profits
   },
   liquidation: {
-    enabled: true,
+    enabled: false, // ⚠️ DISABLED - Solend API deprecated (needs updated SDK). Arbitrage still running!
     maxConcurrentLiquidations: parseInt(process.env.MAX_CONCURRENT_LIQUIDATIONS || '5'), // Increased from 3
     minProfitThreshold: parseFloat(process.env.LIQUIDATION_MIN_PROFIT || '0.015'), // 1.5% - more aggressive
     priorityFeeMultiplier: parseFloat(process.env.PRIORITY_FEE_MULTIPLIER || '3.0'), // Increased from 2.0 for better competitiveness
   },
   flashloan: {
-    providers: ['solend', 'mango'],
+    providers: ['solend'], // Mango v3 is deprecated, only use Solend
     maxAmount: parseFloat(process.env.MAX_FLASHLOAN_AMOUNT || '500000'), // 500k USD - increased from 100k
   },
   dexes: {

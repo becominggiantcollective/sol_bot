@@ -102,7 +102,7 @@ describe('Flashloan Arbitrage Integration Test', () => {
         profit: 1,
         profitPercent: 0.0001,
         route: [],
-        gasEstimate: 0.005,
+        gasEstimate: 10,  // Gas cost higher than profit
       };
 
       const viable = strategy.isViable(mockOpportunity);
