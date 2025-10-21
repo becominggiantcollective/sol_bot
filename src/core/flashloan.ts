@@ -7,10 +7,27 @@ import { MarginFiFlashloanProvider } from './marginfi-flashloan';
 export class SolendFlashloanProvider implements FlashloanProvider {
   name = 'spl-token-lending';
   programId = new PublicKey('LendZqTs7gn5CTSJU1jWKhKuVpjJGom45nnwPb2AMTi'); // SPL Token Lending Program
+  
+  // Your deployed flashloan receiver program ID
+  // Deploy using: ./deploy-flashloan.sh
+  // Then update .env with: FLASHLOAN_RECEIVER_PROGRAM_ID=YourProgramId
+  receiverProgramId: PublicKey;
+  
   maxAmount = 100000000000000; // 100,000 SOL in lamports (~$19M)
   fee = 0.0003; // 0.03% flash loan fee
 
-  constructor(private solanaConnection: SolanaConnection) {}
+  constructor(private solanaConnection: SolanaConnection) {
+    // Load receiver program ID from environment
+    const receiverProgramIdStr = process.env.FLASHLOAN_RECEIVER_PROGRAM_ID;
+    if (!receiverProgramIdStr) {
+      throw new Error(
+        'FLASHLOAN_RECEIVER_PROGRAM_ID not set in .env file. ' +
+        'Deploy the flashloan receiver program first using: ./deploy-flashloan.sh'
+      );
+    }
+    this.receiverProgramId = new PublicKey(receiverProgramIdStr);
+    console.log(`✅ Flashloan receiver program loaded: ${this.receiverProgramId.toString()}`);
+  }
 
   async isAvailable(): Promise<boolean> {
     // SPL Token Lending program is always available on mainnet
@@ -29,7 +46,7 @@ export class SolendFlashloanProvider implements FlashloanProvider {
   ): Promise<TransactionInstruction[]> {
     // SPL Token Lending FlashLoan implementation (Instruction 13)
     // Based on: https://github.com/solana-labs/solana-program-library/tree/main/token-lending
-    // Uses a flash loan receiver program pattern
+    // Uses the deployed flash loan receiver program
     
     const flashloanInstructions: TransactionInstruction[] = [];
     const wallet = this.solanaConnection.getWalletPublicKey();
@@ -49,33 +66,40 @@ export class SolendFlashloanProvider implements FlashloanProvider {
       throw new Error(`No reserve found for mint: ${mint.toString()}`);
     }
     
+    console.log(`📊 Building flashloan for ${amount} tokens`);
+    console.log(`   Reserve: ${reserveAddress.toString()}`);
+    console.log(`   Receiver: ${this.receiverProgramId.toString()}`);
+    
     // Derive lending market authority PDA
     const [lendingMarketAuthority] = PublicKey.findProgramAddressSync(
       [reserve.lendingMarket.toBuffer()],
       this.programId
     );
     
-    // Create user's token accounts
-    const sourceLiquidityAccount = await this.getOrCreateTokenAccount(mint, wallet);
-    const destinationLiquidityAccount = await this.getOrCreateTokenAccount(mint, wallet);
+    // Build FlashLoan instruction (discriminator 13)
+    const data = Buffer.alloc(17);
+    data.writeUInt8(13, 0); // FlashLoan instruction
+    data.writeBigUInt64LE(BigInt(amount), 1);
     
-    // For SPL Token Lending FlashLoan (discriminator 13), we need a receiver program
-    // Since we don't have a custom receiver program deployed, we'll use a simpler approach:
-    // Execute Jupiter swaps directly with available wallet balance
-    //
-    // TODO: To properly implement flashloans, need to:
-    // 1. Deploy a flash loan receiver program that implements instruction 0
-    // 2. That receiver program executes the arbitrage and returns funds + fee
-    // 3. Use discriminator 13 (FlashLoan) instead of 10/11 (BorrowObligation/RepayObligation)
-    //
-    // For now, return the arbitrage instructions directly (no flashloan wrapper)
-    console.log('⚠️  FlashLoan requires custom receiver program - using direct swap instead');
-    console.log(`   To enable flashloans: Deploy SPL Token Lending receiver program`);
-    console.log(`   Falling back to Jupiter direct swaps with wallet balance`);
+    const flashloanIx = new TransactionInstruction({
+      programId: this.programId, // SPL Token Lending program
+      keys: [
+        { pubkey: reserveAddress, isSigner: false, isWritable: true },
+        { pubkey: new PublicKey(reserve.liquiditySupply), isSigner: false, isWritable: true },
+        { pubkey: wallet, isSigner: true, isWritable: false },
+        { pubkey: this.receiverProgramId, isSigner: false, isWritable: false }, // Your deployed program
+      ],
+      data,
+    });
     
-    // Just return the arbitrage instructions without flashloan wrapping
-    // This will execute with available wallet balance
-    return instructions;
+    flashloanInstructions.push(flashloanIx);
+    
+    // Add arbitrage instructions (these will be executed by the receiver program)
+    flashloanInstructions.push(...instructions);
+    
+    console.log(`✅ Flashloan instruction built with ${instructions.length} arbitrage steps`);
+    
+    return flashloanInstructions;
   }
   
   private async getSolendReserve(mint: PublicKey): Promise<{ reserve: any; reserveAddress: PublicKey } | { reserve: null; reserveAddress: null }> {
