@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Arbitrage Bot Dashboard</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header .status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .status-badge.running {
+            background: #10b981;
+            color: white;
+        }
+
+        .status-badge.stopped {
+            background: #ef4444;
+            color: white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95em;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-start {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-stop {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-reset {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-settings {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .profit-positive {
+            color: #10b981;
+        }
+
+        .profit-negative {
+            color: #ef4444;
+        }
+
+        .prices-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .prices-table th {
+            background: #f3f4f6;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .prices-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .price-up {
+            color: #10b981;
+        }
+
+        .price-down {
+            color: #ef4444;
+        }
+
+        .log-container {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+
+        .log-entry {
+            padding: 5px;
+            margin: 2px 0;
+            border-left: 3px solid transparent;
+        }
+
+        .log-entry.info {
+            color: #94a3b8;
+            border-color: #3b82f6;
+        }
+
+        .log-entry.success {
+            color: #86efac;
+            border-color: #10b981;
+        }
+
+        .log-entry.warn {
+            color: #fde047;
+            border-color: #f59e0b;
+        }
+
+        .log-entry.error {
+            color: #fca5a5;
+            border-color: #ef4444;
+        }
+
+        .log-entry .timestamp {
+            color: #64748b;
+            margin-right: 10px;
+        }
+
+        .opportunities-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .opportunity-item {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            background: #f9fafb;
+            border-left: 4px solid transparent;
+        }
+
+        .opportunity-item.detected {
+            border-color: #3b82f6;
+        }
+
+        .opportunity-item.executing {
+            border-color: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+
+        .opportunity-item.success {
+            border-color: #10b981;
+        }
+
+        .opportunity-item.failed {
+            border-color: #ef4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .opportunity-route {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .opportunity-details {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .settings-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #374151;
+        }
+
+        .form-group input {
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+
+        .connection-status.connected {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .connection-status.disconnected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: #10b981;
+        }
+
+        .status-dot.disconnected {
+            background: #ef4444;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .wide-card {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .stat-value {
+                font-size: 2em;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 Solana Arbitrage Bot Dashboard</h1>
+            <div class="status">
+                <span class="status-badge" id="botStatus">⏸️ STOPPED</span>
+                <span class="connection-status" id="connectionStatus">
+                    <span class="status-dot"></span>
+                    Connecting...
+                </span>
+                <div class="controls">
+                    <button class="btn btn-start" id="startBtn" onclick="startBot()">▶️ Start Bot</button>
+                    <button class="btn btn-stop" id="stopBtn" onclick="stopBot()" disabled>⏹️ Stop Bot</button>
+                    <button class="btn btn-reset" onclick="resetStats()">🔄 Reset Stats</button>
+                    <button class="btn btn-settings" onclick="openSettings()">⚙️ Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Grid -->
+        <div class="grid">
+            <div class="card">
+                <h2>⏱️ Uptime</h2>
+                <div class="stat-value" id="uptime">0s</div>
+                <div class="stat-label">Running time</div>
+            </div>
+
+            <div class="card">
+                <h2>🎯 Total Attempts</h2>
+                <div class="stat-value" id="totalAttempts">0</div>
+                <div class="stat-label">Opportunities detected</div>
+            </div>
+
+            <div class="card">
+                <h2>✅ Successful</h2>
+                <div class="stat-value" id="successfulTrades">0</div>
+                <div class="stat-label">Executed trades</div>
+            </div>
+
+            <div class="card">
+                <h2>❌ Failed</h2>
+                <div class="stat-value" id="failedTrades">0</div>
+                <div class="stat-label">Failed attempts</div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Success Rate</h2>
+                <div class="stat-value" id="successRate">0%</div>
+                <div class="stat-label">Win percentage</div>
+            </div>
+
+            <div class="card">
+                <h2>💰 Total Profit</h2>
+                <div class="stat-value profit-positive" id="totalProfit">0.0000 SOL</div>
+                <div class="stat-label">Net earnings</div>
+            </div>
+        </div>
+
+        <!-- Prices and Opportunities -->
+        <div class="grid">
+            <div class="card">
+                <h2>📈 Live Prices</h2>
+                <table class="prices-table">
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>Price</th>
+                            <th>24h Change</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pricesTable">
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: #666;">Waiting for price data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2>🎯 Recent Opportunities</h2>
+                <div class="opportunities-list" id="opportunitiesList">
+                    <p style="text-align: center; color: #666;">No opportunities detected yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs -->
+        <div class="card wide-card">
+            <h2>📝 Live Logs</h2>
+            <div class="log-container" id="logContainer">
+                <div class="log-entry info">
+                    <span class="timestamp">[--:--:--]</span>
+                    <span>Connecting to bot...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Bot Settings</h2>
+                <button class="modal-close" onclick="closeSettings()">×</button>
+            </div>
+            <div class="settings-form" id="settingsForm">
+                <div class="form-group">
+                    <label>Max Gas Fee (SOL)</label>
+                    <input type="number" step="0.001" name="MAX_GAS_FEE" placeholder="0.02">
+                </div>
+                <div class="form-group">
+                    <label>Max Flashloan Amount</label>
+                    <input type="number" name="MAX_FLASHLOAN_AMOUNT" placeholder="500000">
+                </div>
+                <div class="form-group">
+                    <label>Min Profit Threshold (%)</label>
+                    <input type="number" step="0.001" name="MIN_PROFIT_THRESHOLD" placeholder="0.002">
+                </div>
+                <div class="form-group">
+                    <label>Max Slippage (%)</label>
+                    <input type="number" step="0.001" name="MAX_SLIPPAGE" placeholder="0.005">
+                </div>
+                <div class="form-group">
+                    <label>Priority Fee Multiplier</label>
+                    <input type="number" step="0.1" name="PRIORITY_FEE_MULTIPLIER" placeholder="3.0">
+                </div>
+                <button class="btn btn-start" style="margin-top: 10px;" onclick="saveSettings()">💾 Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io('http://localhost:3000');
+        
+        let botRunning = false;
+        let prices = new Map();
+        let opportunities = [];
+        let logs = [];
+        const MAX_LOGS = 100;
+        const MAX_OPPORTUNITIES = 20;
+
+        // Connection status
+        socket.on('connect', () => {
+            updateConnectionStatus(true);
+            addLog('info', 'Connected to dashboard server');
+        });
+
+        socket.on('disconnect', () => {
+            updateConnectionStatus(false);
+            addLog('error', 'Disconnected from server');
+        });
+
+        // Bot status updates
+        socket.on('bot:status', (status) => {
+            updateBotStatus(status);
+        });
+
+        // Price updates
+        socket.on('price:update', (update) => {
+            prices.set(update.token, update);
+            updatePricesTable();
+        });
+
+        // Opportunity events
+        socket.on('opportunity:detected', (opp) => {
+            addOpportunity(opp);
+        });
+
+        socket.on('opportunity:executing', (opp) => {
+            updateOpportunity(opp);
+        });
+
+        socket.on('opportunity:success', (opp) => {
+            updateOpportunity(opp);
+        });
+
+        socket.on('opportunity:failed', (opp) => {
+            updateOpportunity(opp);
+        });
+
+        // Log events
+        socket.on('log', (entry) => {
+            addLog(entry.level, entry.message);
+        });
+
+        // Functions
+        function updateConnectionStatus(connected) {
+            const status = document.getElementById('connectionStatus');
+            const dot = status.querySelector('.status-dot');
+            
+            if (connected) {
+                status.className = 'connection-status connected';
+                dot.className = 'status-dot connected';
+                status.innerHTML = '<span class="status-dot connected"></span> Connected';
+            } else {
+                status.className = 'connection-status disconnected';
+                dot.className = 'status-dot disconnected';
+                status.innerHTML = '<span class="status-dot disconnected"></span> Disconnected';
+            }
+        }
+
+        function updateBotStatus(status) {
+            botRunning = status.running;
+            
+            // Update status badge
+            const badge = document.getElementById('botStatus');
+            if (status.running) {
+                badge.className = 'status-badge running';
+                badge.textContent = '▶️ RUNNING';
+            } else {
+                badge.className = 'status-badge stopped';
+                badge.textContent = '⏸️ STOPPED';
+            }
+            
+            // Update buttons
+            document.getElementById('startBtn').disabled = status.running;
+            document.getElementById('stopBtn').disabled = !status.running;
+            
+            // Update stats
+            document.getElementById('uptime').textContent = formatUptime(status.uptime);
+            document.getElementById('totalAttempts').textContent = status.totalAttempts;
+            document.getElementById('successfulTrades').textContent = status.successfulTrades;
+            document.getElementById('failedTrades').textContent = status.failedTrades;
+            
+            const successRate = status.totalAttempts > 0 
+                ? ((status.successfulTrades / status.totalAttempts) * 100).toFixed(1)
+                : 0;
+            document.getElementById('successRate').textContent = successRate + '%';
+            
+            const profitEl = document.getElementById('totalProfit');
+            profitEl.textContent = status.totalProfit.toFixed(4) + ' SOL';
+            profitEl.className = status.totalProfit >= 0 ? 'stat-value profit-positive' : 'stat-value profit-negative';
+        }
+
+        function formatUptime(seconds) {
+            if (seconds < 60) return seconds + 's';
+            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
+            const hours = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            return hours + 'h ' + mins + 'm';
+        }
+
+        function updatePricesTable() {
+            const tbody = document.getElementById('pricesTable');
+            if (prices.size === 0) return;
+            
+            tbody.innerHTML = '';
+            prices.forEach((price, token) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td><strong>${token}</strong></td>
+                    <td>$${price.price.toFixed(price.price < 1 ? 6 : 2)}</td>
+                    <td class="${price.change24h >= 0 ? 'price-up' : 'price-down'}">
+                        ${price.change24h >= 0 ? '▲' : '▼'} ${Math.abs(price.change24h).toFixed(2)}%
+                    </td>
+                `;
+            });
+        }
+
+        function addOpportunity(opp) {
+            opportunities.unshift(opp);
+            if (opportunities.length > MAX_OPPORTUNITIES) {
+                opportunities = opportunities.slice(0, MAX_OPPORTUNITIES);
+            }
+            updateOpportunitiesList();
+        }
+
+        function updateOpportunity(opp) {
+            const index = opportunities.findIndex(o => 
+                o.route === opp.route && Math.abs(o.timestamp - opp.timestamp) < 5000
+            );
+            
+            if (index !== -1) {
+                opportunities[index] = opp;
+            } else {
+                addOpportunity(opp);
+            }
+            
+            updateOpportunitiesList();
+        }
+
+        function updateOpportunitiesList() {
+            const container = document.getElementById('opportunitiesList');
+            
+            if (opportunities.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">No opportunities detected yet</p>';
+                return;
+            }
+            
+            container.innerHTML = opportunities.map(opp => `
+                <div class="opportunity-item ${opp.status}">
+                    <div class="opportunity-route">${opp.route}</div>
+                    <div class="opportunity-details">
+                        <span>Spread: ${opp.spread >= 0 ? '+' : ''}${opp.spread.toFixed(3)}%</span>
+                        <span>Profit: ${opp.profit.toFixed(4)} SOL</span>
+                        <span>Status: ${opp.status.toUpperCase()}</span>
+                        ${opp.error ? `<span style="color: #ef4444;">(${opp.error})</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addLog(level, message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logs.unshift({ level, message, timestamp });
+            
+            if (logs.length > MAX_LOGS) {
+                logs = logs.slice(0, MAX_LOGS);
+            }
+            
+            updateLogContainer();
+        }
+
+        function updateLogContainer() {
+            const container = document.getElementById('logContainer');
+            container.innerHTML = logs.map(log => `
+                <div class="log-entry ${log.level}">
+                    <span class="timestamp">[${log.timestamp}]</span>
+                    <span>${log.message}</span>
+                </div>
+            `).join('');
+            
+            // Auto-scroll to top (newest)
+            container.scrollTop = 0;
+        }
+
+        function startBot() {
+            socket.emit('bot:start');
+            addLog('info', 'Starting bot...');
+        }
+
+        function stopBot() {
+            socket.emit('bot:stop');
+            addLog('info', 'Stopping bot...');
+        }
+
+        function resetStats() {
+            if (confirm('Reset all statistics? This will clear attempt counts and profit tracking.')) {
+                socket.emit('bot:reset-stats');
+                addLog('info', 'Statistics reset');
+            }
+        }
+
+        async function openSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.add('active');
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/settings');
+                const settings = await response.json();
+                
+                document.querySelectorAll('.form-group input').forEach(input => {
+                    if (settings[input.name]) {
+                        input.value = settings[input.name];
+                    }
+                });
+            } catch (error) {
+                addLog('error', 'Failed to load settings: ' + error.message);
+            }
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        async function saveSettings() {
+            const inputs = document.querySelectorAll('.form-group input');
+            const updates = [];
+            
+            for (const input of inputs) {
+                if (input.value) {
+                    try {
+                        const response = await fetch('http://localhost:3000/api/settings', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                key: input.name,
+                                value: input.value
+                            })
+                        });
+                        
+                        if (response.ok) {
+                            updates.push(input.name);
+                        }
+                    } catch (error) {
+                        addLog('error', `Failed to update ${input.name}: ${error.message}`);
+                    }
+                }
+            }
+            
+            if (updates.length > 0) {
+                addLog('success', `Updated ${updates.length} setting(s)`);
+                closeSettings();
+            }
+        }
+
+        // Close modal on outside click
+        document.getElementById('settingsModal').addEventListener('click', (e) => {
+            if (e.target.id === 'settingsModal') {
+                closeSettings();
+            }
+        });
+
+        // Initial load
+        addLog('info', 'Dashboard initialized');
+    </script>
+</body>
+</html>

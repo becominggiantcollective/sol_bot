@@ -3,11 +3,14 @@ import { LiquidationStrategy } from '../strategies/mev';
 import { SolanaConnection } from '../core/connection';
 import { FlashloanManager } from '../core/flashloan';
 import { PublicKey } from '@solana/web3.js';
+import axios from 'axios';
 
 // Mock the external dependencies
 jest.mock('../core/connection');
 jest.mock('../core/flashloan');
 jest.mock('axios');
+
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('Liquidation System', () => {
   let solanaConnection: jest.Mocked<SolanaConnection>;
@@ -29,6 +32,14 @@ describe('Liquidation System', () => {
       fee: 0.001
     });
     flashloanManager.executeFlashloan = jest.fn().mockResolvedValue('flashloan_signature');
+
+    // Mock axios responses for price feeds
+    mockedAxios.get.mockResolvedValue({
+      data: {
+        'solana': { usd: 140.50 },
+        'usd-coin': { usd: 1.00 }
+      }
+    });
 
     liquidationDetector = new LiquidationDetector(solanaConnection);
     liquidationStrategy = new LiquidationStrategy(solanaConnection, flashloanManager);

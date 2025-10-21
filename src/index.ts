@@ -1,21 +1,20 @@
+// Load environment variables FIRST before any other imports
 import dotenv from 'dotenv';
+dotenv.config();
+
 import { SolanaConnection } from './core/connection';
 import { ArbitrageDetector } from './core/arbitrage';
 import { FlashloanManager } from './core/flashloan';
-import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy } from './strategies/mev';
+import { FlashloanArbitrageStrategy } from './strategies/mev';
 import { COMMON_TOKENS, Logger, sleep } from './utils';
 import { ProfitabilityTracker, Trade } from './utils/profitability';
 import { config } from './config';
-
-// Load environment variables
-dotenv.config();
 
 export class SolanaArbitrageBot {
   private solanaConnection: SolanaConnection;
   private arbitrageDetector: ArbitrageDetector;
   private flashloanManager: FlashloanManager;
   private strategies: any[] = [];
-  private liquidationStrategy?: LiquidationStrategy;
   private logger: Logger;
   private profitTracker: ProfitabilityTracker;
   private isRunning = false;
@@ -31,19 +30,14 @@ export class SolanaArbitrageBot {
       this.flashloanManager = new FlashloanManager(this.solanaConnection);
       this.profitTracker = new ProfitabilityTracker(0); // Initialize with 0, will be updated on start
       
-      // Initialize strategies
+      // Initialize only arbitrage strategy - liquidation removed per user request
       this.strategies = [
         new FlashloanArbitrageStrategy(this.solanaConnection, this.flashloanManager),
-        new SandwichAttackStrategy(this.solanaConnection),
       ];
-
-      // Initialize liquidation strategy if enabled
-      if (config.liquidation.enabled) {
-        this.liquidationStrategy = new LiquidationStrategy(this.solanaConnection, this.flashloanManager);
-        this.logger.info('Liquidation strategy enabled');
-      }
       
       this.logger.info('Solana Arbitrage Bot initialized successfully');
+      this.logger.info('🎯 Focus: Flashloan arbitrage opportunities only');
+      this.logger.info('🛡️  Smart rate limit protection: Progressive cooldown (15s → 5min) activated');
     } catch (error) {
       this.logger.error('Failed to initialize bot:', error);
       throw error;
@@ -102,18 +96,10 @@ export class SolanaArbitrageBot {
     
     while (this.isRunning) {
       try {
-        this.logger.debug('Scanning for trading opportunities...');
+        this.logger.debug('Scanning for arbitrage opportunities...');
         
-        // Run arbitrage detection and liquidation scanning in parallel for maximum speed
-        const [opportunities, liquidationTxs] = await Promise.all([
-          this.arbitrageDetector.detectOpportunities(tokens),
-          this.liquidationStrategy ? this.liquidationStrategy.scanAndExecuteLiquidations() : Promise.resolve([])
-        ]);
-        
-        // Report liquidation results
-        if (liquidationTxs.length > 0) {
-          this.logger.info(`Executed ${liquidationTxs.length} liquidations: ${liquidationTxs.join(', ')}`);
-        }
+        // Detect arbitrage opportunities using real-time on-chain price feeds
+        const opportunities = await this.arbitrageDetector.detectOpportunities(tokens);
 
         // Process arbitrage opportunities
         if (opportunities.length > 0) {
@@ -126,11 +112,12 @@ export class SolanaArbitrageBot {
           this.logger.debug('No profitable arbitrage opportunities found');
         }
         
-        // Shorter wait time for aggressive liquidation monitoring
-        await sleep(2000); // 2 seconds for more aggressive scanning
+        // Wait 20 seconds between scans (6 tokens = 60 API calls, well under rate limit)
+        // With proper rate limiting, we can scan faster and catch more opportunities!
+        await sleep(20000);
       } catch (error) {
         this.logger.error('Error in trading loop:', error);
-        await sleep(5000); // Wait longer on error
+        await sleep(30000); // Wait longer on error to avoid rate limiting
       }
     }
   }

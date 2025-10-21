@@ -106,26 +106,34 @@ export class LiquidationDetector {
 
   private async getJupiterPrices(): Promise<Map<string, number>> {
     try {
-      const response = await axios.get('https://price.jup.ag/v6/price', {
-        params: {
-          ids: 'So11111111111111111111111111111111111111112,EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v,mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So', // SOL, USDC, mSOL
-        },
-        timeout: 5000,
-      });
+      // Use Jupiter API to get SOL/USDC price via quote
+      const jupiterUrl = process.env.JUPITER_API_URL || 'https://public.jupiterapi.com';
+      
+      let quoteUrl: string;
+      if (jupiterUrl.includes('quote-api')) {
+        quoteUrl = `${jupiterUrl}/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=100000000&slippageBps=50`;
+      } else {
+        quoteUrl = `${jupiterUrl}/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=100000000&slippageBps=50`;
+      }
+      
+      const response = await axios.get(quoteUrl, { timeout: 5000 });
 
       const prices = new Map<string, number>();
-      if (response.data?.data) {
-        for (const [mint, data] of Object.entries(response.data.data as any)) {
-          if (data && typeof (data as any).price === 'number') {
-            prices.set(mint, (data as any).price);
-          }
-        }
+      if (response.data?.outAmount) {
+        // 1 SOL (100000000 lamports) = outAmount USDC (with 6 decimals)
+        const solPriceInUSDC = parseInt(response.data.outAmount) / 1_000_000;
+        prices.set('So11111111111111111111111111111111111111112', solPriceInUSDC);
+        prices.set('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', 1.0); // USDC = $1
       }
 
       return prices;
     } catch (error) {
-      this.logger.error('Error fetching Jupiter prices:', error);
-      return new Map();
+      this.logger.debug('Error fetching Jupiter prices, using fallback');
+      // Fallback prices
+      const fallback = new Map<string, number>();
+      fallback.set('So11111111111111111111111111111111111111112', 190); // ~$190 SOL
+      fallback.set('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', 1.0);
+      return fallback;
     }
   }
 

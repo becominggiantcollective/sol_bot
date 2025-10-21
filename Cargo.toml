@@ -4,14 +4,37 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "logger"
-path = "src/logger.rs"
+name = "arbitrage-bot"
+path = "src/main.rs"
 
 [dependencies]
-yellowstone-grpc-client = "9.0"
-yellowstone-grpc-proto = "9.0"
-tokio = { version = "1", features = ["full"] }
-tokio-stream = "0.1"
+# Solana core - minimal deps
+solana-sdk = { version = "1.18" }
+solana-client = { version = "1.18" }
+
+# Async runtime
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+
+# JSON
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Error handling
 anyhow = "1.0"
-tonic = "0.14"
-hex = "0.4"
+
+# Utilities
+dotenv = "0.15"
+log = "0.4"
+colored = "2.1"
+reqwest = { version = "0.11", features = ["json"] }
+env_logger = "0.11.8"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
+lto = true
+
+[features]
+default = []

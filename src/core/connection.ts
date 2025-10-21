@@ -71,4 +71,24 @@ export class SolanaConnection {
     
     return await this.connection.simulateTransaction(transaction);
   }
+
+  async sendRawTransaction(serializedTransaction: Uint8Array): Promise<string> {
+    try {
+      const signature = await this.connection.sendRawTransaction(
+        serializedTransaction,
+        {
+          skipPreflight: false,
+          maxRetries: 3,
+        }
+      );
+      
+      // Wait for confirmation
+      await this.connection.confirmTransaction(signature, 'confirmed');
+      
+      return signature;
+    } catch (error) {
+      console.error('Failed to send raw transaction:', error);
+      throw error;
+    }
+  }
 }
