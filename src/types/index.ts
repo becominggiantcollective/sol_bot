@@ -79,6 +79,11 @@ export interface FlashloanProvider {
   fee: number;
   isAvailable(): Promise<boolean>;
   calculateFee(amount: number): number;
+  createFlashloanInstructions(
+    amount: number,
+    mint: PublicKey,
+    instructions: TransactionInstruction[]
+  ): Promise<TransactionInstruction[]>;
 }
 
 export interface MEVStrategy {

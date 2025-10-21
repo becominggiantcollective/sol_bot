@@ -1,22 +1,23 @@
 import { PublicKey } from '@solana/web3.js';
 
-// High-volume, high-liquidity tokens optimized for profitable arbitrage
+// 🎯 MINIMAL: 3 tokens to AVOID RATE LIMITING
+// 3 tokens = 6 pairs × 2 directions = 12 API calls total
+// This is the MINIMUM to stay under Jupiter's rate limit
+// ** After IP cooldown (1 hour), this should work **
 export const COMMON_TOKENS = {
-  SOL: new PublicKey('So11111111111111111111111111111111111111112'),
-  USDC: new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
-  USDT: new PublicKey('Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB'),
-  BONK: new PublicKey('DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263'),
-  WIF: new PublicKey('EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm'),
-  JUP: new PublicKey('JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN'),
-  RAY: new PublicKey('4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R'),
-  // Additional high-volume tokens for competitive advantage
-  ORCA: new PublicKey('orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE'),
-  MNGO: new PublicKey('MangoCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac'),
-  SRM: new PublicKey('SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt'),
-  mSOL: new PublicKey('mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So'),
-  stSOL: new PublicKey('7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj'),
-  PYTH: new PublicKey('HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3'),
-  JTO: new PublicKey('jtojtomepa8beP8AuQc6eXt5FriJwfFMwQx2v2f9mCL'),
+  // Core trio: One stable base + two volatile for arbitrage
+  SOL: new PublicKey('So11111111111111111111111111111111111111112'),     // Native SOL (flashloan supported, most liquid)
+  USDC: new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),   // USD Coin (stable anchor)
+  USDT: new PublicKey('Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenErt9'),   // Tether (stable alternative)
+  BONK: new PublicKey('DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263'),   // BONK (highest volatility for arb opportunities)
+  
+  // This gives us 6 trading pairs with core 3:
+  // SOL ↔ USDC, SOL ↔ BONK, USDC ↔ BONK (both directions)
+  // = 12 total API calls per scan
+  //
+  // ⚠️  IP is currently rate-limited by Jupiter
+  // ⚠️  Need to wait ~1 hour for cooldown
+  // ⚠️  OR get Jupiter Pro API ($49/mo) for higher limits
 };
 
 export function formatNumber(num: number, decimals = 6): string {

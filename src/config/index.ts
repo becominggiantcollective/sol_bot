@@ -17,13 +17,13 @@ export const config: Config = {
     maxPositionSize: parseFloat(process.env.MAX_POSITION_SIZE || '5000'), // $5000 - larger for better profits
   },
   liquidation: {
-    enabled: true,
-    maxConcurrentLiquidations: parseInt(process.env.MAX_CONCURRENT_LIQUIDATIONS || '5'), // Increased from 3
-    minProfitThreshold: parseFloat(process.env.LIQUIDATION_MIN_PROFIT || '0.015'), // 1.5% - more aggressive
-    priorityFeeMultiplier: parseFloat(process.env.PRIORITY_FEE_MULTIPLIER || '3.0'), // Increased from 2.0 for better competitiveness
+    enabled: false, // Liquidation disabled - focusing on arbitrage only
+    maxConcurrentLiquidations: 0,
+    minProfitThreshold: 0,
+    priorityFeeMultiplier: 0,
   },
   flashloan: {
-    providers: ['solend', 'mango'],
+    providers: ['solend'], // Using Solend for flashloans
     maxAmount: parseFloat(process.env.MAX_FLASHLOAN_AMOUNT || '500000'), // 500k USD - increased from 100k
   },
   dexes: {

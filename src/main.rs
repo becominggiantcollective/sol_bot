@@ -1,143 +1,140 @@
-use anchor_client::solana_sdk::signature::Signer;
-use solana_vntr_sniper::{
-    common::{config::Config, constants::RUN_MSG, cache::WALLET_TOKEN_ACCOUNTS},
-    engine::{
-        copy_trading::{start_copy_trading, CopyTradingConfig},
-        swap::SwapProtocol,
-    },
-    services::{telegram, cache_maintenance},
-};
-use anchor_client::solana_client::rpc_config::{RpcAccountInfoConfig, RpcProgramAccountsConfig};
-use anchor_client::solana_client::rpc_filter::{Memcmp, MemcmpEncodedBytes, RpcFilterType};
-use anchor_client::solana_sdk::pubkey::Pubkey;
-use solana_account_decoder::UiAccountEncoding;
-use std::str::FromStr;
+use anyhow::Result;
 use colored::Colorize;
+use log::{info, debug, warn, error};
+use std::time::Duration;
+use tokio::time;
+use solana_client::rpc_client::RpcClient;
+use std::sync::Arc;
 
-/// Initialize the wallet token account list by fetching all token accounts owned by the wallet
-async fn initialize_token_account_list(config: &Config) {
-    let logger = solana_vntr_sniper::common::logger::Logger::new("[INIT-TOKEN-ACCOUNTS] => ".green().to_string());
-    
-    if let Ok(wallet_pubkey) = config.app_state.wallet.try_pubkey() {
-        logger.log(format!("Initializing token account list for wallet: {}", wallet_pubkey));
-        
-        // Get the token program pubkey
-        let token_program = Pubkey::from_str("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA").unwrap();
-        
-        // Query all token accounts owned by the wallet
-        let accounts = config.app_state.rpc_client.get_token_accounts_by_owner(
-            &wallet_pubkey,
-            anchor_client::solana_client::rpc_request::TokenAccountsFilter::ProgramId(token_program)
-        );
-        match accounts {
-            Ok(accounts) => {
-                logger.log(format!("Found {} token accounts", accounts.len()));
-                
-                // Add each token account to our global cache
-                for account in accounts {
-                    WALLET_TOKEN_ACCOUNTS.insert(Pubkey::from_str(&account.pubkey).unwrap());
-                    logger.log(format!("Added token account: {}", account.pubkey ));
-                }
-                
-                logger.log(format!("Token account list initialized with {} accounts", WALLET_TOKEN_ACCOUNTS.size()));
-            },
-            Err(e) => {
-                logger.log(format!("Error fetching token accounts: {}", e));
-            }
-        }
-    } else {
-        logger.log("Failed to get wallet pubkey, can't initialize token account list".to_string());
-    }
-}
+mod scanner;
+mod executor;
+mod metrics;
+
+use scanner::ArbitrageScanner;
+use executor::TradeExecutor;
+use metrics::BotMetrics;
 
 #[tokio::main]
-async fn main() {
-    /* Initial Settings */
-    let config = Config::new().await;
-    let config = config.lock().await;
+async fn main() -> Result<()> {
+    // Initialize dotenv
+    dotenv::dotenv().ok();
 
-    /* Running Bot */
-    let run_msg = RUN_MSG;
-    println!("{}", run_msg);
+    // Set up simple logging
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .try_init()
+        .ok();
 
-    // Initialize Telegram bot
-    match telegram::init().await {
-        Ok(_) => println!("Telegram bot initialized successfully"),
-        Err(e) => println!("{} Continuing without notifications.", e),
-    }
+    println!("{}", "🚀 Solana Flashloan Arbitrage Bot (Rust Edition)".bright_green().bold());
+    println!("{}", "━".repeat(70).bright_black());
     
-    // Initialize token account list
-    initialize_token_account_list(&config).await;
+    info!("Loading configuration...");
     
-    // Start cache maintenance service (clean up expired cache entries every 60 seconds)
-    cache_maintenance::start_cache_maintenance(60).await;
-    println!("Cache maintenance service started");
-
-    // Get copy trading target addresses from environment
-    let copy_trading_target_address = std::env::var("COPY_TRADING_TARGET_ADDRESS").ok();
-    let is_multi_copy_trading = std::env::var("IS_MULTI_COPY_TRADING")
+    let rpc_url = std::env::var("SOLANA_RPC_URL")
+        .unwrap_or_else(|_| "https://api.mainnet-beta.solana.com".to_string());
+    
+    let scan_interval = std::env::var("SCAN_INTERVAL_SECONDS")
         .ok()
-        .and_then(|v| v.parse::<bool>().ok())
-        .unwrap_or(false);
-    
-    // Prepare target addresses for monitoring
-    let mut target_addresses = Vec::new();
-    
-    // Handle multiple copy trading targets if enabled
-    if is_multi_copy_trading {
-        if let Some(address_str) = copy_trading_target_address {
-            // Parse comma-separated addresses
-            for addr in address_str.split(',') {
-                let trimmed_addr = addr.trim();
-                if !trimmed_addr.is_empty() {
-                    target_addresses.push(trimmed_addr.to_string());
+        .and_then(|s| s.parse::<u64>().ok())
+        .unwrap_or(20);
+
+    let min_profit = std::env::var("MIN_PROFIT_THRESHOLD")
+        .ok()
+        .and_then(|s| s.parse::<f64>().ok())
+        .unwrap_or(0.002); // 0.2% minimum
+
+    let max_slippage = std::env::var("MAX_SLIPPAGE")
+        .ok()
+        .and_then(|s| s.parse::<f64>().ok())
+        .unwrap_or(0.005); // 0.5%
+
+    let max_flashloan = std::env::var("MAX_FLASHLOAN_AMOUNT")
+        .ok()
+        .and_then(|s| s.parse::<f64>().ok())
+        .unwrap_or(500000.0); // $500k
+
+    println!("RPC Endpoint: {}", rpc_url.bright_cyan());
+    println!("Scan Interval: {}s", scan_interval.to_string().bright_blue());
+    println!("Min Profit Threshold: {}%", (min_profit * 100.0).to_string().bright_green());
+    println!("Max Slippage: {}%", (max_slippage * 100.0).to_string().bright_yellow());
+    println!("Max Flashloan: ${:.0}", max_flashloan.to_string().bright_cyan());
+    println!("{}", "━".repeat(70).bright_black());
+    println!("");
+    println!("{}", "✅ Bot initialized - Ready for production".bright_green());
+    println!("{}", "🔍 Starting opportunity scanner...".bright_cyan());
+    println!("{}", "💡 Tip: Fund wallet to enable live trading".bright_yellow());
+    println!("");
+
+    // Initialize components
+    let rpc_client = Arc::new(RpcClient::new(rpc_url.clone()));
+    let scanner = ArbitrageScanner::new(rpc_client, min_profit).await?;
+    let executor = TradeExecutor::new(&rpc_url).await?;
+    let mut metrics = BotMetrics::new();
+
+    // Main loop
+    let mut interval = time::interval(Duration::from_secs(scan_interval));
+    let mut iteration = 0u64;
+
+    loop {
+        interval.tick().await;
+        iteration += 1;
+
+        println!("{}", format!("━━━ Scan #{} ({} scans/hour) ━━━", iteration, (3600 / scan_interval)).bright_black());
+        
+        // Scan for opportunities
+        match scanner.scan_opportunities().await {
+            Ok(opportunities) => {
+                if opportunities.is_empty() {
+                    debug!("No profitable opportunities found in scan #{}", iteration);
+                } else {
+                    println!("{}", format!("🎯 Found {} opportunity(ies)!", opportunities.len()).bright_green().bold());
+                    
+                    for (idx, opp) in opportunities.iter().enumerate() {
+                        let profit_pct = opp.profit_percentage * 100.0;
+                        println!("  {}. {} → {} ({}%)", 
+                            idx + 1,
+                            opp.route[0].bright_yellow(),
+                            opp.route[opp.route.len() - 1].bright_yellow(),
+                            format!("{:.2}", profit_pct).bright_green()
+                        );
+                        
+                        metrics.opportunities_found += 1;
+                        
+                        // Try to execute if profitable enough
+                        if opp.profit_percentage > min_profit {
+                            println!("     ⚡ Attempting execution...");
+                            match executor.execute_trade(&opp).await {
+                                Ok(sig) => {
+                                    println!("     ✅ Success! Tx: {}", sig.to_string().bright_green());
+                                    metrics.successful_trades += 1;
+                                    metrics.total_profit += opp.estimated_profit;
+                                }
+                                Err(e) => {
+                                    warn!("     ❌ Execution failed: {}", e);
+                                    metrics.failed_trades += 1;
+                                }
+                            }
+                        }
+                    }
                 }
             }
+            Err(e) => {
+                error!("Scanner error: {}", e);
+                metrics.scan_errors += 1;
+            }
         }
-    } else if let Some(address) = copy_trading_target_address {
-        // Single address mode
-        if !address.is_empty() {
-            target_addresses.push(address);
-        }
-    }
-    
-    // if target_addresses.is_empty() {
-    //     eprintln!("No COPY_TRADING_TARGET_ADDRESS specified. Please set this environment variable.");
-    //     return;
-    // }
-    
-    // Get protocol preference from environment
-    let protocol_preference = std::env::var("PROTOCOL_PREFERENCE")
-        .ok()
-        .map(|p| match p.to_lowercase().as_str() {
-            "pumpfun" => SwapProtocol::PumpFun,
-            "pumpswap" => SwapProtocol::PumpSwap,
-            _ => SwapProtocol::Auto,
-        })
-        .unwrap_or(SwapProtocol::Auto);
-    
-    // Create copy trading config
-    let copy_trading_config = CopyTradingConfig {
-        yellowstone_grpc_http: config.yellowstone_grpc_http.clone(),
-        yellowstone_grpc_token: config.yellowstone_grpc_token.clone(),
-        app_state: config.app_state.clone(),
-        swap_config: config.swap_config.clone(),
-        time_exceed: config.time_exceed,
-        counter_limit: config.counter_limit as u64,
-        min_dev_buy: config.min_dev_buy as u64,
-        max_dev_buy: config.max_dev_buy as u64,
-        target_addresses,
-        protocol_preference,
-        is_progressive_sell: config.is_progressive_sell,
-    };
-    
-    // Start the copy trading bot
-    if let Err(e) = start_copy_trading(copy_trading_config).await {
-        eprintln!("Copy trading error: {}", e);
-        
-        // Send error notification via Telegram
-        if let Err(te) = telegram::send_error_notification(&format!("Copy trading bot crashed: {}", e)).await {
-            eprintln!("Failed to send Telegram notification: {}", te);
+
+        // Display metrics every 10 scans
+        if iteration % 10 == 0 {
+            println!("");
+            println!("{}", "📊 METRICS".bright_cyan().bold());
+            println!("   Scans: {} | Opportunities: {} | Trades: {} | Profit: ${:.2}",
+                iteration.to_string().bright_blue(),
+                metrics.opportunities_found.to_string().bright_yellow(),
+                format!("{}/{}", metrics.successful_trades, metrics.failed_trades).bright_magenta(),
+                metrics.total_profit.to_string().bright_green()
+            );
+            println!("");
         }
     }
 }
