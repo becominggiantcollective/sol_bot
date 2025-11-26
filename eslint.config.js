@@ -39,7 +39,7 @@ export default [
     },
   },
   {
-    files: ['src/**/*.test.ts'],
+    files: ['src/**/__tests__/**/*.ts', 'src/**/*.test.ts', 'src/**/*.spec.ts'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -59,6 +59,7 @@ export default [
         __dirname: 'readonly',
         __filename: 'readonly',
         global: 'readonly',
+        jest: 'readonly',
         describe: 'readonly',
         it: 'readonly',
         expect: 'readonly',
@@ -66,7 +67,6 @@ export default [
         afterEach: 'readonly',
         beforeAll: 'readonly',
         afterAll: 'readonly',
-        jest: 'readonly',
       },
     },
     plugins: {
@@ -75,7 +75,7 @@ export default [
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
       '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
       'no-unused-vars': 'off',
     },
   },
