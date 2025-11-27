@@ -2,6 +2,16 @@
 
 A sophisticated Solana trading bot that executes flashloan arbitrage and MEV (Maximal Extractable Value) strategies across multiple DEXes.
 
+## ⚠️ Production Status & Assessment
+
+**Before deploying to production, please read:**
+- 📋 [**Assessment Summary**](ASSESSMENT_SUMMARY.md) - Quick reference guide (5 min read)
+- 📊 [**Pre-Go-Live Assessment**](PRE_GO_LIVE_ASSESSMENT.md) - Comprehensive readiness evaluation (30 min read)
+- 🚀 [**Production Deployment Guide**](PRODUCTION_DEPLOYMENT_GUIDE.md) - Step-by-step deployment instructions
+- ✅ Run `npm run pre-deploy-check` before any production deployment
+
+**Current Status:** Functional with identified areas for optimization. See assessment for details.
+
 ## Features
 
 - **Flashloan Arbitrage**: Executes arbitrage opportunities using flashloans from Solend and Mango Markets
@@ -86,6 +96,19 @@ LOG_LEVEL=info
 
 ## Usage
 
+### Pre-Deployment Check
+**ALWAYS run before production deployment:**
+```bash
+npm run pre-deploy-check
+```
+
+This automated checker verifies:
+- ✅ Environment setup and dependencies
+- ✅ Security vulnerabilities
+- ✅ Build status and tests
+- ✅ Configuration completeness
+- ⚠️ Potential deployment issues
+
 ### Quick Start
 ```bash
 # 1. Setup environment
@@ -109,7 +132,10 @@ npm run liquidation-example
 # 6. Start monitoring dashboard
 npm run monitor
 
-# 7. Start the bot (in production)
+# 4. Run pre-deployment checks
+npm run pre-deploy-check
+
+# 5. Start the bot (in production)
 npm start
 ```
 

@@ -14,7 +14,9 @@
     "backtest": "ts-node backtest-example.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "format": "prettier --write src/**/*.ts"
+    "format": "prettier --write src/**/*.ts",
+    "pre-deploy-check": "node pre-deployment-check.js",
+    "deploy-check": "npm run pre-deploy-check"
   },
   "keywords": [
     "solana",
