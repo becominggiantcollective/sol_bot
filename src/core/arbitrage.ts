@@ -1,12 +1,12 @@
 import { PublicKey } from '@solana/web3.js';
 import { ArbitrageOpportunity, TradingRoute, PriceData } from '../types';
 import { SolanaConnection } from './connection';
+import { config } from '../config';
 import axios from 'axios';
 
 export class ArbitrageDetector {
   private priceCache: Map<string, PriceData> = new Map();
   private readonly CACHE_DURATION = 5000; // 5 seconds
-  private readonly MIN_PROFIT_THRESHOLD = 0.001; // 0.1% minimum - lowered for more opportunities
 
   constructor(private solanaConnection: SolanaConnection) {}
 
@@ -34,7 +34,7 @@ export class ArbitrageDetector {
     const results = await Promise.allSettled(opportunityPromises);
     
     for (const result of results) {
-      if (result.status === 'fulfilled' && result.value && result.value.profitPercent > this.MIN_PROFIT_THRESHOLD) {
+      if (result.status === 'fulfilled' && result.value && result.value.profitPercent > config.trading.minProfitThreshold) {
         opportunities.push(result.value);
       }
     }
