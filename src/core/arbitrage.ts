@@ -6,7 +6,7 @@ import axios from 'axios';
 export class ArbitrageDetector {
   private priceCache: Map<string, PriceData> = new Map();
   private readonly CACHE_DURATION = 5000; // 5 seconds
-  private readonly MIN_PROFIT_THRESHOLD = 0.002; // 0.2% minimum for better profitability
+  private readonly MIN_PROFIT_THRESHOLD = 0.001; // 0.1% minimum - lowered for more opportunities
 
   constructor(private solanaConnection: SolanaConnection) {}
 

@@ -87,7 +87,7 @@ export class BotMonitor {
       console.log(`├─ DEXes: Jupiter (v6), Orca, Raydium`);
       console.log(`├─ Flashloan: Solend (0.03%), Mango (0.01%)`);
       console.log(`├─ Token Pairs: 14 high-volume pairs`);
-      console.log(`├─ Min Profit: 0.2% (optimized threshold)`);
+      console.log(`├─ Min Profit: 0.1% (lowered threshold)`);
       console.log(`├─ Max Slippage: 0.5% (tight execution)`);
       console.log(`├─ Priority Fee: 3.0x multiplier`);
       console.log(`└─ Position Size: Up to $5,000\n`);
