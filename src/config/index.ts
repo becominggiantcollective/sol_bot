@@ -13,13 +13,13 @@ export const config: Config = {
   trading: {
     maxSlippage: parseFloat(process.env.MAX_SLIPPAGE || '0.005'), // 0.5% - tighter for better execution
     maxGasFee: parseFloat(process.env.MAX_GAS_FEE || '0.02'), // 0.02 SOL - higher for priority
-    minProfitThreshold: parseFloat(process.env.MIN_PROFIT_THRESHOLD || '0.002'), // 0.2% - higher for sustainability
+    minProfitThreshold: parseFloat(process.env.MIN_PROFIT_THRESHOLD || '0.001'), // 0.1% - optimal threshold (tested vs 0.05%)
     maxPositionSize: parseFloat(process.env.MAX_POSITION_SIZE || '5000'), // $5000 - larger for better profits
   },
   liquidation: {
     enabled: true,
     maxConcurrentLiquidations: parseInt(process.env.MAX_CONCURRENT_LIQUIDATIONS || '5'), // Increased from 3
-    minProfitThreshold: parseFloat(process.env.LIQUIDATION_MIN_PROFIT || '0.015'), // 1.5% - more aggressive
+    minProfitThreshold: parseFloat(process.env.LIQUIDATION_MIN_PROFIT || '0.01'), // 1.0% - optimal threshold (tested vs 0.5%)
     priorityFeeMultiplier: parseFloat(process.env.PRIORITY_FEE_MULTIPLIER || '3.0'), // Increased from 2.0 for better competitiveness
   },
   flashloan: {

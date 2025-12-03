@@ -1,11 +1,12 @@
+import dotenv from 'dotenv';
+
+// Load environment variables FIRST
+dotenv.config();
+
 import { ArbitrageDetector } from './src/core/arbitrage';
 import { SolanaConnection } from './src/core/connection';
 import { Backtester, BacktestConfig } from './src/utils/backtester';
 import { COMMON_TOKENS, Logger } from './src/utils';
-import dotenv from 'dotenv';
-
-// Load environment variables
-dotenv.config();
 
 async function runBacktest() {
   const logger = Logger.getInstance();
@@ -160,7 +161,9 @@ async function runBacktest() {
 }
 
 // Run backtest
-if (require.main === module) {
+// Check if this file is being run directly
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
   runBacktest().catch(console.error);
 }
 
