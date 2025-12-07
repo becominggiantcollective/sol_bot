@@ -4,11 +4,10 @@
  */
 
 import { SentimentData } from './types';
-// @ts-ignore - sentiment module has no type definitions
 import Sentiment from 'sentiment';
 
 export class SentimentAnalyzer {
-  private sentiment: any;
+  private sentiment: Sentiment;
 
   constructor() {
     this.sentiment = new Sentiment();

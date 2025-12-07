@@ -196,12 +196,22 @@ export class SentimentAwareSniperStrategy implements MEVStrategy {
 
   /**
    * Get token symbol from public key
+   * 
+   * IMPORTANT: This is a placeholder implementation that returns a shortened
+   * version of the public key. In production, this should:
+   * 1. Fetch token metadata from on-chain using SPL Token Metadata program
+   * 2. Query a token registry/cache (e.g., Jupiter token list)
+   * 3. Use a token metadata service
+   * 
+   * Current limitation: Sentiment analysis will use abbreviated addresses
+   * instead of actual symbols, which may reduce effectiveness.
+   * 
    * @param mint Token mint public key
-   * @returns Token symbol (placeholder implementation)
+   * @returns Token symbol (currently returns shortened public key)
    */
   private getTokenSymbol(mint: PublicKey): string {
-    // In a real implementation, this would fetch the token symbol from on-chain metadata
-    // For now, return a shortened version of the public key
+    // TODO: Implement proper token symbol fetching from on-chain metadata
+    // or token registry. This is a simplified placeholder.
     return mint.toString().substring(0, 6).toUpperCase();
   }
 
