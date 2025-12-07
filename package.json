@@ -11,6 +11,7 @@
     "example": "ts-node example.ts",
     "liquidation-example": "ts-node liquidation-example.ts",
     "monitor": "ts-node monitor.ts",
+    "sniper": "ts-node sniper.ts",
     "backtest": "ts-node backtest-example.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
@@ -33,10 +34,15 @@
     "@project-serum/anchor": "^0.26.0",
     "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.98.4",
+    "@tensorflow/tfjs-node": "^4.22.0",
     "axios": "^1.11.0",
     "bn.js": "^5.2.2",
     "decimal.js": "^10.6.0",
-    "dotenv": "^17.2.2"
+    "dotenv": "^17.2.2",
+    "natural": "^8.1.0",
+    "sentiment": "^5.0.2",
+    "telegraf": "^4.16.3",
+    "twitter-api-v2": "^1.28.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",

@@ -16,6 +16,7 @@ A sophisticated Solana trading bot that executes flashloan arbitrage and MEV (Ma
 
 - **Flashloan Arbitrage**: Executes arbitrage opportunities using flashloans from Solend and Mango Markets
 - **MEV Strategies**: Implements sandwich attacks and liquidation strategies
+- **ML Sentiment Analysis**: Uses machine learning to analyze Twitter/X and Telegram sentiment for smarter trading decisions
 - **Aggressive Liquidation Bot**: Fast liquidation execution using flash loans with priority fee optimization
 - **Multi-Protocol Support**: Monitors Solend, Mango Markets, and Port Finance for liquidation opportunities
 - **Multi-DEX Support**: Monitors Jupiter, Orca, and Raydium for arbitrage opportunities
@@ -129,13 +130,16 @@ npm run backtest
 # 5. Test liquidation bot
 npm run liquidation-example
 
-# 6. Start monitoring dashboard
+# 6. Run ML-powered token sniper (optional - requires API keys)
+npm run sniper
+
+# 7. Start monitoring dashboard
 npm run monitor
 
-# 4. Run pre-deployment checks
+# 8. Run pre-deployment checks
 npm run pre-deploy-check
 
-# 5. Start the bot (in production)
+# 9. Start the bot (in production)
 npm start
 ```
 
