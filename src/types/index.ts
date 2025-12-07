@@ -120,3 +120,22 @@ export interface LendingProtocol {
   getPositions(): Promise<ProtocolPosition[]>;
   getLiquidationInstruction(opportunity: LiquidationOpportunity): Promise<TransactionInstruction>;
 }
+
+export interface SentimentConfig {
+  enabled: boolean;
+  twitter?: {
+    apiKey: string;
+    apiSecret: string;
+    accessToken: string;
+    accessSecret: string;
+    bearerToken: string;
+  };
+  telegram?: {
+    botToken: string;
+    channels: string[];
+  };
+  updateInterval: number;
+  sentimentThreshold: number;
+  minSampleSize: number;
+  confidenceThreshold: number;
+}

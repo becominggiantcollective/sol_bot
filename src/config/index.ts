@@ -41,3 +41,26 @@ export const config: Config = {
     },
   },
 };
+
+export const sentimentConfig = {
+  enabled: process.env.SENTIMENT_ENABLED === 'true',
+  twitter: process.env.TWITTER_BEARER_TOKEN
+    ? {
+        apiKey: process.env.TWITTER_API_KEY || '',
+        apiSecret: process.env.TWITTER_API_SECRET || '',
+        accessToken: process.env.TWITTER_ACCESS_TOKEN || '',
+        accessSecret: process.env.TWITTER_ACCESS_SECRET || '',
+        bearerToken: process.env.TWITTER_BEARER_TOKEN,
+      }
+    : undefined,
+  telegram: process.env.TELEGRAM_BOT_TOKEN
+    ? {
+        botToken: process.env.TELEGRAM_BOT_TOKEN,
+        channels: (process.env.TELEGRAM_CHANNELS || '').split(',').filter((c) => c.length > 0),
+      }
+    : undefined,
+  updateInterval: parseInt(process.env.SENTIMENT_UPDATE_INTERVAL || '300000'), // 5 minutes
+  sentimentThreshold: parseFloat(process.env.SENTIMENT_THRESHOLD || '0.3'), // 0.3 on -1 to 1 scale
+  minSampleSize: parseInt(process.env.SENTIMENT_MIN_SAMPLES || '10'),
+  confidenceThreshold: parseFloat(process.env.SENTIMENT_CONFIDENCE_THRESHOLD || '0.5'),
+};
