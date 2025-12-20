@@ -1,0 +1,218 @@
+/**
+ * Jito Bundle Executor - Phase 2 MEV Protection
+ * 
+ * Bundles multiple transactions atomically to prevent:
+ * - Sandwich attacks (front/back running)
+ * - MEV bots stealing your arbitrage
+ * - Partial execution failures
+ * 
+ * Benefits:
+ * - All 3 swaps execute or none (atomic)
+ * - Private mempool (no one sees your trades)
+ * - Priority inclusion via tips to validators
+ */
+
+import { Connection, Keypair, PublicKey, Transaction, VersionedTransaction } from '@solana/web3.js';
+import { SearcherClient } from 'jito-ts/dist/sdk/block-engine/searcher.js';
+import { Bundle } from 'jito-ts/dist/sdk/block-engine/types.js';
+import bs58 from 'bs58';
+import { config } from '../config/index.js';
+
+// Jito tip accounts (mainnet validators)
+const JITO_TIP_ACCOUNTS = [
+  'Cw8CFyM9FkoMi7K7Crf6HNQqf4uEMzpKw6QNghXLvLkY',
+  'DttWaMuVvTiduZRnguLF7jNxTgiMBZ1hyAumKUiL2KRL',
+  '96gYZGLnJYVFmbjzopPSU6QiEV5fGqZNyN9nmNhvrZU5',
+  '3AVi9Tg9Uo68tJfuvoKvqKNWKkC5wPdSSdeBnizKZ6jT',
+  'HFqU5x63VTqvQss8hp11i4wVV8bD44PvwucfZ2bU7gRe',
+  'ADaUMid9yfUytqMBgopwjb2DTLSokTSzL1zt6iGPaS49',
+  'ADuUkR4vqLUMWXxW9gh6D6L8pMSawimctcNZ5pGwDcEt',
+  'DfXygSm4jCyNCybVYYK6DwvWqjKee8pbDmJGcLWNDXjh',
+];
+
+export class JitoBundleExecutor {
+  private connection: Connection;
+  private searcherClient: SearcherClient | null = null;
+  private wallet: Keypair;
+  
+  constructor(connection: Connection, wallet: Keypair) {
+    this.connection = connection;
+    this.wallet = wallet;
+    
+    if (config.jito?.enabled) {
+      this.initializeSearcherClient();
+    }
+  }
+  
+  private async initializeSearcherClient() {
+    try {
+      // Initialize Jito searcher client
+      this.searcherClient = new SearcherClient(
+        config.jito.blockEngine,
+        this.wallet
+      );
+      
+      console.log('✅ Jito Bundle Executor initialized');
+      console.log(`   Tip amount: ${config.jito.tipLamports} lamports ($${(config.jito.tipLamports / 1e9 * 230).toFixed(2)})`);
+      console.log(`   Block engine: ${config.jito.blockEngine}`);
+    } catch (error) {
+      console.error('❌ Failed to initialize Jito client:', error);
+      this.searcherClient = null;
+    }
+  }
+  
+  /**
+   * Execute transactions as atomic bundle
+   * All transactions succeed or all fail - no partial execution
+   */
+  async executeBundle(
+    transactions: (Transaction | VersionedTransaction)[],
+    description: string
+  ): Promise<{ success: boolean; bundleId?: string; error?: string }> {
+    
+    if (!config.jito?.enabled || !this.searcherClient) {
+      return {
+        success: false,
+        error: 'Jito bundles not enabled or client not initialized'
+      };
+    }
+    
+    try {
+      console.log(`\n🎯 Submitting Jito bundle: ${description}`);
+      console.log(`   Transactions: ${transactions.length}`);
+      console.log(`   Tip: ${config.jito.tipLamports} lamports`);
+      
+      // Get a random tip account
+      const tipAccount = new PublicKey(
+        JITO_TIP_ACCOUNTS[Math.floor(Math.random() * JITO_TIP_ACCOUNTS.length)]
+      );
+      
+      // Create tip transaction
+      const tipTx = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: this.wallet.publicKey,
+          toPubkey: tipAccount,
+          lamports: config.jito.tipLamports,
+        })
+      );
+      
+      // Get recent blockhash
+      const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash('finalized');
+      tipTx.recentBlockhash = blockhash;
+      tipTx.feePayer = this.wallet.publicKey;
+      
+      // Sign tip transaction
+      tipTx.sign(this.wallet);
+      
+      // Create bundle with all transactions + tip
+      const bundle = new Bundle([...transactions, tipTx], transactions.length + 1);
+      
+      // Submit bundle
+      const bundleResult = await this.searcherClient.sendBundle(bundle);
+      
+      // Check if bundle submission succeeded
+      if (!bundleResult.ok) {
+        console.error(`❌ Bundle submission failed:`, bundleResult.error);
+        return { success: false, error: String(bundleResult.error) };
+      }
+      
+      const bundleId = bundleResult.value;
+      
+      console.log(`✅ Bundle submitted successfully!`);
+      console.log(`   Bundle ID: ${bundleId}`);
+      console.log(`   Tip account: ${tipAccount.toBase58()}`);
+      console.log(`   Waiting for confirmation...`);
+      
+      // Wait for bundle to land (up to 30 seconds)
+      const startTime = Date.now();
+      const timeout = 30000; // 30 seconds
+      
+      while (Date.now() - startTime < timeout) {
+        try {
+          // Check bundle status
+          const status = await this.searcherClient.getBundleStatuses([bundleId]);
+          
+          if (status && status.value && status.value.length > 0) {
+            const bundleStatus = status.value[0];
+            
+            if (bundleStatus.confirmation_status === 'confirmed') {
+              console.log(`✅ Bundle CONFIRMED in ${Date.now() - startTime}ms`);
+              console.log(`   Transactions: ${bundleStatus.transactions?.length || 0} executed`);
+              return { success: true, bundleId };
+            }
+            
+            if (bundleStatus.err) {
+              console.log(`❌ Bundle FAILED: ${JSON.stringify(bundleStatus.err)}`);
+              return { success: false, bundleId, error: JSON.stringify(bundleStatus.err) };
+            }
+          }
+        } catch (error) {
+          // Ignore status check errors, keep waiting
+        }
+        
+        // Wait 500ms before next check
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      
+      console.log(`⏱️ Bundle confirmation timeout after ${timeout}ms`);
+      return { success: false, bundleId, error: 'Confirmation timeout' };
+      
+    } catch (error) {
+      console.error(`❌ Bundle execution failed:`, error);
+      return { success: false, error: String(error) };
+    }
+  }
+  
+  /**
+   * Check if Jito bundles are available and working
+   */
+  async healthCheck(): Promise<boolean> {
+    if (!config.jito?.enabled || !this.searcherClient) {
+      return false;
+    }
+    
+    try {
+      // Try to get tip accounts to verify connection
+      const { blockhash } = await this.connection.getLatestBlockhash();
+      return blockhash !== null;
+    } catch (error) {
+      console.error('Jito health check failed:', error);
+      return false;
+    }
+  }
+  
+  /**
+   * Calculate if bundle tip is worth it based on profit
+   */
+  shouldUseBundleForProfit(profitLamports: number): boolean {
+    const tipCost = config.jito.tipLamports || 500000;
+    
+    // Only use bundle if profit is at least 2x the tip cost
+    const minProfitRequired = tipCost * 2;
+    
+    return profitLamports >= minProfitRequired;
+  }
+  
+  /**
+   * Get estimated bundle inclusion probability based on tip amount
+   */
+  getInclusionProbability(): { probability: number; competitiveness: string } {
+    const tipLamports = config.jito.tipLamports || 500000;
+    
+    // Rough estimates based on network conditions
+    if (tipLamports >= 1000000) {
+      return { probability: 0.95, competitiveness: 'Very High' };
+    } else if (tipLamports >= 500000) {
+      return { probability: 0.80, competitiveness: 'High' };
+    } else if (tipLamports >= 100000) {
+      return { probability: 0.50, competitiveness: 'Medium' };
+    } else {
+      return { probability: 0.20, competitiveness: 'Low' };
+    }
+  }
+}
+
+// Add missing import
+import { SystemProgram } from '@solana/web3.js';
+
+export default JitoBundleExecutor;

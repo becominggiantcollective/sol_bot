@@ -23,14 +23,31 @@ export interface Config {
     priorityFeeMultiplier: number;
   };
   flashloan: {
+    enabled?: boolean;
     providers: string[];
     maxAmount: number;
+    minProfitForFlashloan?: number;
+  };
+  jupiter?: {
+    apiKey: string;
+    apiUrl: string;
   };
   dexes: {
     [key: string]: {
       programId: string;
       enabled: boolean;
     };
+  };
+  jito?: {
+    enabled: boolean;
+    tipLamports: number;
+    bundleOnly: boolean;
+    blockEngine: string;
+  };
+  helius?: {
+    apiKey: string;
+    rpcUrl: string;
+    wsUrl: string;
   };
 }
 
@@ -44,6 +61,10 @@ export interface ArbitrageOpportunity {
   route: TradingRoute[];
   flashloanProvider?: string;
   gasEstimate: number;
+  quotes?: {
+    forward?: any;
+    reverse?: any;
+  };
 }
 
 export interface TradingRoute {

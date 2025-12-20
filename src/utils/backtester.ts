@@ -1,5 +1,5 @@
-import { ArbitrageOpportunity } from '../types';
-import { Logger } from './index';
+import { ArbitrageOpportunity } from '../types/index.js';
+import { Logger } from './index.js';
 
 export interface BacktestResult {
   totalTrades: number;
@@ -119,6 +119,31 @@ export class Backtester {
 
     this.logBacktestResults(result, config.initialCapital, currentCapital);
     return result;
+  }
+
+  /**
+   * Run backtest with optional sentiment gating
+   * sentimentMap: mapping token symbol -> sentiment score (-1..1)
+   * sentimentThreshold: minimum sentiment to allow trade (default 0.0)
+   */
+  async runBacktestWithSentiment(
+    opportunities: ArbitrageOpportunity[],
+    config: BacktestConfig,
+    sentimentMap: Record<string, number> = {},
+    sentimentThreshold = 0.0
+  ): Promise<BacktestResult> {
+    this.logger.info('Starting backtest with sentiment gating...');
+    const filtered = opportunities.filter(opp => {
+      const symbol = opp.route?.[0]?.inputMint?.toString() || opp.inputMint.toString();
+      // Try symbol first; fallback to serialized inputMint
+      const s = sentimentMap[symbol] ?? sentimentMap[opp.inputMint.toString()] ?? 0;
+      // allow if sentiment >= threshold
+      if (s >= sentimentThreshold) return true;
+      // if no signal (0) and threshold <= 0 allow
+      return sentimentThreshold <= 0 && s === 0;
+    });
+
+    return this.runBacktest(filtered, config);
   }
 
   /**

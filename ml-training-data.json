@@ -1,0 +1,439 @@
+{
+  "trades": [
+    {
+      "symbol": "Coca-Cola",
+      "liquidity": 22353.5869,
+      "profitPct": 0.8602402037053605,
+      "holdTime": 32459,
+      "result": "profit",
+      "features": {
+        "liquidityScore": 0.44707173799999994,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009456730
+    },
+    {
+      "symbol": "Coca-Cola",
+      "liquidity": 22353.5869,
+      "profitPct": 0.4930529580145118,
+      "holdTime": 4277,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 0.44707173799999994,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009464036
+    },
+    {
+      "symbol": "Coca-Cola",
+      "liquidity": 22353.5869,
+      "profitPct": 4.962102083974229,
+      "holdTime": 13672,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 0.44707173799999994,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009483048
+    },
+    {
+      "symbol": "Freedom",
+      "liquidity": 51602.0646,
+      "profitPct": -2.8929675999999933,
+      "holdTime": 27564,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009513450
+    },
+    {
+      "symbol": "Freedom",
+      "liquidity": 51602.0646,
+      "profitPct": 9.612733731603129,
+      "holdTime": 36223,
+      "result": "profit",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009553218
+    },
+    {
+      "symbol": "PENNY",
+      "liquidity": 81487.5429,
+      "profitPct": -28.7660218,
+      "holdTime": 1407,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009557867
+    },
+    {
+      "symbol": "PENNY",
+      "liquidity": 81487.5429,
+      "profitPct": -2.1451446525004982,
+      "holdTime": 94220,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009653737
+    },
+    {
+      "symbol": "WOLF",
+      "liquidity": 22205.954,
+      "profitPct": -1.6853844330173327,
+      "holdTime": 28034,
+      "result": "profit",
+      "features": {
+        "liquidityScore": 0.44411908000000005,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009684363
+    },
+    {
+      "symbol": "nocoin",
+      "liquidity": 50858.6751,
+      "profitPct": -7.888814788577267,
+      "holdTime": 14355,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009703341
+    },
+    {
+      "symbol": "nocoin",
+      "liquidity": 50858.6751,
+      "profitPct": 12.69714917565374,
+      "holdTime": 31871,
+      "result": "profit",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009738219
+    },
+    {
+      "symbol": "Rich",
+      "liquidity": 759815.8195,
+      "profitPct": -13.444016199721547,
+      "holdTime": 67948,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766052962820
+    },
+    {
+      "symbol": "AI",
+      "liquidity": 92401796.2894,
+      "profitPct": -40.662612057807095,
+      "holdTime": 302456,
+      "result": "timeout",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766053267730
+    },
+    {
+      "symbol": "Coin",
+      "liquidity": 16841002.2839,
+      "profitPct": -68.40121946346119,
+      "holdTime": 301999,
+      "result": "timeout",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766053572492
+    },
+    {
+      "symbol": "Red Bull",
+      "liquidity": 517013.3761,
+      "profitPct": -104.49838833750009,
+      "holdTime": 92748,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766053668230
+    },
+    {
+      "mint": "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      "symbol": "png",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.00959615,
+      "pnlPercent": -4.0385000000000115,
+      "holdTimeMinutes": 0.1416,
+      "won": false,
+      "entrySignals": {
+        "liquidity": 39257.23,
+        "volume24h": 218593.31,
+        "priceChange5m": 31.67,
+        "priceChange1h": 161,
+        "buyRatio": 0.5908943089430895,
+        "mlScore": 0.9507295997058195
+      },
+      "timestamp": 1766113580418
+    },
+    {
+      "mint": "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      "symbol": "png",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.010203521,
+      "pnlPercent": 2.0352099999999984,
+      "holdTimeMinutes": 0.6261333333333333,
+      "won": true,
+      "entrySignals": {
+        "liquidity": 39235.64,
+        "volume24h": 219882.06,
+        "priceChange5m": 24.9,
+        "priceChange1h": 168,
+        "buyRatio": 0.5887632978723404,
+        "mlScore": 0.9192679343387701
+      },
+      "timestamp": 1766113665428
+    },
+    {
+      "mint": "5ZtxymUCaCGLPCmFwNHGXquYWCNGQ31bq9iMKFwipump",
+      "symbol": "BOOST",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.009791998,
+      "pnlPercent": -2.0800200000000046,
+      "holdTimeMinutes": 0.5495,
+      "won": false,
+      "entrySignals": {
+        "liquidity": 32621.75,
+        "volume24h": 535314.6,
+        "priceChange5m": 5.09,
+        "priceChange1h": -34.47,
+        "buyRatio": 0.6056629834254144,
+        "mlScore": 0.8563587884870941
+      },
+      "timestamp": 1766113690870
+    },
+    {
+      "mint": "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      "symbol": "png",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.010302885,
+      "pnlPercent": 3.028849999999994,
+      "holdTimeMinutes": 0.5983666666666667,
+      "won": true,
+      "entrySignals": {
+        "liquidity": 37905.18,
+        "volume24h": 224332.76,
+        "priceChange5m": 12.64,
+        "priceChange1h": 180,
+        "buyRatio": 0.5903494176372712,
+        "mlScore": 0.8942005503348297
+      },
+      "timestamp": 1766113708704
+    },
+    {
+      "mint": "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      "symbol": "png",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.00992702,
+      "pnlPercent": -0.7298000000000027,
+      "holdTimeMinutes": 0.10911666666666667,
+      "won": false,
+      "entrySignals": {
+        "liquidity": 37573.66,
+        "volume24h": 225714.87,
+        "priceChange5m": 5.61,
+        "priceChange1h": 142,
+        "buyRatio": 0.5892797319932999,
+        "mlScore": 0.8819916999785723
+      },
+      "timestamp": 1766113718116
+    },
+    {
+      "mint": "DLMuaLHkeeMDdTTsL5ee4ejbQxewc4q2b6qvtT45pump",
+      "symbol": "BOOST",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.01158105,
+      "pnlPercent": 15.810499999999994,
+      "holdTimeMinutes": 0.2422,
+      "won": true,
+      "entrySignals": {
+        "liquidity": 57168.02,
+        "volume24h": 1619999.25,
+        "priceChange5m": 28.7,
+        "priceChange1h": 84.52,
+        "buyRatio": 0.6577643171806168,
+        "mlScore": 0.9789926816266666
+      },
+      "timestamp": 1766113743756
+    },
+    {
+      "mint": "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      "symbol": "png",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.009465519,
+      "pnlPercent": -5.34481,
+      "holdTimeMinutes": 1.0024833333333334,
+      "won": false,
+      "entrySignals": {
+        "liquidity": 37573.66,
+        "volume24h": 225714.87,
+        "priceChange5m": 5.61,
+        "priceChange1h": 142,
+        "buyRatio": 0.5892797319932999,
+        "mlScore": 0.8819916999785723
+      },
+      "timestamp": 1766113783471
+    },
+    {
+      "mint": "H8fw8sJt6ztU3dSraHMwY9SfXRKj4xV49nnjGzYPpump",
+      "symbol": "BOOST",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.009293718,
+      "pnlPercent": -7.062820000000003,
+      "holdTimeMinutes": 2.72875,
+      "won": false,
+      "entrySignals": {
+        "liquidity": 21440.8,
+        "volume24h": 26466.1,
+        "priceChange5m": 8.46,
+        "priceChange1h": 22.12,
+        "buyRatio": 0.6052631578947368,
+        "mlScore": 0.7652982369644206
+      },
+      "timestamp": 1766113806640
+    },
+    {
+      "mint": "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      "symbol": "png",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.020461159,
+      "pnlPercent": 104.61158999999998,
+      "holdTimeMinutes": 0.7580166666666667,
+      "won": true,
+      "entrySignals": {
+        "liquidity": 39428.69,
+        "volume24h": 227632.68,
+        "priceChange5m": 5.28,
+        "priceChange1h": 174,
+        "buyRatio": 0.5884525008392077,
+        "mlScore": 0.8695159299179877
+      },
+      "timestamp": 1766113831899
+    },
+    {
+      "mint": "DLMuaLHkeeMDdTTsL5ee4ejbQxewc4q2b6qvtT45pump",
+      "symbol": "BOOST",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.020896062,
+      "pnlPercent": 108.96061999999999,
+      "holdTimeMinutes": 0.33155,
+      "won": true,
+      "entrySignals": {
+        "liquidity": 57900.53,
+        "volume24h": 1632119.32,
+        "priceChange5m": 17.09,
+        "priceChange1h": 85.32,
+        "buyRatio": 0.659346692286577,
+        "mlScore": 0.9345784405733332
+      },
+      "timestamp": 1766113832955
+    },
+    {
+      "mint": "5ZtxymUCaCGLPCmFwNHGXquYWCNGQ31bq9iMKFwipump",
+      "symbol": "BOOST",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.010076904,
+      "pnlPercent": 0.7690399999999986,
+      "holdTimeMinutes": 2.49385,
+      "won": true,
+      "entrySignals": {
+        "liquidity": 32064.58,
+        "volume24h": 536829.26,
+        "priceChange5m": 1.4,
+        "priceChange1h": -36.78,
+        "buyRatio": 0.609007164790174,
+        "mlScore": 0.8480274338086556
+      },
+      "timestamp": 1766113847058
+    },
+    {
+      "mint": "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      "symbol": "png",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.009729337,
+      "pnlPercent": -2.70663000000001,
+      "holdTimeMinutes": 0.12903333333333333,
+      "won": false,
+      "entrySignals": {
+        "liquidity": 37828.15,
+        "volume24h": 231080.54,
+        "priceChange5m": 4.87,
+        "priceChange1h": 150,
+        "buyRatio": 0.5860449513586045,
+        "mlScore": 0.8413056944214495
+      },
+      "timestamp": 1766113914678
+    },
+    {
+      "mint": "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      "symbol": "png",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.020816012,
+      "pnlPercent": 108.16011999999998,
+      "holdTimeMinutes": 0.05876666666666667,
+      "won": true,
+      "entrySignals": {
+        "liquidity": 37621.11,
+        "volume24h": 243920.19,
+        "priceChange5m": 7.67,
+        "priceChange1h": 77.08,
+        "buyRatio": 0.5976207137858642,
+        "mlScore": 0.8446901878800771
+      },
+      "timestamp": 1766114224708
+    },
+    {
+      "mint": "3SV6941SzH5WtNKMQUV6CifBGSuqeGGDReUw3CAwYPYr",
+      "symbol": "The",
+      "entryAmountSol": 0.01,
+      "exitAmountSol": 0.015837829,
+      "pnlPercent": 58.37829000000001,
+      "holdTimeMinutes": 3.562866666666667,
+      "won": true,
+      "entrySignals": {
+        "liquidity": 34250.09,
+        "volume24h": 166427.75,
+        "priceChange5m": 11.69,
+        "priceChange1h": 48.26,
+        "buyRatio": 0.5695039804041642,
+        "mlScore": 0.8374421311707588
+      },
+      "timestamp": 1766114865125
+    }
+  ],
+  "patterns": {}
+}

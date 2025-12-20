@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "weights": {
+    "liquidityScore": -0.3117571110407181,
+    "volumeScore": -0.27732485160646475,
+    "ageScore": 0.0811874660394884,
+    "priceVelocity": 0.15,
+    "volumeSpike": 0.1,
+    "holderConcentration": -0.2,
+    "rugTimingRisk": -0.28499704420596395,
+    "priceDropVelocity": -0.2,
+    "marketMomentum": 0.1,
+    "tokenMomentum": 0.15,
+    "pumpDumpPattern": -0.2,
+    "organicGrowthPattern": 0.15,
+    "whaleActivityPattern": -0.15,
+    "socialMomentum": 0.1,
+    "buyPressure": 0.15,
+    "spreadHealth": 0.10000000000000027
+  },
+  "thresholds": {
+    "buyScore": 0.65,
+    "sellQuickScore": 0.8,
+    "rugRiskScore": 0.35,
+    "minConfidence": 0.6
+  },
+  "rugTiming": {
+    "fastRugWindow": 10000,
+    "mediumRugWindow": 60000,
+    "avgRugTime": 1400,
+    "rugWarningThreshold": 5000
+  },
+  "stats": {
+    "totalPredictions": 65,
+    "correctPredictions": 50,
+    "accuracy": "76.9",
+    "rugsCaught": 0,
+    "rugsMissed": 1,
+    "falsePositives": 0
+  }
+}

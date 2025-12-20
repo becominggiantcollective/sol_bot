@@ -1,0 +1,243 @@
+{
+  "trades": [
+    {
+      "symbol": "GROKYHOME",
+      "tokenAge": 0,
+      "holdTime": 28886,
+      "holdTimeMin": "0.48",
+      "pnlPct": -108.01363239999999,
+      "peakPct": 1.0125454000000034,
+      "peakTime": 22220,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T21:55:53.799Z"
+    },
+    {
+      "symbol": "kaomoji",
+      "tokenAge": 0,
+      "holdTime": 21681,
+      "holdTimeMin": "0.36",
+      "pnlPct": -152.79282920000003,
+      "peakPct": -1.7229227999999972,
+      "peakTime": 4991,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T21:56:23.900Z"
+    },
+    {
+      "symbol": "GROKYHOME",
+      "tokenAge": 0,
+      "holdTime": 43869,
+      "holdTimeMin": "0.73",
+      "pnlPct": -96.4700106,
+      "peakPct": 2.921384400000002,
+      "peakTime": 34656,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T21:56:41.363Z"
+    },
+    {
+      "symbol": "Treasury",
+      "tokenAge": 0,
+      "holdTime": 74538,
+      "holdTimeMin": "1.24",
+      "pnlPct": -101.0789438,
+      "peakPct": 8.554742200000007,
+      "peakTime": 73140,
+      "result": "profit",
+      "timestamp": "2025-12-17T21:57:58.605Z"
+    },
+    {
+      "symbol": "CANTCHATRN",
+      "tokenAge": 0,
+      "holdTime": 88385,
+      "holdTimeMin": "1.47",
+      "pnlPct": -112.39722080000001,
+      "peakPct": -0.7159827999999924,
+      "peakTime": 32167,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T21:58:48.481Z"
+    },
+    {
+      "symbol": "Google",
+      "tokenAge": 0,
+      "holdTime": 43711,
+      "holdTimeMin": "0.73",
+      "pnlPct": -96.04666186666667,
+      "peakPct": 6.805687266666673,
+      "peakTime": 36799,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T22:00:21.321Z"
+    },
+    {
+      "symbol": "X",
+      "tokenAge": 0,
+      "holdTime": 53197,
+      "holdTimeMin": "0.89",
+      "pnlPct": 0.4698807999999992,
+      "peakPct": 10.665705200000003,
+      "peakTime": 51551,
+      "result": "profit",
+      "timestamp": "2025-12-17T22:06:46.303Z"
+    },
+    {
+      "symbol": "Coca-Cola",
+      "tokenAge": 0,
+      "holdTime": 32459,
+      "holdTimeMin": "0.54",
+      "pnlPct": 0.8602402037053605,
+      "peakPct": 11.340353369791648,
+      "peakTime": 27475,
+      "result": "profit",
+      "timestamp": "2025-12-17T22:10:56.730Z"
+    },
+    {
+      "symbol": "Coca-Cola",
+      "tokenAge": 0,
+      "holdTime": 4277,
+      "holdTimeMin": "0.07",
+      "pnlPct": 0.4930529580145118,
+      "peakPct": -28.769842822465908,
+      "peakTime": 1988,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T22:11:04.035Z"
+    },
+    {
+      "symbol": "Coca-Cola",
+      "tokenAge": 0,
+      "holdTime": 13672,
+      "holdTimeMin": "0.23",
+      "pnlPct": 4.962102083974229,
+      "peakPct": 4.928054422084601,
+      "peakTime": 7374,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T22:11:23.048Z"
+    },
+    {
+      "symbol": "Freedom",
+      "tokenAge": 0,
+      "holdTime": 27564,
+      "holdTimeMin": "0.46",
+      "pnlPct": -2.8929675999999933,
+      "peakPct": 5.5830686000000105,
+      "peakTime": 20891,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T22:11:53.450Z"
+    },
+    {
+      "symbol": "Freedom",
+      "tokenAge": 0,
+      "holdTime": 36223,
+      "holdTimeMin": "0.60",
+      "pnlPct": 9.612733731603129,
+      "peakPct": 10.490606226895654,
+      "peakTime": 34800,
+      "result": "profit",
+      "timestamp": "2025-12-17T22:12:33.218Z"
+    },
+    {
+      "symbol": "PENNY",
+      "tokenAge": 0,
+      "holdTime": 1407,
+      "holdTimeMin": "0.02",
+      "pnlPct": -28.7660218,
+      "peakPct": -24.500121800000006,
+      "peakTime": 326,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T22:12:37.867Z"
+    },
+    {
+      "symbol": "PENNY",
+      "tokenAge": 0,
+      "holdTime": 94220,
+      "holdTimeMin": "1.57",
+      "pnlPct": -2.1451446525004982,
+      "peakPct": 9.223590251253722,
+      "peakTime": 87328,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T22:14:13.737Z"
+    },
+    {
+      "symbol": "WOLF",
+      "tokenAge": 0,
+      "holdTime": 28034,
+      "holdTimeMin": "0.47",
+      "pnlPct": -1.6853844330173327,
+      "peakPct": 11.779745335408244,
+      "peakTime": 25544,
+      "result": "profit",
+      "timestamp": "2025-12-17T22:14:44.363Z"
+    },
+    {
+      "symbol": "nocoin",
+      "tokenAge": 0,
+      "holdTime": 14355,
+      "holdTimeMin": "0.24",
+      "pnlPct": -7.888814788577267,
+      "peakPct": 3.452380988452388,
+      "peakTime": 7902,
+      "result": "stoploss",
+      "timestamp": "2025-12-17T22:15:03.341Z"
+    },
+    {
+      "symbol": "nocoin",
+      "tokenAge": 0,
+      "holdTime": 31871,
+      "holdTimeMin": "0.53",
+      "pnlPct": 12.69714917565374,
+      "peakPct": 12.640048440664955,
+      "peakTime": 30548,
+      "result": "profit",
+      "timestamp": "2025-12-17T22:15:38.219Z"
+    },
+    {
+      "symbol": "Rich",
+      "tokenAge": 0,
+      "holdTime": 67948,
+      "holdTimeMin": "1.13",
+      "pnlPct": -13.444016199721547,
+      "peakPct": 13.469658598063253,
+      "peakTime": 56013,
+      "result": "stoploss",
+      "timestamp": "2025-12-18T10:16:02.820Z"
+    },
+    {
+      "symbol": "AI",
+      "tokenAge": 0,
+      "holdTime": 302456,
+      "holdTimeMin": "5.04",
+      "pnlPct": -40.662612057807095,
+      "peakPct": 0.02808242868917385,
+      "peakTime": 130716,
+      "result": "timeout",
+      "timestamp": "2025-12-18T10:21:07.729Z"
+    },
+    {
+      "symbol": "Coin",
+      "tokenAge": 0,
+      "holdTime": 301999,
+      "holdTimeMin": "5.03",
+      "pnlPct": -68.40121946346119,
+      "peakPct": 0.07416057854169299,
+      "peakTime": 285809,
+      "result": "timeout",
+      "timestamp": "2025-12-18T10:26:12.492Z"
+    },
+    {
+      "symbol": "Red Bull",
+      "tokenAge": 0,
+      "holdTime": 92748,
+      "holdTimeMin": "1.55",
+      "pnlPct": -104.49838833750009,
+      "peakPct": 4.968404307800327,
+      "peakTime": 85890,
+      "result": "stoploss",
+      "timestamp": "2025-12-18T10:27:48.230Z"
+    }
+  ],
+  "patterns": {
+    "avgTimeToProfit": 42720.333333333336,
+    "avgTimeToPeak": 40509.666666666664,
+    "avgPeakPct": 10.911866795460085,
+    "rugPullAvgTime": 76478.53333333334,
+    "profitWindowStart": 28034,
+    "profitWindowEnd": 53197
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "positions": [
+    [
+      "3bCDKrN4pyVEAvzNkH7fX5cMYo9DXwRZ5jCi3Dm8pump",
+      {
+        "symbol": "Some",
+        "tokenAmount": 3098423290,
+        "entryAmountSol": 0.01,
+        "entryTime": 1766116625028,
+        "signature": "47YY2ozvYzqJaeHQWE7veUGzK2SoqMEnjBExhya37wPTH6smaMvWyUf6zWxKFkyRq2hYyqVERTGgKDJP4L9V8bPj",
+        "entrySignals": {
+          "liquidity": 59223.97,
+          "volume24h": 483454,
+          "priceChange5m": 17.33,
+          "priceChange1h": 73.23,
+          "buyRatio": 0.7272269753397081,
+          "mlScore": 0.90793919952
+        },
+        "currentValue": 0.010015762,
+        "profitSOL": 0.000015761999999999027,
+        "profitUSD": 0.003625259999999776,
+        "pnlPct": 0.15761999999999166,
+        "peakValue": 0.010015762,
+        "peakPnlPct": 0.15761999999999166
+      }
+    ],
+    [
+      "DzQGSpqwxnmY6K4emTVbHYWtTF9mgXxzQ56goF87pump",
+      {
+        "symbol": "png",
+        "tokenAmount": 5764845581,
+        "entryAmountSol": 0.01,
+        "entryTime": 1766116639935,
+        "signature": "4G7E2Nm3Jr3J6DYt9Y5sEZZ1ZBnEiEr6ZYfMB1FPfAZQoMSYbFmQggVAHsAxyr5twXWmayQEtABjwUJhY3yWgc6E",
+        "entrySignals": {
+          "liquidity": 43950.79,
+          "volume24h": 335456.56,
+          "priceChange5m": 6.06,
+          "priceChange1h": 73.88,
+          "buyRatio": 0.5604819277108434,
+          "mlScore": 0.8672070630964325
+        },
+        "currentValue": 0.009972342,
+        "profitSOL": -0.00002765799999999985,
+        "profitUSD": -0.006361339999999965,
+        "pnlPct": -0.27657999999999294,
+        "peakValue": 0.009972342,
+        "peakPnlPct": -0.27657999999999294
+      }
+    ]
+  ],
+  "stats": {
+    "scanned": 294,
+    "rejected": 224,
+    "bought": 29,
+    "sold": 23,
+    "honeypots": 261
+  },
+  "lastSaved": 1766116665956
+}

@@ -1,0 +1,444 @@
+{
+  "startTime": "2025-12-07T00:04:47.922Z",
+  "walletBalance": {
+    "lamports": 10071612,
+    "sol": 0.010071612,
+    "walletAddress": "9VZkKLpzCwfHXpHFRW7T2NXZ68T9E5vwgFaXtCzdtgzQ"
+  },
+  "gasPrices": {
+    "baseFeePerSignature": 5000,
+    "priorityFeeMicroLamports": {
+      "low": 1000,
+      "medium": 10000,
+      "high": 100000,
+      "urgent": 500000
+    },
+    "estimatedTotal3Swaps": {
+      "low": 0.0000156,
+      "medium": 0.000021,
+      "high": 0.000075,
+      "urgent": 0.000315
+    }
+  },
+  "trades": [
+    {
+      "timestamp": "2025-12-07T00:04:47.925Z",
+      "path": [
+        "SOL",
+        "USDC",
+        "RAY"
+      ],
+      "flashLoanAmount": 10,
+      "flashLoanToken": "SOL",
+      "leg1Output": 1323.509956,
+      "leg2Output": 1165.285643,
+      "leg3Output": 9.987083229,
+      "fees": {
+        "flashLoanFee": 0.03,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.030021,
+        "totalFeesPercent": 0.30021
+      },
+      "profit": {
+        "grossReturn": 9.987083229,
+        "grossProfit": -0.012916771000000438,
+        "grossProfitPercent": -0.12916771000000438,
+        "netProfit": -0.0429377709999998,
+        "netProfitPercent": -0.429377709999998,
+        "isProfitable": false,
+        "repaymentAmount": 10.03
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    },
+    {
+      "timestamp": "2025-12-07T00:04:49.962Z",
+      "path": [
+        "SOL",
+        "USDC",
+        "BONK"
+      ],
+      "flashLoanAmount": 10,
+      "flashLoanToken": "SOL",
+      "leg1Output": 1323.502336,
+      "leg2Output": 140419290.40393,
+      "leg3Output": 9.971494229,
+      "fees": {
+        "flashLoanFee": 0.03,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.030021,
+        "totalFeesPercent": 0.30021
+      },
+      "profit": {
+        "grossReturn": 9.971494229,
+        "grossProfit": -0.028505771000000735,
+        "grossProfitPercent": -0.28505771000000735,
+        "netProfit": -0.058526771000000095,
+        "netProfitPercent": -0.585267710000001,
+        "isProfitable": false,
+        "repaymentAmount": 10.03
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    },
+    {
+      "timestamp": "2025-12-07T00:04:51.982Z",
+      "path": [
+        "SOL",
+        "USDT",
+        "RAY"
+      ],
+      "flashLoanAmount": 10,
+      "flashLoanToken": "SOL",
+      "leg1Output": 1323.09267,
+      "leg2Output": 1165.278038,
+      "leg3Output": 9.987018053,
+      "fees": {
+        "flashLoanFee": 0.03,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.030021,
+        "totalFeesPercent": 0.30021
+      },
+      "profit": {
+        "grossReturn": 9.987018053,
+        "grossProfit": -0.012981947000000105,
+        "grossProfitPercent": -0.12981947000000105,
+        "netProfit": -0.043002946999999465,
+        "netProfitPercent": -0.43002946999999464,
+        "isProfitable": false,
+        "repaymentAmount": 10.03
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    },
+    {
+      "timestamp": "2025-12-07T00:04:53.846Z",
+      "path": [
+        "SOL",
+        "USDC",
+        "JUP"
+      ],
+      "flashLoanAmount": 10,
+      "flashLoanToken": "SOL",
+      "leg1Output": 1323.528416,
+      "leg2Output": 5825.481342,
+      "leg3Output": 9.99518619,
+      "fees": {
+        "flashLoanFee": 0.03,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.030021,
+        "totalFeesPercent": 0.30021
+      },
+      "profit": {
+        "grossReturn": 9.99518619,
+        "grossProfit": -0.004813809999999918,
+        "grossProfitPercent": -0.048138099999999184,
+        "netProfit": -0.03483480999999928,
+        "netProfitPercent": -0.34834809999999283,
+        "isProfitable": false,
+        "repaymentAmount": 10.03
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    },
+    {
+      "timestamp": "2025-12-07T00:04:55.902Z",
+      "path": [
+        "SOL",
+        "USDC",
+        "RAY"
+      ],
+      "flashLoanAmount": 100,
+      "flashLoanToken": "SOL",
+      "leg1Output": 13235.399868,
+      "leg2Output": 11645.988224,
+      "leg3Output": 99.713663342,
+      "fees": {
+        "flashLoanFee": 0.3,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.300021,
+        "totalFeesPercent": 0.300021
+      },
+      "profit": {
+        "grossReturn": 99.713663342,
+        "grossProfit": -0.2863366579999962,
+        "grossProfitPercent": -0.2863366579999962,
+        "netProfit": -0.5863576579999934,
+        "netProfitPercent": -0.5863576579999934,
+        "isProfitable": false,
+        "repaymentAmount": 100.3
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    },
+    {
+      "timestamp": "2025-12-07T00:04:57.861Z",
+      "path": [
+        "SOL",
+        "USDC",
+        "BONK"
+      ],
+      "flashLoanAmount": 100,
+      "flashLoanToken": "SOL",
+      "leg1Output": 13235.425798,
+      "leg2Output": 1401784871.08871,
+      "leg3Output": 98.700896699,
+      "fees": {
+        "flashLoanFee": 0.3,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.300021,
+        "totalFeesPercent": 0.300021
+      },
+      "profit": {
+        "grossReturn": 98.700896699,
+        "grossProfit": -1.2991033010000024,
+        "grossProfitPercent": -1.2991033010000024,
+        "netProfit": -1.5991243009999996,
+        "netProfitPercent": -1.5991243009999996,
+        "isProfitable": false,
+        "repaymentAmount": 100.3
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    },
+    {
+      "timestamp": "2025-12-07T00:05:00.339Z",
+      "path": [
+        "SOL",
+        "USDT",
+        "RAY"
+      ],
+      "flashLoanAmount": 100,
+      "flashLoanToken": "SOL",
+      "leg1Output": 13237.696521,
+      "leg2Output": 11636.774876,
+      "leg3Output": 99.630534227,
+      "fees": {
+        "flashLoanFee": 0.3,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.300021,
+        "totalFeesPercent": 0.300021
+      },
+      "profit": {
+        "grossReturn": 99.630534227,
+        "grossProfit": -0.3694657730000017,
+        "grossProfitPercent": -0.3694657730000017,
+        "netProfit": -0.6694867729999989,
+        "netProfitPercent": -0.6694867729999989,
+        "isProfitable": false,
+        "repaymentAmount": 100.3
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    },
+    {
+      "timestamp": "2025-12-07T00:05:02.182Z",
+      "path": [
+        "SOL",
+        "USDC",
+        "JUP"
+      ],
+      "flashLoanAmount": 100,
+      "flashLoanToken": "SOL",
+      "leg1Output": 13245.323469,
+      "leg2Output": 58248.648297,
+      "leg3Output": 99.853081654,
+      "fees": {
+        "flashLoanFee": 0.3,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.300021,
+        "totalFeesPercent": 0.300021
+      },
+      "profit": {
+        "grossReturn": 99.853081654,
+        "grossProfit": -0.14691834600000675,
+        "grossProfitPercent": -0.14691834600000675,
+        "netProfit": -0.4469393460000039,
+        "netProfitPercent": -0.4469393460000039,
+        "isProfitable": false,
+        "repaymentAmount": 100.3
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "successful": 8,
+    "profitable": 0,
+    "avgGrossProfit": 0,
+    "avgNetProfit": 0,
+    "totalFeesPaid": 1.3201679999999998,
+    "bestTrade": {
+      "timestamp": "2025-12-07T00:04:53.846Z",
+      "path": [
+        "SOL",
+        "USDC",
+        "JUP"
+      ],
+      "flashLoanAmount": 10,
+      "flashLoanToken": "SOL",
+      "leg1Output": 1323.528416,
+      "leg2Output": 5825.481342,
+      "leg3Output": 9.99518619,
+      "fees": {
+        "flashLoanFee": 0.03,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.030021,
+        "totalFeesPercent": 0.30021
+      },
+      "profit": {
+        "grossReturn": 9.99518619,
+        "grossProfit": -0.004813809999999918,
+        "grossProfitPercent": -0.048138099999999184,
+        "netProfit": -0.03483480999999928,
+        "netProfitPercent": -0.34834809999999283,
+        "isProfitable": false,
+        "repaymentAmount": 10.03
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    },
+    "worstTrade": {
+      "timestamp": "2025-12-07T00:04:57.861Z",
+      "path": [
+        "SOL",
+        "USDC",
+        "BONK"
+      ],
+      "flashLoanAmount": 100,
+      "flashLoanToken": "SOL",
+      "leg1Output": 13235.425798,
+      "leg2Output": 1401784871.08871,
+      "leg3Output": 98.700896699,
+      "fees": {
+        "flashLoanFee": 0.3,
+        "flashLoanFeePercent": 0.3,
+        "gasBaseFee": 0.000015,
+        "gasPriorityFee": 0.0000059999999999999985,
+        "totalGasSOL": 0.000021,
+        "totalGasInToken": 0.000021,
+        "totalFees": 0.300021,
+        "totalFeesPercent": 0.300021
+      },
+      "profit": {
+        "grossReturn": 98.700896699,
+        "grossProfit": -1.2991033010000024,
+        "grossProfitPercent": -1.2991033010000024,
+        "netProfit": -1.5991243009999996,
+        "netProfitPercent": -1.5991243009999996,
+        "isProfitable": false,
+        "repaymentAmount": 100.3
+      },
+      "verification": {
+        "walletHadEnoughForGas": true,
+        "walletBalance": 0.010071612,
+        "requiredGas": 0.000021,
+        "allFeesFromFlashLoan": false,
+        "correctDecimalHandling": true,
+        "profitCalculationCorrect": true
+      },
+      "success": true
+    }
+  },
+  "endTime": "2025-12-07T00:05:04.884Z"
+}

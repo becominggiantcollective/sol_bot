@@ -1,22 +1,40 @@
 import { PublicKey } from '@solana/web3.js';
 
-// High-volume, high-liquidity tokens optimized for profitable arbitrage
+// High-volume tokens + volatile meme coins for maximum arbitrage opportunities
 export const COMMON_TOKENS = {
+  // === CORE STABLES/MAJORS ===
   SOL: new PublicKey('So11111111111111111111111111111111111111112'),
   USDC: new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
   USDT: new PublicKey('Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB'),
-  BONK: new PublicKey('DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263'),
-  WIF: new PublicKey('EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm'),
+  
+  // === LIQUID STAKING (price dislocations during staking events) ===
+  mSOL: new PublicKey('mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So'),
+  jitoSOL: new PublicKey('J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn'),
+  
+  // === DEX TOKENS (high volume, cross-DEX arb potential) ===
   JUP: new PublicKey('JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN'),
   RAY: new PublicKey('4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R'),
-  // Additional high-volume tokens for competitive advantage
-  ORCA: new PublicKey('orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE'),
-  MNGO: new PublicKey('MangoCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac'),
-  SRM: new PublicKey('SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt'),
-  mSOL: new PublicKey('mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So'),
-  stSOL: new PublicKey('7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj'),
+  
+  // === HIGH VOLATILITY MEME COINS (where arb opportunities live) ===
+  BONK: new PublicKey('DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263'),
+  WIF: new PublicKey('EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm'),
+  POPCAT: new PublicKey('7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr'),
+  PENGU: new PublicKey('2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv'),  // $541K vol, $4.1M liq
+  
+  // === TRENDING HOT TOKENS (High volume on Raydium/Pumpswap) ===
+  // pippin - $25.6M vol, $9.5M liq on Raydium
+  PIPPIN: new PublicKey('Dfh5DzRgSvvCFDoYc2ciTkMrbDfRKybA4SoFbPmApump'),
+  // arc - $3.1M vol, $3.4M liq on Raydium  
+  ARC: new PublicKey('61V8vBaqAGMpgDQi4JcAwo1dmBGHsyhzodcPqnEVpump'),
+  // Shoggoth - $5.4M vol on Raydium
+  SHOGGOTH: new PublicKey('H6YqpXmDH9byrVsdJWgVdTJxzUob9uL7aoSLpFqapump'),
+  
+  // === ORACLE/DEFI ===
   PYTH: new PublicKey('HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3'),
   JTO: new PublicKey('jtojtomepa8beP8AuQc6eXt5FriJwfFMwQx2v2f9mCL'),
+  
+  // === WORMHOLE BRIDGED (bridge delays = arb windows) ===
+  WETH: new PublicKey('7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs'),
 };
 
 export function formatNumber(num: number, decimals = 6): string {

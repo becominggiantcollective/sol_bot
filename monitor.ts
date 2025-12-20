@@ -1,5 +1,5 @@
-import { SolanaArbitrageBot } from './src/index';
-import { Logger } from './src/utils';
+import { SolanaArbitrageBot } from './src/index.js';
+import { Logger } from './src/utils/index.js';
 
 export class BotMonitor {
   private bot: SolanaArbitrageBot;
@@ -53,7 +53,7 @@ export class BotMonitor {
       console.log(`├─ Status: ${isActive ? '🟢 ACTIVE & SCANNING' : '🔴 INACTIVE'}`);
       console.log(`├─ Wallet: ${walletAddress.substring(0, 8)}...${walletAddress.substring(walletAddress.length - 8)}`);
       console.log(`├─ Balance: ${balance.toFixed(4)} SOL`);
-      console.log(`└─ Health: ${balance > 0.5 ? '🟢 Good' : balance > 0.1 ? '🟡 Low' : '🔴 Critical'}\n`);
+      console.log(`└─ Health: ${balance > 0.02 ? '🟢 Good' : balance > 0.005 ? '🟡 Low' : '🔴 Critical'}\n`);
       
       // Performance metrics
       console.log(`💰 PROFITABILITY METRICS`);
@@ -106,9 +106,9 @@ export class BotMonitor {
       
       // Warnings and recommendations
       const warnings: string[] = [];
-      if (balance < 0.1) {
+      if (balance < 0.005) {
         warnings.push('🔴 CRITICAL: SOL balance too low! Add funds immediately.');
-      } else if (balance < 0.5) {
+      } else if (balance < 0.02) {
         warnings.push('🟡 WARNING: SOL balance getting low. Consider adding more.');
       }
       
@@ -169,7 +169,11 @@ async function main(): Promise<void> {
   await monitor.startMonitoring();
 }
 
-if (require.main === module) {
+// ES module compatible main check
+import { fileURLToPath } from 'url';
+const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
+
+if (isMainModule) {
   main().catch(console.error);
 }
 

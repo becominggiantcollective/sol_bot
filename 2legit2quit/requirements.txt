@@ -1,0 +1,8 @@
+# Claude Agent SDK for building trading agents
+claude-agent-sdk==0.1.17
+
+# Environment variable management
+python-dotenv==1.0.0
+
+# Optional: Type checking and development tools
+mypy==1.13.0

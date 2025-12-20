@@ -22,11 +22,17 @@ impl BlockLogger {
         println!("🚀 Starting Yellowstone gRPC Block Logger");
         println!("📍 Connecting to: {}", self.endpoint);
 
-        // Create interceptor (None means no authentication token)
-        // If you need an auth token, replace None with Some("your_token".to_string())
-        let auth_token: Option<String> = None;
+        // Create interceptor, optionally using YELLOWSTONE_GRPC_TOKEN
+        let auth_token: Option<String> = std::env::var("YELLOWSTONE_GRPC_TOKEN").ok();
 
         // Connect to the gRPC endpoint using the builder pattern
+        if let Some(token) = &auth_token {
+            // Mask token length for safety
+            println!("🔑 Using auth token (len={} chars)", token.len());
+        } else {
+            println!("ℹ️ No auth token provided; endpoint may require one.");
+        }
+
         let builder = GeyserGrpcClient::build_from_shared(self.endpoint.clone())
             .context("Failed to build gRPC client")?;
             
@@ -35,9 +41,9 @@ impl BlockLogger {
             .map_err(|e| anyhow::anyhow!("Failed to set token: {}", e))?
             .connect()
             .await
-            .context("Failed to connect to Yellowstone gRPC endpoint")?;
+            .map_err(|e| anyhow::anyhow!("Failed to connect to Yellowstone gRPC endpoint: {}", e))?;
 
-        println!("✅ Connected successfully!");
+        println!("✅ Connected successfully! Starting subscription...");
 
         // Create subscription request for blocks
         let mut blocks = HashMap::new();
@@ -70,23 +76,22 @@ impl BlockLogger {
             .await
             .context("Failed to create subscription stream")?;
 
-        println!("🎯 Block logger started! Listening for block updates...");
+        println!("🎯 Subscription created. Waiting for block updates...");
 
-        // Process incoming updates
+        // Process incoming updates with a simple heartbeat/timeout
+        let mut last = std::time::Instant::now();
         while let Some(update) = stream.next().await {
             match update {
                 Ok(update) => {
+                    last = std::time::Instant::now();
                     if let Some(update_oneof) = update.update_oneof {
                         match update_oneof {
                             yellowstone_grpc_proto::prelude::subscribe_update::UpdateOneof::Block(block) => {
                                 self.log_block_update(&block).await;
-                                
                                 // TODO: Add transaction processing logic
                                 self.process_transactions(&block).await;
-                                
                                 // TODO: Add mempool monitoring logic
                                 self.monitor_mempool().await;
-                                
                                 // TODO: Add arbitrage opportunity detection
                                 self.detect_arbitrage_opportunities(&block).await;
                             }
@@ -98,9 +103,14 @@ impl BlockLogger {
                 }
                 Err(e) => {
                     eprintln!("❌ Error receiving update: {}", e);
-                    // Consider reconnection logic here
                     break;
                 }
+            }
+
+            // If no updates for 60s, inform user (but keep running)
+            if last.elapsed().as_secs() > 60 {
+                println!("⏳ No block updates seen in the last 60s; staying subscribed...");
+                last = std::time::Instant::now();
             }
         }
 

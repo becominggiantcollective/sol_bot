@@ -1,0 +1,80 @@
+{
+  "patterns": [
+    {
+      "timestamp": 1766009557867,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "loss": -28.7660218
+    },
+    {
+      "timestamp": 1766009557867,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "loss": -28.7660218
+    },
+    {
+      "timestamp": 1766009557867,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "loss": -28.7660218
+    },
+    {
+      "timestamp": 1766009557867,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "loss": -28.7660218
+    },
+    {
+      "timestamp": 1766009557867,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "loss": -28.7660218
+    },
+    {
+      "timestamp": 1766009557867,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "loss": -28.7660218
+    },
+    {
+      "timestamp": 1766009557867,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "loss": -28.7660218
+    },
+    {
+      "timestamp": 1766009557867,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "loss": -28.7660218
+    }
+  ],
+  "avgRugTime": 1400,
+  "fastestRug": 1000,
+  "slowestRug": 30000,
+  "commonFeatures": {}
+}

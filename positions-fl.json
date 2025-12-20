@@ -1,0 +1,315 @@
+{
+  "positions": [
+    [
+      "GXHc1rseR2yVoJJ3zn5WCSaNAoStDMPKMHubpyBdN7DF",
+      {
+        "mint": "GXHc1rseR2yVoJJ3zn5WCSaNAoStDMPKMHubpyBdN7DF",
+        "symbol": "Coca-Cola",
+        "entrySOL": 0.020673959999999998,
+        "tokensHeld": 39999869004,
+        "liquidity": 22353.5869,
+        "strategy": {
+          "targetPct": 10,
+          "stopLossPct": 10,
+          "maxHoldMin": 10,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 10,
+        "stopLoss": 10,
+        "maxHoldMin": 10,
+        "entryTime": 1766009469376,
+        "entryTx": "5WUJNok11tsMfrwv5tkm3Lni5HcKQFsp8ZjnSaRK3jvT5uS1ePCh9S2QsaDpnSBy5U4FQtR4CinnSxeuGhjjwwMT",
+        "gasCost": 0.00011000000000000246,
+        "status": "CLOSED",
+        "peakPct": 4.928054422084601,
+        "peakTime": 7374,
+        "exitSOL": 0.021809823,
+        "profit": 0.0010258629999999984,
+        "profitPct": 4.962102083974229,
+        "exitTx": "3sNVkUFf8yCKFkbXRLg7ifuMkP8BjuVdYHppk962J9qwapNh7cEpiLPZBzk3RGk6EsKBP56Hxfayhwh2QQjzXUir",
+        "exitTime": 1766009483048
+      }
+    ],
+    [
+      "DuXbULJqUf3uUoW5jcFxz68dgA28ssGTzWFaZfeLSqgH",
+      {
+        "mint": "DuXbULJqUf3uUoW5jcFxz68dgA28ssGTzWFaZfeLSqgH",
+        "symbol": "Freedom",
+        "entrySOL": 0.021231671,
+        "tokensHeld": 1679229901,
+        "liquidity": 51602.0646,
+        "strategy": {
+          "targetPct": 10,
+          "stopLossPct": 10,
+          "maxHoldMin": 10,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 10,
+        "stopLoss": 10,
+        "maxHoldMin": 10,
+        "entryTime": 1766009516995,
+        "entryTx": "4xeLbUhPpusA3shQfhxvhwRPS7fNMK69rJ4TgCqdbSCpc3thVoFahz7w9Ftu7d8LR1sNKspYJm972sc6akJZ2oVo",
+        "gasCost": 0.000054999999999999494,
+        "status": "CLOSED",
+        "peakPct": 10.490606226895654,
+        "peakTime": 34800,
+        "exitSOL": 0.02333452,
+        "profit": 0.0020409439999999994,
+        "profitPct": 9.612733731603129,
+        "exitTx": "b3SCnPQQ1FRs7opnEY4sZ9dh3h67Dg6RkG7XJK5aTBgakVJtViUwzdkMDG6zxftodGqX5Nbqp137nRYHMd9o8NL",
+        "exitTime": 1766009553218
+      }
+    ],
+    [
+      "fyag5snyjds3wEd4wTL1yVWfp5s42PkWYvrhyuEy6Db",
+      {
+        "mint": "fyag5snyjds3wEd4wTL1yVWfp5s42PkWYvrhyuEy6Db",
+        "symbol": "PENNY",
+        "entrySOL": 0.017019132,
+        "tokensHeld": 41754783155,
+        "liquidity": 81487.5429,
+        "strategy": {
+          "targetPct": 10,
+          "stopLossPct": 10,
+          "maxHoldMin": 10,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 10,
+        "stopLoss": 10,
+        "maxHoldMin": 10,
+        "entryTime": 1766009559517,
+        "entryTx": "4EdR5pS8AqDodwiThGksnrNE4iyVX6qHvoz9W4EQP3eixaH2bVc1xAFEGvyx5j3q8QB74NSbQjTPvQC74N4hixDB",
+        "gasCost": 0.0020942800000000004,
+        "status": "CLOSED",
+        "peakPct": 9.223590251253722,
+        "peakTime": 87328,
+        "exitSOL": 0.018748327,
+        "profit": -0.0003650850000000011,
+        "profitPct": -2.1451446525004982,
+        "exitTx": "663yd5JBvJqaM4Ji4Hy1drTLzYzC8inrUwb7WryjB4EkaQgZKkKrfPbw283Edb7YNwGcALWxZPsk8oDMdk6ws3Mo",
+        "exitTime": 1766009653737
+      }
+    ],
+    [
+      "2SYpmxdQ8nDjw7ESGsj5HpiRVTJZY3guEtkEhpH3pCVq",
+      {
+        "mint": "2SYpmxdQ8nDjw7ESGsj5HpiRVTJZY3guEtkEhpH3pCVq",
+        "symbol": "WOLF",
+        "entrySOL": 0.016678093999999997,
+        "tokensHeld": 31208671650,
+        "liquidity": 22205.954,
+        "strategy": {
+          "targetPct": 10,
+          "stopLossPct": 10,
+          "maxHoldMin": 10,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 10,
+        "stopLoss": 10,
+        "maxHoldMin": 10,
+        "entryTime": 1766009656329,
+        "entryTx": "2hTFmBgYyALBpPvhXdxFuwRUoMMn2nLj6kQ2951nUBFHQgBqBES5C5g3bTUF8ytn6NXWaQgbD3RCsz7Roqpp3Kpu",
+        "gasCost": 0.002094279000000001,
+        "status": "CLOSED",
+        "peakPct": 11.779745335408244,
+        "peakTime": 25544,
+        "exitSOL": 0.018491283,
+        "profit": -0.00028108999999999773,
+        "profitPct": -1.6853844330173327,
+        "exitTx": "4L655YsN5rapeqZALX9PKoFvHGwZPoy2hp8sTwg5fKixZu7kUijVPFdyDJE9yh6TcR7qQdRAB9u4n6YtXenFFyjo",
+        "exitTime": 1766009684363
+      }
+    ],
+    [
+      "8fXA1mKPmBY22tyQWhTfYVKNHpGjchLG7davy9LagvmG",
+      {
+        "mint": "8fXA1mKPmBY22tyQWhTfYVKNHpGjchLG7davy9LagvmG",
+        "symbol": "nocoin",
+        "entrySOL": 0.015216967,
+        "tokensHeld": 1039791819,
+        "liquidity": 50858.6751,
+        "strategy": {
+          "targetPct": 10,
+          "stopLossPct": 10,
+          "maxHoldMin": 10,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 10,
+        "stopLoss": 10,
+        "maxHoldMin": 10,
+        "entryTime": 1766009706348,
+        "entryTx": "3gbwYenmi6UuYLRxo5k1UWZVEBfFuAxcrZdGwfaD9AFCXB2ywJkFffoGru4gLVtMU1VfqAcgbarUT5Z36cioiAoo",
+        "gasCost": 0.000054999999999999494,
+        "status": "CLOSED",
+        "peakPct": 12.640048440664955,
+        "peakTime": 30548,
+        "exitSOL": 0.017210993,
+        "profit": 0.001932121000000002,
+        "profitPct": 12.69714917565374,
+        "exitTx": "oRs5sV1emZ8zs1GwJeNHdBPw7HRGbP2D27qBcxcVz6pGkDe4XrByS9WWKc4i27uQ363gjhVwNAkZ51VmC6uQnXx",
+        "exitTime": 1766009738220
+      }
+    ],
+    [
+      "EQE6EWcGeUw5XpW31i42MXLtfHxDy38sJFzk3BskTKD5",
+      {
+        "mint": "EQE6EWcGeUw5XpW31i42MXLtfHxDy38sJFzk3BskTKD5",
+        "symbol": "HOLD",
+        "entrySOL": 0.017149088,
+        "tokensHeld": 44369949734,
+        "liquidity": 81776.7851,
+        "strategy": {
+          "targetPct": 10,
+          "stopLossPct": 10,
+          "maxHoldMin": 10,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 10,
+        "stopLoss": 10,
+        "maxHoldMin": 10,
+        "entryTime": 1766009741905,
+        "entryTx": "3zoHnsduf33mqcDE6hRfx91qpKNG9cBq7v9CfZWWvKk4FuZeVJHJigUDzTtLyLQZ8EEBM3iusxyDxiSsscJqDdD1",
+        "gasCost": 0.004530280000000001,
+        "status": "CLOSED",
+        "peakPct": 5.053446573951912,
+        "peakTime": 95057,
+        "exitSOL": 0,
+        "profit": -0.017149088,
+        "profitPct": -100,
+        "exitReason": "LIQUIDITY_DRAINED",
+        "exitTime": 1766052000000
+      }
+    ],
+    [
+      "CT9GXN9u8GGk5zY9yJUG3Qa4uWx3SBX9ZX8cZfg4qo9p",
+      {
+        "mint": "CT9GXN9u8GGk5zY9yJUG3Qa4uWx3SBX9ZX8cZfg4qo9p",
+        "symbol": "Rich",
+        "entrySOL": 0.011730572,
+        "tokensHeld": 1428692647,
+        "liquidity": 759815.8195,
+        "strategy": {
+          "targetPct": 15,
+          "stopLossPct": 8,
+          "maxHoldMin": 5,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 15,
+        "stopLoss": 8,
+        "maxHoldMin": 5,
+        "entryTime": 1766052894872,
+        "entryTx": "5bjRFEmU8FoouKRr42knoXyETGNWCmxtYwgUbRQt8EQ3wDgoSZzWLKTVbc9Y1x6PyFd3nNeQtXHp8k8UJCKtExaZ",
+        "gasCost": 0.0020942800000000004,
+        "status": "CLOSED",
+        "peakPct": 13.469658598063253,
+        "peakTime": 56013,
+        "exitSOL": 0.012247792,
+        "profit": -0.00157706,
+        "profitPct": -13.444016199721547,
+        "exitTx": "41DAqcVkQsw5thyyRQKL3LdY1RVm2vhEUSzv86zR8gsWHDdQR4a19fVjV4oyG2w4J5gccPZSPnNnTFUvaC6BBrGt",
+        "exitTime": 1766052962821
+      }
+    ],
+    [
+      "7pGTXpHn4zCy5VAtRnrhUpN3LixiYe7jiPAZbVXSMtz7",
+      {
+        "mint": "7pGTXpHn4zCy5VAtRnrhUpN3LixiYe7jiPAZbVXSMtz7",
+        "symbol": "AI",
+        "entrySOL": 0.010205669999999998,
+        "tokensHeld": 54591646,
+        "liquidity": 92401796.2894,
+        "strategy": {
+          "targetPct": 15,
+          "stopLossPct": 8,
+          "maxHoldMin": 5,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 15,
+        "stopLoss": 8,
+        "maxHoldMin": 5,
+        "entryTime": 1766052965273,
+        "entryTx": "WoVJAGMptFtnSDhhjckW1tHb4iynA7u5t6FqkzQrBibuTXs5Fmjrwhibx5bGegJ8xPcBNEndYmJ9FQkiCfPQCRJ",
+        "gasCost": 0.004133559000000002,
+        "status": "CLOSED",
+        "peakPct": 0.02808242868917385,
+        "peakTime": 130716,
+        "exitSOL": 0.010194904,
+        "profit": -0.0041498920000000005,
+        "profitPct": -40.662612057807095,
+        "exitTx": "xwPi3xiHcLPHMFk3dqwCqJpL44ndfn3d4F7tgBebFfmtnSftfgppd3CHu8aLxPpDeesh8Mu1d4jmDm6apDeJDtJ",
+        "exitTime": 1766053267730
+      }
+    ],
+    [
+      "DrdRhyTtych6WtMCpegr4RKVrhJfyDxWcRuwnJJi9Ksg",
+      {
+        "mint": "DrdRhyTtych6WtMCpegr4RKVrhJfyDxWcRuwnJJi9Ksg",
+        "symbol": "Coin",
+        "entrySOL": 0.0060557779999999995,
+        "tokensHeld": 177872992,
+        "liquidity": 16841002.2839,
+        "strategy": {
+          "targetPct": 15,
+          "stopLossPct": 8,
+          "maxHoldMin": 5,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 15,
+        "stopLoss": 8,
+        "maxHoldMin": 5,
+        "entryTime": 1766053270493,
+        "entryTx": "zgzhzVGqh1yJLqpV7WV9jxnYNC59KEJpKuyiS5pyvvWnE3TFevXRm56dSLsCvXarJYAEii32xtY1Xv4Xyab5wY6",
+        "gasCost": 0.004133559,
+        "status": "CLOSED",
+        "peakPct": 0.07416057854169299,
+        "peakTime": 285809,
+        "exitSOL": 0.006053003,
+        "profit": -0.004142226,
+        "profitPct": -68.40121946346119,
+        "exitTx": "5QJYuDAhoeof2rGbgtHhRuCS71ZJmna2pmkbgsCXpgcVW1oQHMB3iXzu4ugb5e6r6Yz7VwADEMBLAucyLnBDwYsc",
+        "exitTime": 1766053572492
+      }
+    ],
+    [
+      "F6JctdCCP6kzvmcU9v9YM1QwodJfcV7a2hYr8JbNTo5S",
+      {
+        "mint": "F6JctdCCP6kzvmcU9v9YM1QwodJfcV7a2hYr8JbNTo5S",
+        "symbol": "Red Bull",
+        "entrySOL": 0.0019135520000000007,
+        "tokensHeld": 355724018,
+        "liquidity": 517013.3761,
+        "strategy": {
+          "targetPct": 15,
+          "stopLossPct": 8,
+          "maxHoldMin": 5,
+          "flashloanMax": 0.021739130434782608
+        },
+        "profitTarget": 15,
+        "stopLoss": 8,
+        "maxHoldMin": 5,
+        "entryTime": 1766053575482,
+        "entryTx": "S9t26rnrA3o6nnNeNF6Uye8Y9Rb31v9YZenLXn1BWERn9iQFkemMLF4KNq35Ez8V3pT9zcikf8deZNNjkHF13cn",
+        "gasCost": 0.0020942799999999996,
+        "status": "CLOSED",
+        "peakPct": 4.968404307800327,
+        "peakTime": 85890,
+        "exitSOL": 0.002017056,
+        "profit": -0.0019996310000000004,
+        "profitPct": -104.49838833750009,
+        "exitTx": "4cWSpHkDg3GYYsacAVjdPn8sdC9AXPYK8Geziay61gNxQv8AcYDpX1w8k9thNaS5wphHoxtU51AmiXteat9N9JkF",
+        "exitTime": 1766053668230
+      }
+    ]
+  ],
+  "stats": {
+    "scanned": 42,
+    "rejected": 9,
+    "trades": 15,
+    "successful": 5,
+    "failed": 6,
+    "totalProfit": -0.032576600000000004,
+    "totalGasCost": 0.031920914130434797,
+    "avgPriorityFee": 0
+  },
+  "lastSaved": 1766053668230
+}

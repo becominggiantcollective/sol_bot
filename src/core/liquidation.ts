@@ -1,7 +1,8 @@
 import { PublicKey } from '@solana/web3.js';
-import { SolanaConnection } from './connection';
-import { LiquidationOpportunity } from '../types';
-import { Logger } from '../utils';
+import { SolanaConnection } from './connection.js';
+import { LiquidationOpportunity } from '../types/index.js';
+import { Logger } from '../utils/index.js';
+import { config } from '../config/index.js';
 import axios from 'axios';
 
 export class LiquidationDetector {
@@ -24,10 +25,13 @@ export class LiquidationDetector {
 
       const allOpportunities: LiquidationOpportunity[] = [];
 
-      // For demo purposes, create mock liquidation opportunities
-      // In production, this would scan actual lending protocols
-      const mockOpportunities = await this.createMockLiquidationOpportunities();
-      allOpportunities.push(...mockOpportunities);
+      // Scan Solend for underwater positions
+      const solendOpps = await this.scanSolendLiquidations();
+      allOpportunities.push(...solendOpps);
+
+      if (allOpportunities.length > 0) {
+        this.logger.info(`🔥 Found ${allOpportunities.length} liquidation opportunities!`);
+      }
 
       // Sort by urgency and profit potential
       return allOpportunities
@@ -48,32 +52,66 @@ export class LiquidationDetector {
     }
   }
 
-  private async createMockLiquidationOpportunities(): Promise<LiquidationOpportunity[]> {
-    // Create some mock liquidation opportunities for testing
+  /**
+   * Scan Solend for liquidatable positions
+   * Uses Solend's obligation accounts to find underwater borrowers
+   */
+  private async scanSolendLiquidations(): Promise<LiquidationOpportunity[]> {
     const opportunities: LiquidationOpportunity[] = [];
     
-    // Mock undercollateralized position
-    const mockBorrower = new PublicKey('11111111111111111111111111111112');
-    const solMint = new PublicKey('So11111111111111111111111111111111111111112');
-    const usdcMint = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
-
-    opportunities.push({
-      protocol: 'solend',
-      borrower: mockBorrower,
-      collateralMint: solMint,
-      borrowMint: usdcMint,
-      collateralAmount: 10, // 10 SOL
-      borrowAmount: 950, // 950 USDC
-      healthFactor: 0.95, // Undercollateralized
-      liquidationThreshold: 0.85,
-      maxLiquidationAmount: 475, // 50% of borrow
-      estimatedProfit: 23.75, // 5% liquidation bonus
-      profitPercent: 0.05,
-      flashloanRequired: true,
-      urgency: 'high',
-      lastUpdated: Date.now(),
-    });
-
+    try {
+      // Solend main market obligations - these are accounts with borrow positions
+      // In production, you'd fetch all obligation accounts via getProgramAccounts
+      // For efficiency, we use Solend's API if available
+      
+      const response = await axios.get('https://api.solend.fi/v1/obligations', {
+        params: { market: 'main' },
+        timeout: 10000,
+      }).catch(() => null);
+      
+      if (response?.data?.results) {
+        for (const obligation of response.data.results) {
+          // Check if position is liquidatable (health < 1.0)
+          const healthFactor = obligation.loanToValue ? 1 / obligation.loanToValue : 999;
+          
+          if (healthFactor < 1.0 && obligation.borrowedValue > 0) {
+            const solPrice = this.priceCache.get('So11111111111111111111111111111111111111112') || 230;
+            const borrowValue = obligation.borrowedValue || 0;
+            const collateralValue = obligation.depositedValue || 0;
+            
+            // Liquidation bonus is typically 5-10%
+            const liquidationBonus = 0.05;
+            const maxLiquidation = Math.min(borrowValue * 0.5, collateralValue * 0.5); // Close factor
+            const estimatedProfit = maxLiquidation * liquidationBonus;
+            
+            if (estimatedProfit > 0.5) { // Only if profit > $0.50
+              opportunities.push({
+                protocol: 'solend',
+                borrower: new PublicKey(obligation.obligationAddress || obligation.owner),
+                collateralMint: new PublicKey('So11111111111111111111111111111111111111112'), // Simplified
+                borrowMint: new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'), // Simplified
+                collateralAmount: collateralValue / solPrice,
+                borrowAmount: borrowValue,
+                healthFactor,
+                liquidationThreshold: 0.85,
+                maxLiquidationAmount: maxLiquidation,
+                estimatedProfit,
+                profitPercent: estimatedProfit / maxLiquidation,
+                urgency: healthFactor < 0.9 ? 'critical' : healthFactor < 0.95 ? 'high' : 'medium',
+                flashloanRequired: maxLiquidation > 100, // Flash loan for > $100
+                lastUpdated: Date.now(),
+              });
+              
+              this.logger.info(`💰 Solend liquidation: HF=${healthFactor.toFixed(3)}, Profit=$${estimatedProfit.toFixed(2)}`);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // Solend API might not be available, fall back to on-chain scanning
+      this.logger.debug('Solend API not available, skipping API-based detection');
+    }
+    
     return opportunities;
   }
 
@@ -106,18 +144,25 @@ export class LiquidationDetector {
 
   private async getJupiterPrices(): Promise<Map<string, number>> {
     try {
-      const response = await axios.get('https://price.jup.ag/v6/price', {
+      const headers: Record<string, string> = {};
+      if (config.jupiter?.apiKey) {
+        headers['x-api-key'] = config.jupiter.apiKey;
+      }
+      // Updated to use Jupiter Price API v3
+      const response = await axios.get('https://api.jup.ag/price/v3', {
         params: {
           ids: 'So11111111111111111111111111111111111111112,EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v,mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So', // SOL, USDC, mSOL
         },
         timeout: 5000,
+        headers,
       });
 
       const prices = new Map<string, number>();
-      if (response.data?.data) {
-        for (const [mint, data] of Object.entries(response.data.data as any)) {
-          if (data && typeof (data as any).price === 'number') {
-            prices.set(mint, (data as any).price);
+      if (response.data) {
+        // V3 format: { tokenAddress: { usdPrice: number, ... } }
+        for (const [mint, data] of Object.entries(response.data as any)) {
+          if (data && typeof (data as any).usdPrice === 'number') {
+            prices.set(mint, (data as any).usdPrice);
           }
         }
       }

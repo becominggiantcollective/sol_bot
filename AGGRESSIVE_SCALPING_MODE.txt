@@ -1,0 +1,94 @@
+🚨 AGGRESSIVE SCALPING MODE - GET IN/OUT FAST 🚨
+
+═══════════════════════════════════════════════════════════
+
+STRATEGY: Lower entry bar, faster exits, tighter stops
+Goal: Catch more trades but exit FAST before rugs
+
+═══════════════════════════════════════════════════════════
+
+📉 LOWERED ENTRY THRESHOLDS (More Trades):
+
+  MIN_LIQUIDITY:     $1,500  (was $3,500) ⚡ 57% LOWER
+  MIN_VOLUME_24H:    $2,000  (was $5,000) ⚡ 60% LOWER  
+  VOL/LIQ RATIO:     1.2x    (was 1.8x)   ⚡ More lenient
+  1H MOMENTUM:       +12%    (was +18%)   ⚡ Catch weaker pumps
+  TOKEN AGE:         15min-3h (was 20min-10h) ⚡ Earlier entry
+
+═══════════════════════════════════════════════════════════
+
+🛡️ TIGHTENED SAFETY (Avoid Rugs):
+
+  STOP LOSS:         -8%     (was -12%)   ✅ Cut losses FASTER
+  MAX HOLD TIME:     20min   (was 45min)  ✅ Exit 2.25x FASTER
+  TRAILING STOP:     -15%    (was -20%)   ✅ Tighter protection
+  MAX WHALE:         25%     (was 30%)    ✅ Stricter holder check
+  MAX TOKEN AGE:     3h      (was 10h)    ✅ Avoid dead pumps
+  
+═══════════════════════════════════════════════════════════
+
+⚡ FASTER EXIT STRATEGY (Take Profits Quick):
+
+  Stage 1: Sell 40% at +35%  (was 30% at +50%)
+           → Lock profits FASTER
+           
+  Stage 2: Sell 30% at +70%  (was 30% at +100%)
+           → Don't be greedy
+           
+  Stage 3: Remaining 30% rides with 15% trailing stop
+           → Catch big pumps but exit fast on dump
+
+═══════════════════════════════════════════════════════════
+
+⏱️ TIMING (Faster Reactions):
+
+  SCAN INTERVAL:     3 sec   (was 5 sec)  ⚡ 40% faster detection
+  MONITOR:           1.5 sec (was 2 sec)  ⚡ Watch closely
+  COOLDOWN:          10 sec  (was 15 sec) ⚡ Trade more often
+
+═══════════════════════════════════════════════════════════
+
+🎯 EXPECTED RESULTS:
+
+✅ MORE TRADES: Lower thresholds = more opportunities
+✅ FASTER EXITS: 20min max hold = less rug exposure  
+✅ BETTER PROTECTION: 8% stop loss vs 12% before
+✅ QUICKER PROFITS: Take 40% at +35% vs wait for +50%
+
+⚠️ RISKS:
+- More trades = more transaction fees
+- Faster exits = might miss huge pumps
+- Lower liquidity = higher slippage risk
+- Earlier entry = closer to rug danger
+
+═══════════════════════════════════════════════════════════
+
+💡 EXAMPLE TRADE:
+
+Token: $50 liquidity, 15min old, +15% in 1h
+OLD SETTINGS: ❌ REJECTED (too low liq, weak momentum)
+NEW SETTINGS: ✅ TRADES IT (meets $1.5K, +12% min)
+
+You buy $2.30
+  ↓ 10 min later: +35%
+  → Auto-sell 40% = $1.28 profit locked ✅
+  ↓ 5 min later: +70%  
+  → Auto-sell 30% = $1.13 more profit ✅
+  ↓ Token dumps 15%
+  → Auto-sell remaining 30% = exit safe ✅
+  
+Total: Made profit in 15 minutes, out before rug
+
+═══════════════════════════════════════════════════════════
+
+🚀 READY TO GO!
+
+Bot is now scanning for tokens with $1.5K+ liquidity.
+It will trade MORE often but exit FASTER.
+
+Current market: Still showing $10-$40 liquidity tokens
+(way below even new $1.5K minimum - market is dead)
+
+Bot will automatically trade when opportunities appear!
+
+═══════════════════════════════════════════════════════════

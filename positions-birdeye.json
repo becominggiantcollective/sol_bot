@@ -1,0 +1,36 @@
+{
+  "positions": [
+    [
+      "6ZFUNyPDn1ycjhb3RbNAmtcVvwp6oL4Zn6GswnGupump",
+      {
+        "symbol": "Polybet",
+        "tokenAmount": 115069914223,
+        "entryAmountSol": 0.01,
+        "entryTime": 1766201873755,
+        "signature": "2afj2tmqbV6cSPtkky3hbdYA1Cz3w7NURv48v7HMuzmQP31W4v4HaY4DbDMkpiK2V3tuRS3PNvMwqkG8cznRmSYx",
+        "entrySignals": {
+          "liquidity": 13115.14,
+          "volume24h": 40467.88,
+          "priceChange": 58.31,
+          "volLiqRatio": 3.0855850566597076,
+          "priceChange1h": 250
+        },
+        "currentValue": 0.009787561,
+        "profitSOL": -0.00021243900000000003,
+        "profitUSD": -0.048860970000000004,
+        "pnlPct": -2.1243899999999982,
+        "peakValue": 0.009787561,
+        "peakPnlPct": -2.1243899999999982
+      }
+    ]
+  ],
+  "stats": {
+    "scanned": 0,
+    "rejected": 12,
+    "bought": 2,
+    "sold": 0,
+    "honeypots": 0,
+    "birdeyeBlocked": 0
+  },
+  "lastUpdated": 1766201878830
+}

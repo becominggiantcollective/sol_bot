@@ -1,0 +1,44 @@
+{
+  "positions": [
+    [
+      "3AcNxkAi4NydSHxm6KzFx4tT5PyKAS5TaBVofhq7ejsE",
+      {
+        "mint": "3AcNxkAi4NydSHxm6KzFx4tT5PyKAS5TaBVofhq7ejsE",
+        "symbol": "LAMEME ",
+        "entryPrice": 0.008695652173913044,
+        "tokensHeld": 769551333,
+        "liquidity": 53479.57,
+        "profitTarget": 20,
+        "stopLoss": 15,
+        "entryTime": 1765935308348,
+        "flashLoanUsed": 0.008695652173913044,
+        "status": "SIMULATED"
+      }
+    ],
+    [
+      "86fjvnP4RDhb5orkWFtCUNQdKxreAE3Bk11nabKS6YyT",
+      {
+        "mint": "86fjvnP4RDhb5orkWFtCUNQdKxreAE3Bk11nabKS6YyT",
+        "symbol": "pizza ",
+        "entryPrice": 0.008695652173913044,
+        "tokensHeld": 10845896364,
+        "liquidity": 13961.18,
+        "profitTarget": 10,
+        "stopLoss": 15,
+        "entryTime": 1765935310847,
+        "flashLoanUsed": 0.008695652173913044,
+        "status": "CLOSED_SIM"
+      }
+    ]
+  ],
+  "stats": {
+    "scanned": 4,
+    "rejected": 2,
+    "attempted": 2,
+    "successful": 0,
+    "failed": 0,
+    "totalProfit": 0,
+    "totalGasCost": 0
+  },
+  "lastSaved": 1765935312324
+}

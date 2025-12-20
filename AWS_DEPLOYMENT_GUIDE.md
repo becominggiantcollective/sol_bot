@@ -40,7 +40,9 @@ Your bot has been backtested! Here's what exists:
 
 #### 1. Push to AWS ECR (Container Registry)
 ```bash
-# Install AWS CLI
+# Install AWS CLIurl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
@@ -132,8 +134,8 @@ Create `ecs-task-definition.json`:
       "environment": [
         {"name": "NODE_ENV", "value": "production"},
         {"name": "WALLET_PRIVATE_KEY", "value": "YOUR_PRIVATE_KEY_HERE"},
-        {"name": "BIRDEYE_API_KEY", "value": "037a1fc7b81142ddb212d8a2c7956e7f"},
-        {"name": "JUPITER_API_KEY", "value": "f6663264-66de-4a78-b115-c14a9efc5a05"}
+        {"name": "BIRDEYE_API_KEY", "value": "YOUR_BIRDEYE_API_KEY"},
+        {"name": "JUPITER_API_KEY", "value": "YOUR_JUPITER_API_KEY"}
       ],
       "logConfiguration": {
         "logDriver": "awslogs",

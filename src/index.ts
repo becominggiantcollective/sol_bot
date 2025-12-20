@@ -1,18 +1,18 @@
 import dotenv from 'dotenv';
-import { SolanaConnection } from './core/connection';
-import { ArbitrageDetector } from './core/arbitrage';
-import { FlashloanManager } from './core/flashloan';
-import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy } from './strategies/mev';
-import { COMMON_TOKENS, Logger, sleep } from './utils';
-import { ProfitabilityTracker, Trade } from './utils/profitability';
-import { config } from './config';
-
-// Load environment variables
+// Load environment variables FIRST before any other imports that use process.env
 dotenv.config();
+
+import { SolanaConnection } from './core/connection.js';
+import { detectOpportunities, compareCrossDexPrices, calculateFlashLoan, isFlashLoanProfitable, tradeLogs } from './core/arbitrage.js';
+import { FlashloanManager } from './core/flashloan.js';
+import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy } from './strategies/mev.js';
+import { DirectSwapStrategy } from './strategies/direct-swap.js';
+import { COMMON_TOKENS, Logger, sleep } from './utils/index.js';
+import { ProfitabilityTracker, Trade } from './utils/profitability.js';
+import { config } from './config/index.js';
 
 export class SolanaArbitrageBot {
   private solanaConnection: SolanaConnection;
-  private arbitrageDetector: ArbitrageDetector;
   private flashloanManager: FlashloanManager;
   private strategies: any[] = [];
   private liquidationStrategy?: LiquidationStrategy;
@@ -27,12 +27,12 @@ export class SolanaArbitrageBot {
     
     try {
       this.solanaConnection = new SolanaConnection();
-      this.arbitrageDetector = new ArbitrageDetector(this.solanaConnection);
       this.flashloanManager = new FlashloanManager(this.solanaConnection);
       this.profitTracker = new ProfitabilityTracker(0); // Initialize with 0, will be updated on start
       
-      // Initialize strategies
+      // Initialize strategies - DirectSwapStrategy FIRST (preferred, actually works)
       this.strategies = [
+        new DirectSwapStrategy(this.solanaConnection),
         new FlashloanArbitrageStrategy(this.solanaConnection, this.flashloanManager),
         new SandwichAttackStrategy(this.solanaConnection),
       ];
@@ -43,7 +43,7 @@ export class SolanaArbitrageBot {
         this.logger.info('Liquidation strategy enabled');
       }
       
-      this.logger.info('Solana Arbitrage Bot initialized successfully');
+      this.logger.info('Solana Triangular Cross-DEX Arbitrage Bot initialized successfully');
     } catch (error) {
       this.logger.error('Failed to initialize bot:', error);
       throw error;
@@ -58,7 +58,7 @@ export class SolanaArbitrageBot {
       const balance = await this.solanaConnection.getBalance();
       this.logger.info(`Wallet balance: ${balance} SOL`);
       
-      if (balance < 0.1) {
+      if (balance < 0.01) {
         this.logger.warn('Low wallet balance. Consider adding more SOL for gas fees.');
       }
       
@@ -98,15 +98,13 @@ export class SolanaArbitrageBot {
   }
 
   private async tradingLoop(): Promise<void> {
-    const tokens = Object.values(COMMON_TOKENS);
-    
     while (this.isRunning) {
       try {
-        this.logger.debug('Scanning for trading opportunities...');
+        this.logger.info('🔺 Scanning for TRIANGULAR CROSS-DEX arbitrage opportunities...');
         
-        // Run arbitrage detection and liquidation scanning in parallel for maximum speed
+        // Run triangular arbitrage detection and liquidation scanning in parallel for maximum speed
         const [opportunities, liquidationTxs] = await Promise.all([
-          this.arbitrageDetector.detectOpportunities(tokens),
+          detectOpportunities(),
           this.liquidationStrategy ? this.liquidationStrategy.scanAndExecuteLiquidations() : Promise.resolve([])
         ]);
         
@@ -117,17 +115,17 @@ export class SolanaArbitrageBot {
 
         // Process arbitrage opportunities
         if (opportunities.length > 0) {
-          this.logger.info(`Found ${opportunities.length} arbitrage opportunities`);
+          this.logger.info(`🎯 Found ${opportunities.length} TRIANGULAR arbitrage opportunities!`);
           
           // Execute the most profitable opportunity
           const bestOpportunity = opportunities[0];
-          await this.executeOpportunity(bestOpportunity);
+          await this.executeTriangularOpportunity(bestOpportunity);
         } else {
-          this.logger.debug('No profitable arbitrage opportunities found');
+          this.logger.debug('No profitable triangular arbitrage opportunities found');
         }
         
-        // Shorter wait time for aggressive liquidation monitoring
-        await sleep(2000); // 2 seconds for more aggressive scanning
+        // Wait between scans to avoid rate limiting
+        await sleep(10000); // 10 seconds for triangular (more API calls per scan)
       } catch (error) {
         this.logger.error('Error in trading loop:', error);
         await sleep(5000); // Wait longer on error
@@ -135,56 +133,101 @@ export class SolanaArbitrageBot {
     }
   }
 
-  private async executeOpportunity(opportunity: any): Promise<void> {
-    this.logger.info(
-      `Executing opportunity: ${opportunity.inputMint.toString()} -> ${opportunity.outputMint.toString()}, Profit: ${opportunity.profitPercent * 100}%`
-    );
+  private async executeTriangularOpportunity(opportunity: any): Promise<void> {
+    const SOL_PRICE = 230;
+    
+    this.logger.info('═'.repeat(80));
+    this.logger.info('🔺 EXECUTING TRIANGULAR ARBITRAGE OPPORTUNITY');
+    this.logger.info('═'.repeat(80));
+    this.logger.info(`Type:        ${opportunity.type}`);
+    this.logger.info(`Path:        ${opportunity.route}`);
+    this.logger.info(`Input:       ${opportunity.inputAmount.toFixed(6)} ${opportunity.tokenA}`);
+    this.logger.info(`Expected:    ${opportunity.expectedOutput.toFixed(6)} ${opportunity.tokenA}`);
+    this.logger.info(`Net Profit:  ${opportunity.profit.toFixed(6)} ${opportunity.tokenA} (${opportunity.profitPercent.toFixed(4)}%)`);
+    
+    if (opportunity.details) {
+      this.logger.info('─'.repeat(80));
+      this.logger.info('LEG BREAKDOWN:');
+      this.logger.info(`  Leg 1: ${opportunity.tokenA} → ${opportunity.tokenB} = ${opportunity.details.leg1Output.toFixed(6)}`);
+      this.logger.info(`  Leg 2: ${opportunity.tokenB} → ${opportunity.tokenC} = ${opportunity.details.leg2Output.toFixed(6)}`);
+      this.logger.info(`  Leg 3: ${opportunity.tokenC} → ${opportunity.tokenA} = ${opportunity.details.leg3Output.toFixed(6)}`);
+      this.logger.info(`  Gross Profit: ${opportunity.details.grossProfitPercent.toFixed(4)}%`);
+      this.logger.info(`  Gas Cost:     ${opportunity.details.estimatedGasCost.toFixed(6)} ${opportunity.tokenA}`);
+    }
+    this.logger.info('─'.repeat(80));
+    
+    // Check if flash loan would be profitable
+    const flashLoanCheck = opportunity.details ? 
+      isFlashLoanProfitable(opportunity.details, 100) : // Check with $100 worth
+      { profitable: false, reason: 'No details available' };
+    
+    this.logger.info(`Flash Loan Viable: ${flashLoanCheck.profitable ? '✅ YES' : '❌ NO'}`);
+    this.logger.info(`Flash Loan Note:   ${flashLoanCheck.reason}`);
     
     // Find the best strategy for this opportunity
     const viableStrategy = this.strategies.find(strategy => strategy.isViable(opportunity));
     
     if (!viableStrategy) {
-      this.logger.warn('No viable strategy found for opportunity');
+      this.logger.warn('❌ No viable execution strategy found for this triangular opportunity');
+      this.logger.info('   (This is expected in simulation mode - we detect but don\'t execute)');
+      this.logger.info('═'.repeat(80));
       return;
     }
     
+    this.logger.info(`Strategy:    ${viableStrategy.constructor.name}`);
+    
     try {
+      const startTime = Date.now();
+      
       // Execute the strategy
       const signature = await viableStrategy.execute(opportunity);
-      this.logger.info(`Opportunity executed successfully: ${signature}`);
       
-      // Log profit and record trade
-      const profit = opportunity.profit;
-      this.logger.info(`Estimated profit: ${profit} tokens (${opportunity.profitPercent * 100}%)`);
+      const executionTime = Date.now() - startTime;
+      
+      this.logger.info('─'.repeat(80));
+      this.logger.info('✅ TRIANGULAR TRADE EXECUTED SUCCESSFULLY');
+      this.logger.info(`Signature:   ${signature}`);
+      this.logger.info(`Exec Time:   ${executionTime}ms`);
+      
+      // Log profit
+      const profitTokens = opportunity.profit;
+      const profitUSD = profitTokens * (opportunity.tokenA === 'USDC' ? 1 : SOL_PRICE);
+      
+      this.logger.info('─'.repeat(80));
+      this.logger.info('💰 PROFIT SUMMARY');
+      this.logger.info(`Profit:      ${profitTokens.toFixed(6)} ${opportunity.tokenA} ($${profitUSD.toFixed(4)})`);
+      this.logger.info(`ROI:         ${opportunity.profitPercent.toFixed(4)}%`);
+      this.logger.info('═'.repeat(80));
       
       // Record successful trade
       const trade: Trade = {
         timestamp: new Date(),
-        type: 'arbitrage',
-        profit,
+        type: 'triangular-arbitrage',
+        profit: profitUSD,
         success: true,
         details: {
-          inputToken: opportunity.inputMint.toString(),
-          outputToken: opportunity.outputMint.toString(),
+          path: opportunity.route,
           inputAmount: opportunity.inputAmount,
           outputAmount: opportunity.expectedOutput,
-          gasUsed: opportunity.gasEstimate,
+          gasUsed: opportunity.details?.estimatedGasCost || 0,
         },
       };
       this.profitTracker.recordTrade(trade);
     } catch (error) {
-      this.logger.error('Failed to execute opportunity:', error);
+      this.logger.info('─'.repeat(80));
+      this.logger.error('❌ TRIANGULAR TRADE EXECUTION FAILED');
+      this.logger.error(`Error: ${error}`);
+      this.logger.info('═'.repeat(80));
       
       // Record failed trade
       const trade: Trade = {
         timestamp: new Date(),
-        type: 'arbitrage',
-        profit: -opportunity.gasEstimate, // Loss is the gas fee
+        type: 'triangular-arbitrage',
+        profit: -(opportunity.details?.estimatedGasCost || 0) * SOL_PRICE,
         success: false,
         details: {
-          inputToken: opportunity.inputMint.toString(),
-          outputToken: opportunity.outputMint.toString(),
-          gasUsed: opportunity.gasEstimate,
+          path: opportunity.route,
+          gasUsed: opportunity.details?.estimatedGasCost || 0,
         },
       };
       this.profitTracker.recordTrade(trade);
@@ -193,7 +236,7 @@ export class SolanaArbitrageBot {
 
   private validateConfig(): void {
     if (!config.wallet.privateKey) {
-      throw new Error('Wallet private key not configured. Set WALLET_PRIVATE_KEY environment variable.');
+      throw new Error('Wallet private key not configured. Set WALLET_IDK_PRIVATE_KEY (or legacy WALLET_PRIVATE_KEY) environment variable.');
     }
     
     if (!config.solana.rpcUrl) {
@@ -209,7 +252,9 @@ export class SolanaArbitrageBot {
   }
 
   async getWalletAddress(): Promise<string> {
-    return this.solanaConnection.getWalletPublicKey().toString();
+    const pubkey = this.solanaConnection.getWalletPublicKey();
+    if (!pubkey) throw new Error('Wallet not loaded');
+    return pubkey.toString();
   }
 
   isActive(): boolean {
@@ -255,7 +300,10 @@ async function main(): Promise<void> {
 
 // SolanaArbitrageBot is already exported above
 
-// Run if this file is executed directly
-if (require.main === module) {
+// Run if this file is executed directly (ES module compatible)
+import { fileURLToPath } from 'url';
+const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
+
+if (isMainModule) {
   main().catch(console.error);
 }

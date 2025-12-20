@@ -1,0 +1,72 @@
+{
+  "So11111111111111111111111111111111111111112/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v:Raydium->Orca": {
+    "dexCombo": "Raydium->Orca",
+    "tokenPair": "So11111111111111111111111111111111111111112/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "avgFeePercent": 0.0055,
+    "avgSlippage": 0.0012,
+    "successRate": 0.92,
+    "avgExecutionTime": 450,
+    "sampleSize": 50,
+    "lastUpdated": 1733832000000
+  },
+  "So11111111111111111111111111111111111111112/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v:Orca->Raydium": {
+    "dexCombo": "Orca->Raydium",
+    "tokenPair": "So11111111111111111111111111111111111111112/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "avgFeePercent": 0.0058,
+    "avgSlippage": 0.0015,
+    "successRate": 0.89,
+    "avgExecutionTime": 470,
+    "sampleSize": 45,
+    "lastUpdated": 1733832000000
+  },
+  "So11111111111111111111111111111111111111112/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v:Raydium->Phoenix": {
+    "dexCombo": "Raydium->Phoenix",
+    "tokenPair": "So11111111111111111111111111111111111111112/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "avgFeePercent": 0.005,
+    "avgSlippage": 0.001,
+    "successRate": 0.88,
+    "avgExecutionTime": 380,
+    "sampleSize": 38,
+    "lastUpdated": 1733832000000
+  },
+  "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB:Orca->Orca": {
+    "dexCombo": "Orca->Orca",
+    "tokenPair": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+    "avgFeePercent": 0.0006,
+    "avgSlippage": 0.0002,
+    "successRate": 0.98,
+    "avgExecutionTime": 320,
+    "sampleSize": 120,
+    "lastUpdated": 1733832000000
+  },
+  "So11111111111111111111111111111111111111112/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN:Raydium->Raydium": {
+    "dexCombo": "Raydium->Raydium",
+    "tokenPair": "So11111111111111111111111111111111111111112/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+    "avgFeePercent": 0.005,
+    "avgSlippage": 0.002,
+    "successRate": 0.85,
+    "avgExecutionTime": 420,
+    "sampleSize": 65,
+    "lastUpdated": 1733832000000
+  },
+  "So11111111111111111111111111111111111111112/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R:Raydium->Orca": {
+    "dexCombo": "Raydium->Orca",
+    "tokenPair": "So11111111111111111111111111111111111111112/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+    "avgFeePercent": 0.0052,
+    "avgSlippage": 0.0018,
+    "successRate": 0.91,
+    "avgExecutionTime": 410,
+    "sampleSize": 72,
+    "lastUpdated": 1733832000000
+  },
+  "So11111111111111111111111111111111111111112/DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263:Orca->Raydium": {
+    "dexCombo": "Orca->Raydium",
+    "tokenPair": "So11111111111111111111111111111111111111112/DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    "avgFeePercent": 0.0062,
+    "avgSlippage": 0.0025,
+    "successRate": 0.83,
+    "avgExecutionTime": 520,
+    "sampleSize": 55,
+    "lastUpdated": 1733832000000
+  }
+}

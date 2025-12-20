@@ -1,4 +1,4 @@
-import { Logger } from './index';
+import { Logger } from './index.js';
 
 export interface ProfitMetrics {
   totalTrades: number;
@@ -21,7 +21,7 @@ export interface ProfitMetrics {
 
 export interface Trade {
   timestamp: Date;
-  type: 'arbitrage' | 'liquidation' | 'sandwich';
+  type: 'arbitrage' | 'liquidation' | 'sandwich' | 'triangular-arbitrage';
   profit: number;
   success: boolean;
   details: {
@@ -30,6 +30,7 @@ export interface Trade {
     inputAmount?: number;
     outputAmount?: number;
     gasUsed?: number;
+    path?: string;
   };
 }
 

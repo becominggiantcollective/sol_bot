@@ -27,6 +27,10 @@ A sophisticated Solana trading bot that executes flashloan arbitrage and MEV (Ma
 - **Production-Ready**: Deployment scripts, monitoring dashboard, and comprehensive documentation
 - **Configurable**: Easily customizable trading and liquidation parameters
 
+## Sentiment-based signals (prototype)
+
+This project includes a prototype sentiment microservice (Hugging Face) and a Node client to optionally boost strategy scores based on social signals (X/Twitter and Telegram). See docs/SENTIMENT_INTEGRATION.md for usage and how to run the prototype locally.
+
 ## Architecture
 
 ```

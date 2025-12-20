@@ -55,4 +55,6 @@ target/
 **/*.rs.bk
 
 # Solana CLI
-.config/
+.config/.env
+.env.local
+.env.*.local

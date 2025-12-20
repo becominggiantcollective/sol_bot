@@ -1,9 +1,10 @@
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
-import { ArbitrageOpportunity, MEVStrategy, LiquidationOpportunity, LendingProtocol, ProtocolPosition } from '../types';
-import { SolanaConnection } from '../core/connection';
-import { FlashloanManager } from '../core/flashloan';
-import { LiquidationDetector } from '../core/liquidation';
-import { Logger } from '../utils';
+import { ArbitrageOpportunity, MEVStrategy, LiquidationOpportunity, LendingProtocol, ProtocolPosition } from '../types/index.js';
+import { SolanaConnection } from '../core/connection.js';
+import { FlashloanManager } from '../core/flashloan.js';
+import { LiquidationDetector } from '../core/liquidation.js';
+import { Logger } from '../utils/index.js';
+import { config } from '../config/index.js';
 
 export class FlashloanArbitrageStrategy implements MEVStrategy {
   name = 'flashloan-arbitrage';
@@ -34,11 +35,14 @@ export class FlashloanArbitrageStrategy implements MEVStrategy {
       const arbitrageInstructions = await this.buildArbitrageInstructions(opportunity);
       
       // Execute flashloan with arbitrage
+      const walletPubkey = this.solanaConnection.getWalletPublicKey();
+      if (!walletPubkey) throw new Error('Wallet not loaded');
       const signature = await this.flashloanManager.executeFlashloan(
         provider,
         opportunity.inputAmount,
         opportunity.inputMint,
-        arbitrageInstructions
+        arbitrageInstructions,
+        walletPubkey
       );
       
       console.log(`Flashloan arbitrage executed: ${signature}`);
@@ -82,31 +86,19 @@ export class FlashloanArbitrageStrategy implements MEVStrategy {
   }
 
   private async buildJupiterSwapInstruction(_route: any): Promise<TransactionInstruction | null> {
-    // Simplified Jupiter swap instruction
-    // In reality, you'd use Jupiter SDK
-    return new TransactionInstruction({
-      keys: [], // Add required accounts
-      programId: new PublicKey('JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4'),
-      data: Buffer.from([]), // Encode swap data
-    });
+    // TODO: Implement proper Jupiter swap instruction building
+    // This should use the Jupiter API to get swap instructions
+    throw new Error('Jupiter swap instruction builder not yet implemented for MEV strategy');
   }
 
   private async buildOrcaSwapInstruction(_route: any): Promise<TransactionInstruction | null> {
-    // Simplified Orca swap instruction
-    return new TransactionInstruction({
-      keys: [], // Add required accounts
-      programId: new PublicKey('DjVE6JNiYqPL2QXyCUUh8rNjHrbz9hXHNYt99MQ59qw1'),
-      data: Buffer.from([]), // Encode swap data
-    });
+    // TODO: Implement proper Orca swap instruction building
+    throw new Error('Orca swap instruction builder not yet implemented');
   }
 
   private async buildRaydiumSwapInstruction(_route: any): Promise<TransactionInstruction | null> {
-    // Simplified Raydium swap instruction
-    return new TransactionInstruction({
-      keys: [], // Add required accounts
-      programId: new PublicKey('675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8'),
-      data: Buffer.from([]), // Encode swap data
-    });
+    // TODO: Implement proper Raydium swap instruction building
+    throw new Error('Raydium swap instruction builder not yet implemented');
   }
 }
 
@@ -288,11 +280,14 @@ export class LiquidationStrategy implements MEVStrategy {
     const liquidationInstructions = await this.buildLiquidationInstructions(opportunity, protocol);
 
     // Execute flash loan with liquidation
+    const walletPubkey = this.solanaConnection.getWalletPublicKey();
+    if (!walletPubkey) throw new Error('Wallet not loaded');
     return await this.flashloanManager.executeFlashloan(
       provider,
       flashloanAmount,
       opportunity.borrowMint,
-      liquidationInstructions
+      liquidationInstructions,
+      walletPubkey
     );
   }
 
@@ -342,14 +337,10 @@ export class LiquidationStrategy implements MEVStrategy {
         return null; // No swap needed
       }
 
-      // Use Jupiter for the swap (simplified implementation)
-      return new TransactionInstruction({
-        keys: [
-          // Add required accounts for Jupiter swap
-        ],
-        programId: new PublicKey('JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4'),
-        data: Buffer.from([]), // Encode swap data
-      });
+      // TODO: Implement proper Jupiter swap via API
+      // For now, skip collateral swap - liquidation will return the collateral directly
+      this.logger.debug('Collateral swap not implemented, skipping');
+      return null;
     } catch (error) {
       this.logger.error('Error building collateral swap instruction:', error);
       return null;
@@ -382,17 +373,23 @@ export class LiquidationStrategy implements MEVStrategy {
 
   private async getTokenPrice(mint: PublicKey): Promise<number> {
     try {
-      // In a real implementation, this would fetch current price
-      // For now, return mock price
-      const mockPrices: { [key: string]: number } = {
-        'So11111111111111111111111111111111111111112': 100, // SOL
-        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 1, // USDC
-      };
-
-      return mockPrices[mint.toString()] || 1;
+      // Fetch real-time price from Jupiter Price API
+      const headers: Record<string, string> = {};
+      if (config.jupiter?.apiKey) headers['x-api-key'] = config.jupiter.apiKey;
+      
+      const response = await fetch(`https://api.jup.ag/price/v2?ids=${mint.toBase58()}`, { headers });
+      if (!response.ok) {
+        throw new Error(`Jupiter API error: ${response.status}`);
+      }
+      const data = await response.json() as { data?: { [key: string]: { price?: number } } };
+      const priceData = data.data?.[mint.toBase58()];
+      if (priceData?.price) {
+        return priceData.price;
+      }
+      throw new Error(`No price data for ${mint.toBase58()}`);
     } catch (error) {
       this.logger.error('Error getting token price:', error);
-      return 1;
+      throw error;
     }
   }
 }
@@ -406,20 +403,15 @@ class SolendProtocol implements LendingProtocol {
   constructor(private solanaConnection: SolanaConnection) {}
 
   async getPositions(): Promise<ProtocolPosition[]> {
-    // In a real implementation, this would scan Solend's on-chain data
-    // for all borrower positions. For now, return mock data for testing.
-    return [];
+    // TODO: Implement real Solend position scanning
+    // This requires querying Solend obligation accounts and calculating health factors
+    throw new Error('Solend position scanning not yet implemented');
   }
 
   async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
-    // Create Solend liquidation instruction
-    return new TransactionInstruction({
-      keys: [
-        // Add required accounts for Solend liquidation
-      ],
-      programId: this.programId,
-      data: Buffer.from([]), // Encode liquidation data
-    });
+    // TODO: Implement real Solend liquidation instruction builder
+    // This requires proper account setup and instruction encoding
+    throw new Error('Solend liquidation instruction builder not yet implemented');
   }
 }
 
@@ -431,16 +423,13 @@ class MangoProtocol implements LendingProtocol {
   constructor(private solanaConnection: SolanaConnection) {}
 
   async getPositions(): Promise<ProtocolPosition[]> {
-    // In a real implementation, this would scan Mango's perpetual positions
-    return [];
+    // TODO: Implement real Mango position scanning
+    throw new Error('Mango position scanning not yet implemented');
   }
 
   async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
-    return new TransactionInstruction({
-      keys: [],
-      programId: this.programId,
-      data: Buffer.from([]),
-    });
+    // TODO: Implement real Mango liquidation instruction builder
+    throw new Error('Mango liquidation instruction builder not yet implemented');
   }
 }
 
@@ -452,15 +441,12 @@ class PortProtocol implements LendingProtocol {
   constructor(private solanaConnection: SolanaConnection) {}
 
   async getPositions(): Promise<ProtocolPosition[]> {
-    // In a real implementation, this would scan Port Finance positions
-    return [];
+    // TODO: Implement real Port Finance position scanning
+    throw new Error('Port Finance position scanning not yet implemented');
   }
 
   async getLiquidationInstruction(_opportunity: LiquidationOpportunity): Promise<TransactionInstruction> {
-    return new TransactionInstruction({
-      keys: [],
-      programId: this.programId,
-      data: Buffer.from([]),
-    });
+    // TODO: Implement real Port Finance liquidation instruction builder
+    throw new Error('Port Finance liquidation instruction builder not yet implemented');
   }
 }

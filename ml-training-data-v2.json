@@ -1,0 +1,2372 @@
+{
+  "trades": [
+    {
+      "symbol": "Coca-Cola",
+      "liquidity": 22353.5869,
+      "profitPct": 0.8602402037053605,
+      "holdTime": 32459,
+      "result": "profit",
+      "features": {
+        "liquidityScore": 0.44707173799999994,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009456730,
+      "isRug": false
+    },
+    {
+      "symbol": "Coca-Cola",
+      "liquidity": 22353.5869,
+      "profitPct": 0.4930529580145118,
+      "holdTime": 4277,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 0.44707173799999994,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009464036,
+      "isRug": false
+    },
+    {
+      "symbol": "Coca-Cola",
+      "liquidity": 22353.5869,
+      "profitPct": 4.962102083974229,
+      "holdTime": 13672,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 0.44707173799999994,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009483048,
+      "isRug": false
+    },
+    {
+      "symbol": "Freedom",
+      "liquidity": 51602.0646,
+      "profitPct": -2.8929675999999933,
+      "holdTime": 27564,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009513450,
+      "isRug": false
+    },
+    {
+      "symbol": "Freedom",
+      "liquidity": 51602.0646,
+      "profitPct": 9.612733731603129,
+      "holdTime": 36223,
+      "result": "profit",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009553218,
+      "isRug": false
+    },
+    {
+      "symbol": "PENNY",
+      "liquidity": 81487.5429,
+      "profitPct": -28.7660218,
+      "holdTime": 1407,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009557867,
+      "isRug": true
+    },
+    {
+      "symbol": "PENNY",
+      "liquidity": 81487.5429,
+      "profitPct": -2.1451446525004982,
+      "holdTime": 94220,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009653737,
+      "isRug": false
+    },
+    {
+      "symbol": "WOLF",
+      "liquidity": 22205.954,
+      "profitPct": -1.6853844330173327,
+      "holdTime": 28034,
+      "result": "profit",
+      "features": {
+        "liquidityScore": 0.44411908000000005,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009684363,
+      "isRug": false
+    },
+    {
+      "symbol": "nocoin",
+      "liquidity": 50858.6751,
+      "profitPct": -7.888814788577267,
+      "holdTime": 14355,
+      "result": "stoploss",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009703341,
+      "isRug": false
+    },
+    {
+      "symbol": "nocoin",
+      "liquidity": 50858.6751,
+      "profitPct": 12.69714917565374,
+      "holdTime": 31871,
+      "result": "profit",
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.5,
+        "ageScore": 0
+      },
+      "timestamp": 1766009738219,
+      "isRug": false
+    },
+    {
+      "token": {
+        "symbol": "GBOY",
+        "mint": "svy5ErijNYy9hEVzxknCdwWdZ3NeXJTdpb9Ndnso17f",
+        "liquidity": 592873.1,
+        "volume": 129472.46,
+        "ageHours": 111.12751861111111,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.007028,
+      "exitPrice": 0.007338245817212332,
+      "profitPct": 3.81,
+      "holdTimeMs": 44302.94033013415,
+      "exitReason": "timeout",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030618069,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.21838140404751036,
+        "ageScore": 1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 44302.94033013415
+    },
+    {
+      "token": {
+        "symbol": "SCP",
+        "mint": "HLF7DWt4L9wZcb6wCWKC1ean57nohHPc8LHbsYJrpump",
+        "liquidity": 15657.99,
+        "volume": 113604.48,
+        "ageHours": 17.763075555555556,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.00002808,
+      "exitPrice": 0.000028753812506328332,
+      "profitPct": 1.8,
+      "holdTimeMs": 36901.52823365702,
+      "exitReason": "timeout",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0.15
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030619075,
+      "features": {
+        "liquidityScore": 0.8389472022731855,
+        "volumeScore": 1,
+        "ageScore": 0.7401281481481482,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.15,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 36901.52823365702
+    },
+    {
+      "token": {
+        "symbol": "GBOY",
+        "mint": "svy5ErijNYy9hEVzxknCdwWdZ3NeXJTdpb9Ndnso17f",
+        "liquidity": 592873.1,
+        "volume": 129472.46,
+        "ageHours": 111.12964555555556,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.007028,
+      "exitPrice": 0.007208241063658063,
+      "profitPct": 1.96,
+      "holdTimeMs": 36060.51110130238,
+      "exitReason": "timeout",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030625726,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.21838140404751036,
+        "ageScore": 1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 36060.51110130238
+    },
+    {
+      "token": {
+        "symbol": "SCP",
+        "mint": "HLF7DWt4L9wZcb6wCWKC1ean57nohHPc8LHbsYJrpump",
+        "liquidity": 15657.99,
+        "volume": 113604.48,
+        "ageHours": 17.765202777777777,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.00002808,
+      "exitPrice": 0.00002737109906294173,
+      "profitPct": -3.12,
+      "holdTimeMs": 31584.61650197356,
+      "exitReason": "timeout",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0.15
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030626734,
+      "features": {
+        "liquidityScore": 0.8389472022731855,
+        "volumeScore": 1,
+        "ageScore": 0.7402167824074074,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.15,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 31584.61650197356
+    },
+    {
+      "token": {
+        "symbol": "GBOY",
+        "mint": "svy5ErijNYy9hEVzxknCdwWdZ3NeXJTdpb9Ndnso17f",
+        "liquidity": 592873.1,
+        "volume": 129472.46,
+        "ageHours": 111.13179944444444,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.007028,
+      "exitPrice": 0.00772850620179018,
+      "profitPct": 9.37,
+      "holdTimeMs": 37954.90661935106,
+      "exitReason": "target_hit",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030633480,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.21838140404751036,
+        "ageScore": 1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 37954.90661935106
+    },
+    {
+      "token": {
+        "symbol": "SCP",
+        "mint": "HLF7DWt4L9wZcb6wCWKC1ean57nohHPc8LHbsYJrpump",
+        "liquidity": 15657.99,
+        "volume": 113604.48,
+        "ageHours": 17.767356944444444,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.00002808,
+      "exitPrice": 0.00003073780077755767,
+      "profitPct": 8.87,
+      "holdTimeMs": 37265.494896577926,
+      "exitReason": "target_hit",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0.15
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030634488,
+      "features": {
+        "liquidityScore": 0.8389472022731855,
+        "volumeScore": 1,
+        "ageScore": 0.7403065393518519,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.15,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 37265.494896577926
+    },
+    {
+      "token": {
+        "symbol": "GBOY",
+        "mint": "svy5ErijNYy9hEVzxknCdwWdZ3NeXJTdpb9Ndnso17f",
+        "liquidity": 592873.1,
+        "volume": 129472.46,
+        "ageHours": 111.133945,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.007028,
+      "exitPrice": 0.007205397964938032,
+      "profitPct": 1.92,
+      "holdTimeMs": 44185.938533961824,
+      "exitReason": "timeout",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030641204,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.21838140404751036,
+        "ageScore": 1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 44185.938533961824
+    },
+    {
+      "token": {
+        "symbol": "SCP",
+        "mint": "HLF7DWt4L9wZcb6wCWKC1ean57nohHPc8LHbsYJrpump",
+        "liquidity": 15657.99,
+        "volume": 113604.48,
+        "ageHours": 17.769501666666667,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.00002808,
+      "exitPrice": 0.000029116511466788766,
+      "profitPct": 3.09,
+      "holdTimeMs": 21922.288300092838,
+      "exitReason": "timeout",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0.15
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030642208,
+      "features": {
+        "liquidityScore": 0.8389472022731855,
+        "volumeScore": 1,
+        "ageScore": 0.7403959027777778,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.15,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 21922.288300092838
+    },
+    {
+      "token": {
+        "symbol": "GBOY",
+        "mint": "svy5ErijNYy9hEVzxknCdwWdZ3NeXJTdpb9Ndnso17f",
+        "liquidity": 592873.1,
+        "volume": 129472.46,
+        "ageHours": 111.13611555555556,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.007028,
+      "exitPrice": 0.007549045971110124,
+      "profitPct": 6.81,
+      "holdTimeMs": 15422.939829050847,
+      "exitReason": "target_hit",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030649019,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0.21838140404751036,
+        "ageScore": 1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 15422.939829050847
+    },
+    {
+      "token": {
+        "symbol": "SCP",
+        "mint": "HLF7DWt4L9wZcb6wCWKC1ean57nohHPc8LHbsYJrpump",
+        "liquidity": 15657.99,
+        "volume": 113604.48,
+        "ageHours": 17.7716725,
+        "topHolderPct": 50
+      },
+      "entryPrice": 0.00002808,
+      "exitPrice": 0.000027436166560890907,
+      "profitPct": -2.89,
+      "holdTimeMs": 16055.636180211553,
+      "exitReason": "timeout",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95,
+        "rugRisk": 0.15
+      },
+      "flashloanAmount": 50000,
+      "fees": {
+        "priority": 25000,
+        "gas": 0.0069,
+        "solend": 150
+      },
+      "timestamp": 1766030650024,
+      "features": {
+        "liquidityScore": 0.8389472022731855,
+        "volumeScore": 1,
+        "ageScore": 0.7404863541666667,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.15,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 16055.636180211553
+    },
+    {
+      "token": {
+        "symbol": "SOL",
+        "mint": "So11111111111111111111111111111111111111112",
+        "liquidity": 15868047.25
+      },
+      "entryPrice": 123.89,
+      "exitPrice": 125.51105283204656,
+      "profitPct": 0.40386140289496014,
+      "holdTimeMs": 16126.485372067986,
+      "dex": "orca",
+      "route": "SOL/USDC",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031023706,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 16126.485372067986
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13872536.87
+      },
+      "entryPrice": 0.002023,
+      "exitPrice": 0.0021461800113205163,
+      "profitPct": 5.784377326767981,
+      "holdTimeMs": 22025.989611219276,
+      "dex": "jupiter",
+      "route": "HumidiFi → AlphaQ → TesseraV → Pump.fun Amm → SolFi V2",
+      "prediction": {
+        "score": 0.9626762399366592,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031025894,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 22025.989611219276
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.00002244302042184636,
+      "profitPct": 1.6164736686937415,
+      "holdTimeMs": 27383.39889737184,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.9912974609735743,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031027148,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 27383.39889737184
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.0055075730073561755,
+      "profitPct": 10.08972766799309,
+      "holdTimeMs": 40605.72257660805,
+      "dex": "jupiter",
+      "route": "HumidiFi → GoonFi → HumidiFi → Raydium CLMM",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031028704,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 40605.72257660805
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000012267253093962634,
+      "profitPct": 1.2455083937304186,
+      "holdTimeMs": 25520.584586873512,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.9872163154051261,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031029943,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 25520.584586873512
+    },
+    {
+      "token": {
+        "symbol": "SOL",
+        "mint": "So11111111111111111111111111111111111111112",
+        "liquidity": 15868047.25
+      },
+      "entryPrice": 123.89,
+      "exitPrice": 140.8827760650662,
+      "profitPct": 12.811419101675842,
+      "holdTimeMs": 30459.563000815313,
+      "dex": "orca",
+      "route": "SOL/USDC",
+      "prediction": {
+        "score": 1,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031036447,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 30459.563000815313
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13872536.87
+      },
+      "entryPrice": 0.002023,
+      "exitPrice": 0.0022445319074794723,
+      "profitPct": 10.646062752321914,
+      "holdTimeMs": 8682.929536837155,
+      "dex": "jupiter",
+      "route": "HumidiFi → Manifest → Pump.fun Amm → SolFi V2",
+      "prediction": {
+        "score": 0.936727030637066,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031038035,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 8682.929536837155
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.000022698855538944703,
+      "profitPct": 2.778304354880584,
+      "holdTimeMs": 11099.827391734885,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.9787723323828081,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031039308,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 11099.827391734885
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.005181920689323796,
+      "profitPct": 3.5623210127038787,
+      "holdTimeMs": 35392.50277774425,
+      "dex": "jupiter",
+      "route": "GoonFi → HumidiFi → Manifest → TesseraV → Raydium CLMM",
+      "prediction": {
+        "score": 0.9888190557006284,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031040601,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 35392.50277774425
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000013215960052757075,
+      "profitPct": 9.09904282083673,
+      "holdTimeMs": 43384.990916507944,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.9762808268664027,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031041815,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 43384.990916507944
+    },
+    {
+      "token": {
+        "symbol": "SOL",
+        "mint": "So11111111111111111111111111111111111111112",
+        "liquidity": 15868051.16
+      },
+      "entryPrice": 123.89,
+      "exitPrice": 123.13930835405787,
+      "profitPct": -1.5105340107693428,
+      "holdTimeMs": 35085.81251276638,
+      "dex": "orca",
+      "route": "SOL/USDC",
+      "prediction": {
+        "score": 0.9744081028392968,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031048315,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 35085.81251276638
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13872536.87
+      },
+      "entryPrice": 0.002023,
+      "exitPrice": 0.002206771988773475,
+      "profitPct": 8.77953192157564,
+      "holdTimeMs": 40602.91622748556,
+      "dex": "jupiter",
+      "route": "Whirlpool → SolFi V2 → GoonFi → SolFi V2 → Pump.fun Amm",
+      "prediction": {
+        "score": 0.900564097104557,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031050176,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 40602.91622748556
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.000023882006547576906,
+      "profitPct": 8.15137887182974,
+      "holdTimeMs": 41822.15444734584,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.9578114608649895,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031051397,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 41822.15444734584
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.0056008202114250305,
+      "profitPct": 11.958783672580287,
+      "holdTimeMs": 29665.41355486607,
+      "dex": "jupiter",
+      "route": "TesseraV → SolFi V2 → Raydium CLMM",
+      "prediction": {
+        "score": 0.9617110408417675,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031052983,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 29665.41355486607
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000013589785263561565,
+      "profitPct": 12.193622380476542,
+      "holdTimeMs": 27435.231793756797,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.9568289323894015,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031054244,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 27435.231793756797
+    },
+    {
+      "token": {
+        "symbol": "SOL",
+        "mint": "So11111111111111111111111111111111111111112",
+        "liquidity": 15868051.16
+      },
+      "entryPrice": 123.89,
+      "exitPrice": 127.50667231678536,
+      "profitPct": 2.014660890132652,
+      "holdTimeMs": 30505.186077819246,
+      "dex": "orca",
+      "route": "SOL/USDC",
+      "prediction": {
+        "score": 0.8949534335404938,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031060697,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 30505.186077819246
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13872536.87
+      },
+      "entryPrice": 0.002023,
+      "exitPrice": 0.0021488157558538726,
+      "profitPct": 5.914666231036697,
+      "holdTimeMs": 21373.228198462206,
+      "dex": "jupiter",
+      "route": "TesseraV → SolFi V2 → Pump.fun Amm → SolFi V2",
+      "prediction": {
+        "score": 0.8605022698733998,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031062698,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 21373.228198462206
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.00002438362853526432,
+      "profitPct": 10.42940788040108,
+      "holdTimeMs": 38152.70198417627,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.9321084047151255,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031063973,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 38152.70198417627
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.005234407616247463,
+      "profitPct": 4.614374067898625,
+      "holdTimeMs": 22148.12323380617,
+      "dex": "jupiter",
+      "route": "SolFi V2 → TesseraV → Raydium CLMM",
+      "prediction": {
+        "score": 0.9297408940704224,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031065450,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 22148.12323380617
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000012549731976518736,
+      "profitPct": 3.583909739393523,
+      "holdTimeMs": 12888.086303554654,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.9326740418001388,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031066703,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 12888.086303554654
+    },
+    {
+      "token": {
+        "symbol": "SOL",
+        "mint": "So11111111111111111111111111111111111111112",
+        "liquidity": 15868051.16
+      },
+      "entryPrice": 123.89,
+      "exitPrice": 120.65155454757925,
+      "profitPct": -3.51856840134051,
+      "holdTimeMs": 13176.53068505145,
+      "dex": "orca",
+      "route": "SOL/USDC",
+      "prediction": {
+        "score": 0.8059314313611309,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031073141,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 13176.53068505145
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13872536.87
+      },
+      "entryPrice": 0.002023,
+      "exitPrice": 0.0021126533703541427,
+      "profitPct": 4.127103922597259,
+      "holdTimeMs": 2780.932016682498,
+      "dex": "jupiter",
+      "route": "Whirlpool → SolFi V2 → HumidiFi → Pump.fun Amm → SolFi V2",
+      "prediction": {
+        "score": 0.8155934420438802,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031075098,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 2780.932016682498
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.000022233659828672337,
+      "profitPct": 0.6656989494656478,
+      "holdTimeMs": 39946.619135694746,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.9024046443665515,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031076328,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 39946.619135694746
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.005538700399725613,
+      "profitPct": 10.713648140421192,
+      "holdTimeMs": 5246.276495259373,
+      "dex": "jupiter",
+      "route": "HumidiFi → HumidiFi → Raydium CLMM",
+      "prediction": {
+        "score": 0.8938933497678427,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031077717,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 5246.276495259373
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000012842656732057154,
+      "profitPct": 6.008783543519498,
+      "holdTimeMs": 24382.612191594435,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.9044783371341732,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031078923,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 24382.612191594435
+    },
+    {
+      "token": {
+        "symbol": "SOL",
+        "mint": "So11111111111111111111111111111111111111112",
+        "liquidity": 15867643.19
+      },
+      "entryPrice": 123.88,
+      "exitPrice": 136.32310114973114,
+      "profitPct": 9.235279455708062,
+      "holdTimeMs": 38046.94148260876,
+      "dex": "raydium",
+      "route": "SOL/USD1",
+      "prediction": {
+        "score": 0.7189879067455703,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031462910,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 38046.94148260876
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13833434.53
+      },
+      "entryPrice": 0.002012,
+      "exitPrice": 0.0021688686342072024,
+      "profitPct": 7.487451799562743,
+      "holdTimeMs": 25166.50586494601,
+      "dex": "jupiter",
+      "route": "HumidiFi → AlphaQ → Whirlpool → SolFi V2 → SolFi V2",
+      "prediction": {
+        "score": 0.7732037510776509,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031465119,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 25166.50586494601
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.000022920625342918992,
+      "profitPct": 3.7854333465894405,
+      "holdTimeMs": 15007.187127288727,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.8701187308353608,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031466376,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 15007.187127288727
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.005007879463952701,
+      "profitPct": 0.0738218070294788,
+      "holdTimeMs": 20786.24153832775,
+      "dex": "jupiter",
+      "route": "TesseraV → SolFi V2 → HumidiFi → Raydium CLMM",
+      "prediction": {
+        "score": 0.8553434960699415,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031467845,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 20786.24153832775
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.00001215380288039962,
+      "profitPct": 0.30635099668560734,
+      "holdTimeMs": 4473.2886197838,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.8737400941792632,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031469120,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 4473.2886197838
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13833434.53
+      },
+      "entryPrice": 0.002012,
+      "exitPrice": 0.0019809048587999954,
+      "profitPct": -1.8546841550697954,
+      "holdTimeMs": 29674.853402667177,
+      "dex": "jupiter",
+      "route": "Whirlpool → HumidiFi → HumidiFi → SolFi V2",
+      "prediction": {
+        "score": 0.7237663681639124,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031476758,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 29674.853402667177
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.000022086605676260273,
+      "profitPct": -0.002121906174961964,
+      "holdTimeMs": 3470.277890625991,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.8355151890632686,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031478280,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 3470.277890625991
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.005079871603636489,
+      "profitPct": 1.5168392390556877,
+      "holdTimeMs": 16724.235049733958,
+      "dex": "jupiter",
+      "route": "HumidiFi → HumidiFi → SolFi V2 → Raydium CLMM",
+      "prediction": {
+        "score": 0.8145515027029722,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031479745,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 16724.235049733958
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000012084714574047696,
+      "profitPct": -0.26557206914159387,
+      "holdTimeMs": 25333.592588181487,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.8406598900684621,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031481135,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 25333.592588181487
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13833434.53
+      },
+      "entryPrice": 0.002012,
+      "exitPrice": 0.002229784554626824,
+      "profitPct": 10.51508203910656,
+      "holdTimeMs": 41714.124089526595,
+      "dex": "jupiter",
+      "route": "Raydium CLMM → HumidiFi → SolFi V2 → Whirlpool",
+      "prediction": {
+        "score": 0.7237663681639124,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031488213,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 41714.124089526595
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.000023911967911677496,
+      "profitPct": 8.287443195628951,
+      "holdTimeMs": 7811.355212833249,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.8034850580992081,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031489469,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 7811.355212833249
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.005034249165682235,
+      "profitPct": 0.5977786667114567,
+      "holdTimeMs": 6255.172610540721,
+      "dex": "jupiter",
+      "route": "SolFi V2 → HumidiFi → Raydium CLMM",
+      "prediction": {
+        "score": 0.7764766366109569,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031490919,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 6255.172610540721
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000013403849915149725,
+      "profitPct": 10.654422476405005,
+      "holdTimeMs": 5852.774352490028,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.8101415423070999,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031492125,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 5852.774352490028
+    },
+    {
+      "token": {
+        "symbol": "PUMP",
+        "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "liquidity": 13833434.53
+      },
+      "entryPrice": 0.002012,
+      "exitPrice": 0.0020764244048841374,
+      "profitPct": 2.892808195036666,
+      "holdTimeMs": 37540.86316217443,
+      "dex": "jupiter",
+      "route": "HumidiFi → Whirlpool → SolFi V2 → SolFi V2",
+      "prediction": {
+        "score": 0.6800412709720731,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031499359,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 37540.86316217443
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.000023603856526583933,
+      "profitPct": 6.88820893089888,
+      "holdTimeMs": 11060.57984750233,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.8034850580992081,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 50000,
+      "timestamp": 1766031500595,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 11060.57984750233
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.0049101647934017235,
+      "profitPct": -1.8893805291296188,
+      "holdTimeMs": 33477.8209809433,
+      "dex": "jupiter",
+      "route": "GoonFi → SolFi V2 → GoonFi → Raydium CLMM",
+      "prediction": {
+        "score": 0.7363837086244965,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031502195,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 33477.8209809433
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000011844414965436017,
+      "profitPct": -2.259407239768072,
+      "holdTimeMs": 20239.27798977768,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.7775963941117788,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031503470,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 20239.27798977768
+    },
+    {
+      "token": {
+        "symbol": "pump",
+        "mint": "HN8yLhpHVkzAk1dLNxZTvPLoYwxrUusM7svbnSyLsPzQ",
+        "liquidity": 25094.89
+      },
+      "entryPrice": 0.00002202,
+      "exitPrice": 0.000022394877602510018,
+      "profitPct": 1.3932414282925507,
+      "holdTimeMs": 6329.526961996664,
+      "dex": "jupiter",
+      "route": "Pump.fun Amm",
+      "prediction": {
+        "score": 0.7694326770852998,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031509950,
+      "features": {
+        "liquidityScore": 0.8799170592704195,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 6329.526961996664
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "3j92g6mygEzuQ25Atdy8xPsScH7hsn33PjH31ZqP61Rg",
+        "liquidity": 8910617.48
+      },
+      "entryPrice": 0.004989,
+      "exitPrice": 0.005589734718143311,
+      "profitPct": 11.731984969799782,
+      "holdTimeMs": 21500.593235213386,
+      "dex": "jupiter",
+      "route": "TesseraV → HumidiFi → SolFi V2 → Raydium CLMM",
+      "prediction": {
+        "score": 0.7363837086244965,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031511418,
+      "features": {
+        "liquidityScore": 1,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 21500.593235213386
+    },
+    {
+      "token": {
+        "symbol": "MEME",
+        "mint": "EWy1HPEUq4Lgm6H4pQ8augEuJ7WRwJgENZMTAUzrpump",
+        "liquidity": 17564.57
+      },
+      "entryPrice": 0.00001208,
+      "exitPrice": 0.000011862818225934374,
+      "profitPct": -2.10706236809293,
+      "holdTimeMs": 8539.883611858799,
+      "dex": "jupiter",
+      "route": "Raydium",
+      "prediction": {
+        "score": 0.7775963941117788,
+        "confidence": 0.95
+      },
+      "flashloanAmount": 25000,
+      "timestamp": 1766031512844,
+      "features": {
+        "liquidityScore": 0.848927504450282,
+        "volumeScore": 0,
+        "ageScore": 0.1,
+        "priceVelocity": 0.5,
+        "volumeSpike": 0.5,
+        "holderConcentration": 0.5,
+        "rugTimingRisk": 0.25,
+        "priceDropVelocity": 0,
+        "marketMomentum": 0.5,
+        "tokenMomentum": 0.5,
+        "pumpDumpPattern": 0,
+        "organicGrowthPattern": 0.5,
+        "whaleActivityPattern": 0,
+        "socialMomentum": 0.5,
+        "buyPressure": 0.5,
+        "spreadHealth": 0.8
+      },
+      "isRug": false,
+      "rugTime": 8539.883611858799
+    }
+  ],
+  "patterns": {},
+  "rugPatterns": [],
+  "marketConditions": []
+}
