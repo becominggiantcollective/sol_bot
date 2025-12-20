@@ -1,0 +1,138 @@
+{
+  "timestamp": "2025-12-20T04:27:54.526Z",
+  "config": {
+    "tradeAmountSol": 0.01,
+    "minLiquidity": 3000,
+    "minVolume24h": 2000,
+    "minVolLiqRatio": 1.5,
+    "minPriceChange1h": 8,
+    "minPriceChange5m": 2,
+    "maxPriceChange5m": 15,
+    "minTokenAge": 10,
+    "maxTokenAge": 120,
+    "maxWhaleHolding": 10,
+    "firstProfitTarget": 20,
+    "stopLossPct": 5,
+    "maxHoldMinutes": 20,
+    "trailingStopPct": 15
+  },
+  "results": {
+    "totalScanned": 65,
+    "passedFilters": 3,
+    "trades": [
+      {
+        "entryAmountSOL": 0.01,
+        "entryAmountUSD": 2.3000000000000003,
+        "exitAmountSOL": 0.0115,
+        "exitAmountUSD": 2.645,
+        "profitSOL": 0.0014999999999999996,
+        "profitUSD": 0.3449999999999999,
+        "profitPct": 15,
+        "exitReason": "Near profit target (+15%)",
+        "won": true,
+        "token": "BENNY",
+        "mint": "4YRjChMcSh14jLmHZLZPhHwfhWn7g5CJEjF3Nv1spump",
+        "entryData": {
+          "liquidity": 35958.16,
+          "volume24h": 379045.2,
+          "priceChange1h": 169,
+          "priceChange5m": 12.6,
+          "age": 38
+        }
+      },
+      {
+        "entryAmountSOL": 0.01,
+        "entryAmountUSD": 2.3000000000000003,
+        "exitAmountSOL": 0.011000000000000001,
+        "exitAmountUSD": 2.5300000000000002,
+        "profitSOL": 0.0010000000000000009,
+        "profitUSD": 0.2300000000000002,
+        "profitPct": 10,
+        "exitReason": "Partial profit (+10%)",
+        "won": true,
+        "token": "Benny",
+        "mint": "GCgrYQRBigijdKgXicgGtDvGR1tbUmPJSEkxvVXRpump",
+        "entryData": {
+          "liquidity": 41545,
+          "volume24h": 791031.48,
+          "priceChange1h": 242,
+          "priceChange5m": 5.71,
+          "age": 43
+        }
+      },
+      {
+        "entryAmountSOL": 0.01,
+        "entryAmountUSD": 2.3000000000000003,
+        "exitAmountSOL": 0.011000000000000001,
+        "exitAmountUSD": 2.5300000000000002,
+        "profitSOL": 0.0010000000000000009,
+        "profitUSD": 0.2300000000000002,
+        "profitPct": 10,
+        "exitReason": "Partial profit (+10%)",
+        "won": true,
+        "token": "Benny",
+        "mint": "GCgrYQRBigijdKgXicgGtDvGR1tbUmPJSEkxvVXRpump",
+        "entryData": {
+          "liquidity": 41545,
+          "volume24h": 791031.48,
+          "priceChange1h": 242,
+          "priceChange5m": 5.71,
+          "age": 43
+        }
+      }
+    ],
+    "totalProfitSOL": 0.0035000000000000014,
+    "totalProfitUSD": 0.8050000000000004,
+    "wins": 3,
+    "losses": 0,
+    "winRate": 100,
+    "avgProfitPct": 11.666666666666666,
+    "bestTrade": {
+      "entryAmountSOL": 0.01,
+      "entryAmountUSD": 2.3000000000000003,
+      "exitAmountSOL": 0.0115,
+      "exitAmountUSD": 2.645,
+      "profitSOL": 0.0014999999999999996,
+      "profitUSD": 0.3449999999999999,
+      "profitPct": 15,
+      "exitReason": "Near profit target (+15%)",
+      "won": true,
+      "token": "BENNY",
+      "mint": "4YRjChMcSh14jLmHZLZPhHwfhWn7g5CJEjF3Nv1spump",
+      "entryData": {
+        "liquidity": 35958.16,
+        "volume24h": 379045.2,
+        "priceChange1h": 169,
+        "priceChange5m": 12.6,
+        "age": 38
+      }
+    },
+    "worstTrade": {
+      "entryAmountSOL": 0.01,
+      "entryAmountUSD": 2.3000000000000003,
+      "exitAmountSOL": 0.011000000000000001,
+      "exitAmountUSD": 2.5300000000000002,
+      "profitSOL": 0.0010000000000000009,
+      "profitUSD": 0.2300000000000002,
+      "profitPct": 10,
+      "exitReason": "Partial profit (+10%)",
+      "won": true,
+      "token": "Benny",
+      "mint": "GCgrYQRBigijdKgXicgGtDvGR1tbUmPJSEkxvVXRpump",
+      "entryData": {
+        "liquidity": 41545,
+        "volume24h": 791031.48,
+        "priceChange1h": 242,
+        "priceChange5m": 5.71,
+        "age": 43
+      }
+    },
+    "rejectionReasons": {
+      "Low liquidity": 32,
+      "Low volume": 6,
+      "Weak 1h momentum": 20,
+      "Too old": 2,
+      "Low Vol/Liq ratio": 2
+    }
+  }
+}

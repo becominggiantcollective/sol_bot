@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  sniper-bot:
+    build: .
+    container_name: sol_sniper_bot
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - WALLET_PRIVATE_KEY=${WALLET_PRIVATE_KEY}
+      - BIRDEYE_API_KEY=037a1fc7b81142ddb212d8a2c7956e7f
+      - JUPITER_API_KEY=f6663264-66de-4a78-b115-c14a9efc5a05
+      - HELIUS_API_KEY=7f243329-aabe-4227-b05f-0ed8d59b4efe
+    volumes:
+      # Mount entire directory for data persistence (more robust than individual files)
+      - ./data:/app/data
+      - ./logs:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - sol_bot_network
+
+  # Dashboard service - Terminal UI for monitoring
+  dashboard:
+    build: .
+    container_name: sol_dashboard
+    restart: unless-stopped
+    command: ["node", "dashboard.mjs"]
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./positions-birdeye.json:/app/positions-birdeye.json
+      - ./ml-model-v2.json:/app/ml-model-v2.json
+    networks:
+      - sol_bot_network
+    depends_on:
+      - sniper-bot
+
+networks:
+  sol_bot_network:
+    driver: bridge
