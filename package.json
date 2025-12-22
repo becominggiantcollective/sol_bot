@@ -9,9 +9,11 @@
     "build:rust": "cargo build --release --features napi && cp target/release/libsol_bot.so native/sol_bot.node",
     "build:all": "npm run build:rust && npm run build",
     "start": "node dist/index.js",
+    "start:kpi": "node dist/bot-with-kpi.js",
     "sniper": "node --loader ts-node/esm sniper.ts",
     "scan": "node --loader ts-node/esm scan-pools.ts",
     "dev": "ts-node src/index.ts",
+    "dev:kpi": "ts-node src/bot-with-kpi.ts",
     "example": "ts-node example.ts",
     "liquidation-example": "ts-node liquidation-example.ts",
     "monitor": "node --loader ts-node/esm monitor.ts",
@@ -23,7 +25,12 @@
     "format": "prettier --write src/**/*.ts",
     "pre-deploy-check": "node pre-deployment-check.js",
     "deploy-check": "npm run pre-deploy-check",
-    "sentiment:service": "uvicorn ml.sentiment_service.app:app --reload --port 8000"
+    "sentiment:service": "uvicorn ml.sentiment_service.app:app --reload --port 8000",
+    "kpi:view": "node kpi-cli.mjs view",
+    "kpi:report": "node kpi-cli.mjs report",
+    "kpi:export": "node kpi-cli.mjs export",
+    "kpi:performance": "node kpi-cli.mjs performance",
+    "kpi:circuit-breaker": "node kpi-cli.mjs circuit-breaker"
   },
   "keywords": [
     "solana",
