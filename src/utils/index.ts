@@ -133,3 +133,23 @@ export class Logger {
     return levels.indexOf(level) >= levels.indexOf(this.logLevel);
   }
 }
+
+// Export KPI tracking and fine-tuning utilities
+export { KPITracker } from './kpiTracker.js';
+export { FineTuningEngine } from './fineTuning.js';
+export type { 
+  ComprehensiveKPIs, 
+  ExecutionMetrics, 
+  RPCMetrics, 
+  RiskMetrics, 
+  CostMetrics, 
+  ProfitabilityMetrics,
+  CircuitBreakerStatus,
+} from './kpiTracker.js';
+export type {
+  TradingParameters,
+  ParameterTestResult,
+  ABTestConfig,
+  ABTestResults,
+  OptimizationTarget,
+} from './fineTuning.js';
