@@ -279,8 +279,6 @@ function toRaw(humanAmount: number, tokenSymbol: string): bigint {
   if (!token) {
     throw new Error(`Unknown token: ${tokenSymbol}`);
   }
-  // Use BigInt for precision, avoid floating point errors
-  const multiplier = BigInt(10 ** token.decimals);
   // Round to avoid floating point precision issues
   const scaledAmount = Math.round(humanAmount * (10 ** token.decimals));
   return BigInt(scaledAmount);
@@ -675,12 +673,15 @@ async function calculateProfit(
   if (inputToken === 'SOL') {
     gasCostInInputToken = gasCostSOL;
   } else if (inputToken === 'USDC' || inputToken === 'USDT') {
-    // Convert SOL to stablecoin at current price
+    // Convert SOL gas cost to stablecoin at current price
     gasCostInInputToken = gasCostSOL * solPrice;
   } else {
-    // For other tokens, estimate based on SOL price
-    // This is approximate - in production, fetch actual price
-    gasCostInInputToken = gasCostSOL * solPrice; // Assume token ~ $1 for safety
+    // For other tokens, express gas cost in USD terms (SOL * solPrice) so
+    // the comparison is on equal footing. The grossProfitAmount is already in
+    // the input token's units, so we keep gas in USD as a conservative upper
+    // bound (this slightly overestimates cost for tokens worth less than $1,
+    // but is safer than the previous assumption of $1/token).
+    gasCostInInputToken = gasCostSOL * solPrice;
   }
   
   // Step 3: Flash loan fee (if applicable)

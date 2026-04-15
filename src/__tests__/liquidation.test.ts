@@ -23,12 +23,19 @@ describe('Liquidation System', () => {
     // Setup mock methods
     solanaConnection.getBalance = jest.fn().mockResolvedValue(10); // 10 SOL
     solanaConnection.sendTransaction = jest.fn().mockResolvedValue('mock_signature');
+    solanaConnection.getWalletPublicKey = jest.fn().mockReturnValue(
+      new PublicKey('So11111111111111111111111111111111111111112')
+    );
     flashloanManager.getBestProvider = jest.fn().mockResolvedValue({
       name: 'mock_provider',
       maxAmount: 1000000,
       fee: 0.001
     });
-    flashloanManager.executeFlashloan = jest.fn().mockResolvedValue('flashloan_signature');
+    flashloanManager.executeFlashloan = jest.fn().mockResolvedValue({
+      success: true,
+      signature: 'flashloan_signature',
+      method: 'rpc' as const,
+    });
 
     liquidationDetector = new LiquidationDetector(solanaConnection);
     liquidationStrategy = new LiquidationStrategy(solanaConnection, flashloanManager);
