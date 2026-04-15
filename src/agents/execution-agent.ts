@@ -95,10 +95,11 @@ export class ExecutionAgent implements TradingAgent {
     const strategy = this.strategies.find(s => s.isViable(opportunity));
 
     if (!strategy) {
+      const strategyNames = this.strategies.map(s => s.name).join(', ');
       const result: ExecutionResult = {
         opportunityId,
         success: false,
-        error: 'No viable execution strategy found',
+        error: `No viable execution strategy found (checked: ${strategyNames})`,
         executionTimeMs: Date.now() - start,
       };
       this.failureCount++;

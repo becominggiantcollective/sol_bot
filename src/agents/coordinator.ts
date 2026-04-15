@@ -205,7 +205,7 @@ export class AgentCoordinator {
     const requestSignal: AgentSignal = {
       id: generateId(),
       agentId: 'coordinator',
-      agentRole: 'arbitrage-scout',
+      agentRole: 'coordinator',
       type: 'risk-assessment-request',
       data: request,
       confidence: signal.confidence,

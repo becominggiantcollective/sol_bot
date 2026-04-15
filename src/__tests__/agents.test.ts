@@ -62,6 +62,9 @@ const { AgentCoordinator } = require('../agents/coordinator');
 // Helpers
 // ---------------------------------------------------------------------------
 
+/** A scan interval long enough to prevent actual network calls during tests */
+const MOCK_LONG_INTERVAL_MS = 9_999_000;
+
 function makeOpportunity(profitPercent = 0.003) {
   const { PublicKey } = require('@solana/web3.js');
   return {
@@ -104,45 +107,45 @@ describe('AgentSignal type safety', () => {
 
 describe('MarketAnalystAgent', () => {
   it('computeTrend returns a valid trend value', () => {
-    const agent = new MarketAnalystAgent(new EventEmitter(), 9999_000);
+    const agent = new MarketAnalystAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     (agent as any).priceHistory = [150, 151, 152, 151, 153, 154];
     const condition = (agent as any).computeTrend();
     expect(['bullish', 'bearish', 'sideways']).toContain(condition);
   });
 
   it('computeVolatility returns low for stable prices', () => {
-    const agent = new MarketAnalystAgent(new EventEmitter(), 9999_000);
+    const agent = new MarketAnalystAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     (agent as any).priceHistory = [100, 100, 100, 100, 100, 100];
     expect((agent as any).computeVolatility()).toBe('low');
   });
 
   it('computeVolatility returns high for volatile prices', () => {
-    const agent = new MarketAnalystAgent(new EventEmitter(), 9999_000);
+    const agent = new MarketAnalystAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     (agent as any).priceHistory = [100, 140, 80, 130, 70, 120];
     expect((agent as any).computeVolatility()).toBe('high');
   });
 
   it('computeTrend returns bearish for falling prices', () => {
-    const agent = new MarketAnalystAgent(new EventEmitter(), 9999_000);
+    const agent = new MarketAnalystAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     (agent as any).priceHistory = [200, 180, 160, 140, 120, 100];
     expect((agent as any).computeTrend()).toBe('bearish');
   });
 
   it('computeTrend returns bullish for rising prices', () => {
-    const agent = new MarketAnalystAgent(new EventEmitter(), 9999_000);
+    const agent = new MarketAnalystAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     (agent as any).priceHistory = [100, 110, 120, 130, 140, 160];
     expect((agent as any).computeTrend()).toBe('bullish');
   });
 
   it('computeRiskLevel is higher for bearish+high-volatility', () => {
-    const agent = new MarketAnalystAgent(new EventEmitter(), 9999_000);
+    const agent = new MarketAnalystAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     const riskHigh = (agent as any).computeRiskLevel('bearish', 'high', 'low');
     const riskLow = (agent as any).computeRiskLevel('bullish', 'low', 'high');
     expect(riskHigh).toBeGreaterThan(riskLow);
   });
 
   it('getLastCondition returns null on startup', () => {
-    const agent = new MarketAnalystAgent(new EventEmitter(), 9999_000);
+    const agent = new MarketAnalystAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     expect(agent.getLastCondition()).toBeNull();
   });
 });
@@ -153,13 +156,13 @@ describe('MarketAnalystAgent', () => {
 
 describe('ArbitrageScoutAgent', () => {
   it('starts with zero opportunities found', () => {
-    const agent = new ArbitrageScoutAgent(new EventEmitter(), 9999_000);
+    const agent = new ArbitrageScoutAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     expect(agent.getTotalOpportunitiesFound()).toBe(0);
   });
 
   it('emits arbitrage-opportunity signals for each found opportunity', () => {
     const emitter = new EventEmitter();
-    const agent = new ArbitrageScoutAgent(emitter, 9999_000);
+    const agent = new ArbitrageScoutAgent(emitter, MOCK_LONG_INTERVAL_MS);
     const opp = makeOpportunity(0.005);
 
     const signals: any[] = [];
@@ -174,7 +177,7 @@ describe('ArbitrageScoutAgent', () => {
 
   it('confidence is capped at 0.95', () => {
     const emitter = new EventEmitter();
-    const agent = new ArbitrageScoutAgent(emitter, 9999_000);
+    const agent = new ArbitrageScoutAgent(emitter, MOCK_LONG_INTERVAL_MS);
     const opp = makeOpportunity(99); // absurdly high profit %
 
     const signals: any[] = [];
@@ -185,7 +188,7 @@ describe('ArbitrageScoutAgent', () => {
   });
 
   it('stop() sets status to idle', () => {
-    const agent = new ArbitrageScoutAgent(new EventEmitter(), 9999_000);
+    const agent = new ArbitrageScoutAgent(new EventEmitter(), MOCK_LONG_INTERVAL_MS);
     (agent as any).running = true;
     agent.stop();
     expect(agent.status).toBe('idle');

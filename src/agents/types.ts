@@ -18,7 +18,8 @@ export type AgentRole =
   | 'market-analyst'
   | 'arbitrage-scout'
   | 'risk-manager'
-  | 'execution';
+  | 'execution'
+  | 'coordinator';
 
 export type AgentStatus = 'idle' | 'running' | 'paused' | 'error';
 

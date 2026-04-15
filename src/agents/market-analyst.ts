@@ -16,6 +16,9 @@ import {
   TradingAgent,
 } from './types.js';
 
+// Fallback SOL price used only when all API calls fail (not for trading decisions)
+const DEFAULT_SOL_PRICE_USD = 150;
+
 // Price samples for rolling-window calculations
 const SAMPLE_WINDOW = 6; // number of price snapshots to keep
 
@@ -117,13 +120,14 @@ export class MarketAnalystAgent implements TradingAgent {
       };
       const price = json.data?.[SOL_MINT]?.price;
       if (price && price > 0) return price;
-    } catch {
+    } catch (err) {
+      this.logger.warn(`[MarketAnalystAgent] failed to fetch SOL price: ${err}`);
       // fall through to default
     }
     // Fallback: return last known price or a safe default
     return this.priceHistory.length > 0
       ? this.priceHistory[this.priceHistory.length - 1]
-      : 150;
+      : DEFAULT_SOL_PRICE_USD;
   }
 
   private computeTrend(): MarketCondition['trend'] {
