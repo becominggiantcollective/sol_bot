@@ -10,12 +10,14 @@ import { DirectSwapStrategy } from './strategies/direct-swap.js';
 import { COMMON_TOKENS, Logger, sleep } from './utils/index.js';
 import { ProfitabilityTracker, Trade } from './utils/profitability.js';
 import { config } from './config/index.js';
+import { AgentCoordinator } from './agents/index.js';
 
 export class SolanaArbitrageBot {
   private solanaConnection: SolanaConnection;
   private flashloanManager: FlashloanManager;
   private strategies: any[] = [];
   private liquidationStrategy?: LiquidationStrategy;
+  private agentCoordinator?: AgentCoordinator;
   private logger: Logger;
   private profitTracker: ProfitabilityTracker;
   private isRunning = false;
@@ -67,6 +69,14 @@ export class SolanaArbitrageBot {
       
       this.isRunning = true;
       
+      // Start the multi-agent coordinator
+      this.agentCoordinator = new AgentCoordinator(
+        this.solanaConnection,
+        this.flashloanManager
+      );
+      await this.agentCoordinator.start();
+      this.logger.info('Multi-agent trading system active');
+      
       // Start metrics display interval (every 5 minutes)
       this.metricsDisplayInterval = setInterval(() => {
         this.profitTracker.displayMetrics();
@@ -91,6 +101,11 @@ export class SolanaArbitrageBot {
     
     if (this.metricsDisplayInterval) {
       clearInterval(this.metricsDisplayInterval);
+    }
+
+    // Stop multi-agent coordinator
+    if (this.agentCoordinator) {
+      this.agentCoordinator.stop();
     }
     
     // Display final metrics
@@ -267,6 +282,10 @@ export class SolanaArbitrageBot {
 
   exportMetrics(): string {
     return this.profitTracker.exportToJSON();
+  }
+
+  getAgentMetrics() {
+    return this.agentCoordinator?.getMetrics() ?? null;
   }
 }
 
