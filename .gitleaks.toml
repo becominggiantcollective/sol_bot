@@ -16,6 +16,12 @@ regex = '''(?i)(private[_\-]?key|secret[_\-]?key|signing[_\-]?key)\s*[:=]\s*['"]
 tags = ["solana", "private-key"]
 
 [[rules]]
+id = "solana-private-key-base58-bare"
+description = "Bare Solana private key (base58, 87-88 chars, any variable name)"
+regex = '''['"][1-9A-HJ-NP-Za-km-z]{87,88}['"]'''
+tags = ["solana", "private-key"]
+
+[[rules]]
 id = "helius-api-key"
 description = "Helius API key in URL"
 regex = '''helius-rpc\.com/\?api-key=[0-9a-f\-]{36}'''

@@ -114,12 +114,12 @@ npm run build
 cargo build --release --bin tx-executor
 
 # Copy files to VPS (replace with your deployment method)
-scp -r dist/ root@<VPS_IP>:/root/sol_bot/
-scp -r target/release/tx-executor root@<VPS_IP>:/root/sol_bot/
-scp .env root@<VPS_IP>:/root/sol_bot/
+scp -r dist/ deploy@<VPS_IP>:/root/sol_bot/
+scp -r target/release/tx-executor deploy@<VPS_IP>:/root/sol_bot/
+scp .env deploy@<VPS_IP>:/root/sol_bot/
 
 # SSH to VPS and restart
-ssh root@<VPS_IP>
+ssh deploy@<VPS_IP>
 cd /root/sol_bot
 pm2 restart solana-arb-bot
 pm2 logs solana-arb-bot

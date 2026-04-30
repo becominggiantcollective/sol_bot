@@ -1,4 +1,4 @@
-import { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction, TransactionConfirmationStrategy, SystemProgram } from '@solana/web3.js';
+import { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction, TransactionConfirmationStrategy, SystemProgram, SystemInstruction } from '@solana/web3.js';
 // @ts-ignore - bs58 types
 import bs58 from 'bs58';
 import { config } from '../config/index.js';
@@ -7,7 +7,7 @@ import { config } from '../config/index.js';
 // Configurable via MAX_TX_SOL_CAP env var; default is 500 SOL.
 const MAX_TX_SOL_CAP = parseFloat(process.env.MAX_TX_SOL_CAP || '500');
 // Maximum lamports transferred per transaction (derived from cap above)
-const MAX_TX_LAMPORTS = BigInt(Math.round(MAX_TX_SOL_CAP * 1e9));
+const MAX_TX_LAMPORTS = BigInt(Math.floor(MAX_TX_SOL_CAP * 1e9));
 
 export class SolanaConnection {
   private connection: Connection;
@@ -76,9 +76,10 @@ export class SolanaConnection {
     }
 
     // ── DRY_RUN guard: never broadcast real transactions in dry-run mode ──────
-    if (process.env.DRY_RUN === 'true') {
+    const dryRun = process.env.DRY_RUN?.toLowerCase();
+    if (dryRun === 'true' || dryRun === '1' || dryRun === 'yes') {
       throw new Error(
-        'DRY_RUN=true — transaction blocked at signing boundary. ' +
+        'DRY_RUN is enabled — transaction blocked at signing boundary. ' +
         'Set DRY_RUN=false to allow live transactions.'
       );
     }
@@ -150,20 +151,22 @@ export class SolanaConnection {
 
   /**
    * Estimate the total lamports transferred by SystemProgram.transfer instructions
-   * in the transaction. Used for the amount-cap safety check.
+   * in the transaction. Uses the official SDK decoder for robustness.
+   * Only native SOL transfers are counted; SPL token transfers use a different
+   * program and their amounts are in token units, not lamports.
    */
   private _estimateTransferLamports(transaction: Transaction): bigint {
     let total = BigInt(0);
     for (const ix of transaction.instructions) {
-      // Only inspect native SOL transfers; SPL token transfers use a different
-      // program and their "amount" field is in token units, not lamports.
-      if (ix.programId.equals(SystemProgram.programId) && ix.data.length >= 12) {
-        // SystemProgram.transfer layout: [4-byte instruction index][8-byte lamports]
-        const instructionIndex = ix.data.readUInt32LE(0);
-        if (instructionIndex === 2) { // Transfer = index 2
-          const lamports = ix.data.readBigUInt64LE(4);
-          total += lamports;
+      if (!ix.programId.equals(SystemProgram.programId)) continue;
+      try {
+        const type = SystemInstruction.decodeInstructionType(ix);
+        if (type === 'Transfer') {
+          const decoded = SystemInstruction.decodeTransfer(ix);
+          total += BigInt(decoded.lamports.toString());
         }
+      } catch {
+        // Unrecognised system instruction — skip it conservatively
       }
     }
     return total;

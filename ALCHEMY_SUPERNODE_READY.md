@@ -144,11 +144,11 @@ ML_EARLY_PREDICTION_MS=200
 npm run build
 
 # Deploy to VPS
-scp -r dist/ root@<VPS_IP>:/root/sol_bot/
-scp .env root@<VPS_IP>:/root/sol_bot/
+scp -r dist/ deploy@<VPS_IP>:/root/sol_bot/
+scp .env deploy@<VPS_IP>:/root/sol_bot/
 
 # Restart bot
-ssh root@<VPS_IP>
+ssh deploy@<VPS_IP>
 cd /root/sol_bot
 pm2 restart solana-arb-bot
 pm2 logs solana-arb-bot --lines 100
