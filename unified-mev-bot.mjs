@@ -81,8 +81,8 @@ const CONFIG = {
 };
 
 // === CONSTANTS ===
-const HELIUS_RPC = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
-const HELIUS_WS = 'wss://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const HELIUS_RPC = process.env.HELIUS_RPC_URL;
+const HELIUS_WS = process.env.HELIUS_WS_URL;
 const JUPITER_API = 'https://public.jupiterapi.com';
 const GECKO_API = 'https://api.geckoterminal.com/api/v2';
 
@@ -119,7 +119,7 @@ const TRIANGULAR_PATHS = [
 ];
 
 // Wallet
-const PRIVATE_KEY = 'YFBxhJvJXXEyzNF6gzMZqifEC9DdrfLtW8Bto4V9fyFp3ALoakJD6W11PvPnezt8cFQWDJUZAqkLcyPzeJ2syzs';
+const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY;
 const wallet = Keypair.fromSecretKey(bs58.decode(PRIVATE_KEY));
 const connection = new Connection(HELIUS_RPC, 'confirmed');
 

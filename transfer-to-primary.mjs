@@ -8,7 +8,7 @@ const BACKUP_WALLET_KEY_BYTES = [246,195,56,94,100,225,214,225,145,200,125,248,1
 const CONFIG = {
   backupWallet: '9VZkKLpzCwfHXpHFRW7T2NXZ68T9E5vwgFaXtCzdtgzQ',
   primaryWallet: 'EZpCKtCMj3dMjnPt2f1egkBQ2khhXP8uK5bWiSt6Y1VV',
-  heliusRpc: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+  heliusRpc: process.env.HELIUS_RPC_URL,
 };
 
 async function main() {

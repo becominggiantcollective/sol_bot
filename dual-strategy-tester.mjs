@@ -39,8 +39,8 @@ async function optimizedFetch(url, options = {}) {
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
-  jupiterApiKey: 'f6663264-66de-4a78-b115-c14a9efc5a05',
-  heliusRpc: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+  jupiterApiKey: process.env.JUPITER_API_KEY,
+  heliusRpc: process.env.HELIUS_RPC_URL,
   
   // Flashloan Arbitrage Settings
   flashloan: {

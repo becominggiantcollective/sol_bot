@@ -9,7 +9,7 @@ import axios from 'axios';
 // CONFIGURATION
 // =============================================================================
 
-const JUPITER_API_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
+const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
 
 // Token addresses
 const TOKENS = {

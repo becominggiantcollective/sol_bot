@@ -10,9 +10,9 @@ import fetch from 'node-fetch';
 import bs58 from 'bs58';
 
 // === CONFIG ===
-const RPC = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const RPC = process.env.HELIUS_RPC_URL;
 const JUPITER_API = 'https://api.jup.ag/swap/v1';
-const JUPITER_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
+const JUPITER_KEY = process.env.JUPITER_API_KEY;
 
 // Token mints
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
@@ -53,7 +53,7 @@ const TRIANGULAR_ROUTES = [
 const connection = new Connection(RPC, 'confirmed');
 
 // Wallet
-const PRIVATE_KEY = '2bYF7j9KWjEfuLLpiYezrH9z7HUpBc3J29zE7j6ZviNkavRkZZFPNurog251FNxHzgs56PwwcrX4DbEN4FSpqkcx';
+const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY;
 const wallet = Keypair.fromSecretKey(bs58.decode(PRIVATE_KEY));
 
 // Stats

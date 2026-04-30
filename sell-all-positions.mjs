@@ -8,8 +8,8 @@ import fetch from 'node-fetch';
 import { Keypair, Connection, VersionedTransaction, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import bs58 from 'bs58';
 
-const PRIVATE_KEY = 'YFBxhJvJXXEyzNF6gzMZqifEC9DdrfLtW8Bto4V9fyFp3ALoakJD6W11PvPnezt8cFQWDJUZAqkLcyPzeJ2syzs';
-const RPC_URL = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY;
+const RPC_URL = process.env.HELIUS_RPC_URL;
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
 
 const wallet = Keypair.fromSecretKey(bs58.decode(PRIVATE_KEY));

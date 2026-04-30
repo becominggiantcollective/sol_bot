@@ -11,7 +11,7 @@ import axios from 'axios';
 // CONFIGURATION
 // =============================================================================
 
-const JUPITER_API_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
+const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
 
 // =============================================================================
 // NEW TOKEN WATCHER TEST
@@ -169,7 +169,7 @@ async function testSafetyCheck() {
   try {
     // Use Helius to get token info
     const response = await axios.post(
-      'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+      process.env.HELIUS_RPC_URL,
       {
         jsonrpc: '2.0',
         id: 1,

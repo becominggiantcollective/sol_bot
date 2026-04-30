@@ -34,13 +34,28 @@ use tokio::sync::{Mutex, RwLock};
 use tokio_tungstenite::{connect_async, tungstenite::Message};
 
 // ============================================================================
-// CONFIGURATION
+// CONFIGURATION — loaded from environment variables at runtime
 // ============================================================================
 
-const HELIUS_RPC: &str = "https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe";
-const HELIUS_WS: &str = "wss://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe";
+fn helius_api_key() -> String {
+    std::env::var("HELIUS_API_KEY")
+        .expect("HELIUS_API_KEY environment variable is required")
+}
+
+fn helius_rpc_url() -> String {
+    format!("https://mainnet.helius-rpc.com/?api-key={}", helius_api_key())
+}
+
+fn helius_ws_url() -> String {
+    format!("wss://mainnet.helius-rpc.com/?api-key={}", helius_api_key())
+}
+
+fn jupiter_api_key() -> String {
+    std::env::var("JUPITER_API_KEY")
+        .expect("JUPITER_API_KEY environment variable is required")
+}
+
 const JUPITER_API: &str = "https://api.jup.ag/swap/v1";
-const JUPITER_API_KEY: &str = "f6663264-66de-4a78-b115-c14a9efc5a05";
 const GECKO_API: &str = "https://api.geckoterminal.com/api/v2";
 
 const SOL_MINT: &str = "So11111111111111111111111111111111111111112";
@@ -236,7 +251,7 @@ impl MevBot {
             .timeout(Duration::from_secs(10))
             .build()?;
         let rpc = RpcClient::new_with_commitment(
-            HELIUS_RPC.to_string(),
+            helius_rpc_url(),
             CommitmentConfig::confirmed(),
         );
 
@@ -269,7 +284,7 @@ impl MevBot {
         let response = self
             .client
             .get(&url)
-            .header("x-api-key", JUPITER_API_KEY)
+            .header("x-api-key", &jupiter_api_key())
             .send()
             .await?
             .json::<JupiterQuote>()
@@ -292,7 +307,7 @@ impl MevBot {
         let response = self
             .client
             .post(&format!("{}/swap", JUPITER_API))
-            .header("x-api-key", JUPITER_API_KEY)
+            .header("x-api-key", &jupiter_api_key())
             .header("Content-Type", "application/json")
             .json(&swap_request)
             .send()
@@ -657,7 +672,7 @@ impl MevBot {
 
         let response: serde_json::Value = self
             .client
-            .post(HELIUS_RPC)
+            .post(&helius_rpc_url())
             .json(&request)
             .send()
             .await?

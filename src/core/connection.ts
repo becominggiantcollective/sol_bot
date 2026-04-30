@@ -1,7 +1,13 @@
-import { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction, TransactionConfirmationStrategy } from '@solana/web3.js';
+import { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction, TransactionConfirmationStrategy, SystemProgram } from '@solana/web3.js';
 // @ts-ignore - bs58 types
 import bs58 from 'bs58';
 import { config } from '../config/index.js';
+
+// Maximum SOL value that a single transaction is allowed to transfer.
+// Configurable via MAX_TX_SOL_CAP env var; default is 500 SOL.
+const MAX_TX_SOL_CAP = parseFloat(process.env.MAX_TX_SOL_CAP || '500');
+// Maximum lamports transferred per transaction (derived from cap above)
+const MAX_TX_LAMPORTS = BigInt(Math.round(MAX_TX_SOL_CAP * 1e9));
 
 export class SolanaConnection {
   private connection: Connection;
@@ -68,6 +74,25 @@ export class SolanaConnection {
     if (!this.wallet) {
       throw new Error('Wallet not loaded - cannot send transaction');
     }
+
+    // ── DRY_RUN guard: never broadcast real transactions in dry-run mode ──────
+    if (process.env.DRY_RUN === 'true') {
+      throw new Error(
+        'DRY_RUN=true — transaction blocked at signing boundary. ' +
+        'Set DRY_RUN=false to allow live transactions.'
+      );
+    }
+
+    // ── Amount cap: reject transactions that transfer more than MAX_TX_SOL_CAP ─
+    const totalTransferred = this._estimateTransferLamports(transaction);
+    if (totalTransferred > MAX_TX_LAMPORTS) {
+      throw new Error(
+        `Transaction rejected: transfer amount ${totalTransferred} lamports exceeds ` +
+        `safety cap of ${MAX_TX_LAMPORTS} lamports (${MAX_TX_SOL_CAP} SOL). ` +
+        `Increase MAX_TX_SOL_CAP env var if intentional.`
+      );
+    }
+
     try {
       const latestBlockhash = await this.connection.getLatestBlockhash('confirmed');
       
@@ -121,5 +146,26 @@ export class SolanaConnection {
     transaction.sign(this.wallet);
     
     return await this.connection.simulateTransaction(transaction);
+  }
+
+  /**
+   * Estimate the total lamports transferred by SystemProgram.transfer instructions
+   * in the transaction. Used for the amount-cap safety check.
+   */
+  private _estimateTransferLamports(transaction: Transaction): bigint {
+    let total = BigInt(0);
+    for (const ix of transaction.instructions) {
+      // Only inspect native SOL transfers; SPL token transfers use a different
+      // program and their "amount" field is in token units, not lamports.
+      if (ix.programId.equals(SystemProgram.programId) && ix.data.length >= 12) {
+        // SystemProgram.transfer layout: [4-byte instruction index][8-byte lamports]
+        const instructionIndex = ix.data.readUInt32LE(0);
+        if (instructionIndex === 2) { // Transfer = index 2
+          const lamports = ix.data.readBigUInt64LE(4);
+          total += lamports;
+        }
+      }
+    }
+    return total;
   }
 }

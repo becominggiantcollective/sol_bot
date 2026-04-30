@@ -33,7 +33,7 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import { analyzeToken } from './ml-predictor.mjs';
 
-const RPC_URL = process.env.HELIUS_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const RPC_URL = process.env.HELIUS_RPC_URL;
 const connection = new Connection(RPC_URL, 'confirmed');
 
 // ═══════════════════════════════════════════════════════════════════════════

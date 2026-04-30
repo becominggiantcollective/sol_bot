@@ -100,8 +100,8 @@ function getDynamicThreshold(sentimentScore: number, liquidity: number): number 
 // CONFIGURATION
 // =============================================================================
 
-const JUPITER_API_KEY = process.env.JUPITER_API_KEY || 'f6663264-66de-4a78-b115-c14a9efc5a05';
-const HELIUS_API_KEY = process.env.HELIUS_API_KEY || '7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
+const HELIUS_API_KEY = process.env.HELIUS_API_KEY;
 
 // Token addresses
 const TOKENS = {

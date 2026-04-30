@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { Connection, PublicKey } from '@solana/web3.js';
 
-const HELIUS_RPC = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const HELIUS_RPC = process.env.HELIUS_RPC_URL;
 
 async function verifySolendFee() {
   console.log('═══════════════════════════════════════════════════════════════════');
@@ -44,7 +44,7 @@ async function verifySolendFee() {
   try {
     // SOL -> USDC
     const quote1 = await fetch(`https://api.jup.ag/swap/v1/quote?inputMint=${SOL}&outputMint=${USDC}&amount=${amount}&slippageBps=50`, {
-      headers: { 'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05' }
+      headers: { 'x-api-key': process.env.JUPITER_API_KEY }
     }).then(r => r.json());
     
     const usdcOut = parseInt(quote1.outAmount);
@@ -52,7 +52,7 @@ async function verifySolendFee() {
     
     // USDC -> SOL
     const quote2 = await fetch(`https://api.jup.ag/swap/v1/quote?inputMint=${USDC}&outputMint=${SOL}&amount=${usdcOut}&slippageBps=50`, {
-      headers: { 'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05' }
+      headers: { 'x-api-key': process.env.JUPITER_API_KEY }
     }).then(r => r.json());
     
     const solBack = parseInt(quote2.outAmount);

@@ -33,7 +33,7 @@ async function optimizedFetch(url, options = {}) {
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
-  jupiterApiKey: 'f6663264-66de-4a78-b115-c14a9efc5a05',
+  jupiterApiKey: process.env.JUPITER_API_KEY,
   
   // Conservative flashloan settings
   flashloan: {

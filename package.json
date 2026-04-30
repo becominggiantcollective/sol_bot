@@ -23,7 +23,10 @@
     "format": "prettier --write src/**/*.ts",
     "pre-deploy-check": "node pre-deployment-check.js",
     "deploy-check": "npm run pre-deploy-check",
-    "sentiment:service": "uvicorn ml.sentiment_service.app:app --reload --port 8000"
+    "sentiment:service": "uvicorn ml.sentiment_service.app:app --reload --port 8000",
+    "secrets:scan": "gitleaks detect --source . --config .gitleaks.toml",
+    "secrets:protect": "gitleaks protect --staged --config .gitleaks.toml",
+    "setup:hooks": "git config core.hooksPath .githooks && echo \"\u2705 Git hooks configured\""
   },
   "keywords": [
     "solana",

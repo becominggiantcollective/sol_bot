@@ -33,7 +33,7 @@ class RealMarketBacktester {
       const url = `https://api.jup.ag/swap/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&slippageBps=50`;
       
       const response = await fetch(url, {
-        headers: { 'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05' }
+        headers: { 'x-api-key': process.env.JUPITER_API_KEY }
       });
       if (!response.ok) {
         console.error(`❌ Jupiter API error: ${response.status}`);

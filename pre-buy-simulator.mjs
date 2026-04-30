@@ -11,9 +11,9 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import fetch from 'node-fetch';
 
-const BIRDEYE_API_KEY = process.env.BIRDEYE_API_KEY || '037a1fc7b81142ddb212d8a2c7956e7f';
-const JUPITER_API_KEY = process.env.JUPITER_API_KEY || 'f6663264-66de-4a78-b115-c14a9efc5a05';
-const HELIUS_RPC = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const BIRDEYE_API_KEY = process.env.BIRDEYE_API_KEY;
+const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
+const HELIUS_RPC = process.env.HELIUS_RPC_URL;
 const connection = new Connection(HELIUS_RPC, 'confirmed');
 
 const SOL_MINT = 'So11111111111111111111111111111111111111112';

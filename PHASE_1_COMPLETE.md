@@ -93,7 +93,7 @@ node test-micro-edges.mjs
 
 ### Restart Bot:
 ```bash
-ssh root@83.229.86.150
+ssh root@<VPS_IP>
 pm2 restart solana-arb-bot
 pm2 logs solana-arb-bot --lines 100
 ```
@@ -232,7 +232,7 @@ Example: SOL → USDC → BONK → SOL = +0.08% ($0.18 profit on 2 SOL)
 
 3. **Monitor Logs**:
    ```bash
-   ssh root@83.229.86.150
+   ssh root@<VPS_IP>
    pm2 logs solana-arb-bot --lines 200
    ```
 

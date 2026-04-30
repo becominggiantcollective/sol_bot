@@ -22,9 +22,9 @@ import WebSocket from 'ws';
 // === CONFIG ===
 const CONFIG = {
   // Helius API
-  heliusApiKey: process.env.HELIUS_API_KEY || '7f243329-aabe-4227-b05f-0ed8d59b4efe',
-  heliusRpc: `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY || '7f243329-aabe-4227-b05f-0ed8d59b4efe'}`,
-  heliusWs: `wss://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY || '7f243329-aabe-4227-b05f-0ed8d59b4efe'}`,
+  heliusApiKey: process.env.HELIUS_API_KEY,
+  heliusRpc: `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`,
+  heliusWs: `wss://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`,
 
   // Tracking settings
   maxWalletsToTrack: 20,           // Track top 20 wallets

@@ -12,10 +12,10 @@ import bs58 from 'bs58';
 // Configuration - MICRO TRADING
 const CONFIG = {
   // Wallet
-  privateKey: 'YFBxhJvJXXEyzNF6gzMZqifEC9DdrfLtW8Bto4V9fyFp3ALoakJD6W11PvPnezt8cFQWDJUZAqkLcyPzeJ2syzs',
+  privateKey: process.env.WALLET_PRIVATE_KEY,
   
   // RPC
-  rpcUrl: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+  rpcUrl: process.env.HELIUS_RPC_URL,
   
   // Micro trading params - ULTRA SMALL to preserve capital
   tradeAmountSol: 0.001,        // ~$0.13 per trade (ultra small)

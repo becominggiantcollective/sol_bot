@@ -17,8 +17,8 @@ import bs58 from 'bs58';
 //                         CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════
 const CONFIG = {
-  privateKey: 'YFBxhJvJXXEyzNF6gzMZqifEC9DdrfLtW8Bto4V9fyFp3ALoakJD6W11PvPnezt8cFQWDJUZAqkLcyPzeJ2syzs',
-  rpcUrl: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+  privateKey: process.env.WALLET_PRIVATE_KEY,
+  rpcUrl: process.env.HELIUS_RPC_URL,
   
   // Trading params
   tradeAmountSol: 0.001,        // Trade size

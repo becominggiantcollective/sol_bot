@@ -18,8 +18,8 @@ import fs from 'fs';
 // CONFIGURATION
 // =============================================================================
 
-const JUPITER_API_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
-const HELIUS_RPC = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
+const HELIUS_RPC = process.env.HELIUS_RPC_URL;
 const WALLET_ADDRESS = '9VZkKLpzCwfHXpHFRW7T2NXZ68T9E5vwgFaXtCzdtgzQ';
 
 // Token addresses and decimals

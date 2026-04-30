@@ -11,8 +11,8 @@ const BACKUP_WALLET_KEY_BYTES = [246,195,56,94,100,225,214,225,145,200,125,248,1
 
 const CONFIG = {
   walletAddress: '9VZkKLpzCwfHXpHFRW7T2NXZ68T9E5vwgFaXtCzdtgzQ',
-  heliusRpc: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
-  jupiterApiKey: 'f6663264-66de-4a78-b115-c14a9efc5a05',
+  heliusRpc: process.env.HELIUS_RPC_URL,
+  jupiterApiKey: process.env.JUPITER_API_KEY,
 };
 
 const SOL_MINT = 'So11111111111111111111111111111111111111112';

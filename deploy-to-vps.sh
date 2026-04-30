@@ -1,19 +1,31 @@
 #!/bin/bash
 # Deploy Solana Bot to VPS
 # Run this from your LOCAL machine
+#
+# Required environment variables:
+#   VPS_IP    - IP address of the target VPS (e.g. export VPS_IP=1.2.3.4)
+#   VPS_USER  - SSH user on the VPS (defaults to 'deploy', NOT 'root')
+#
+# Example:
+#   VPS_IP=1.2.3.4 VPS_USER=deploy ./deploy-to-vps.sh
 
-VPS_IP="83.229.86.150"
-VPS_USER="root"
+if [ -z "${VPS_IP}" ]; then
+    echo "❌ VPS_IP environment variable is not set."
+    echo "   Usage: VPS_IP=<your-server-ip> VPS_USER=<user> ./deploy-to-vps.sh"
+    exit 1
+fi
+
+VPS_USER="${VPS_USER:-deploy}"   # Default to non-root 'deploy' user
 REMOTE_DIR="sol_bot"
 
 echo "🚀 Deploying Solana Arbitrage Bot to VPS"
 echo "========================================"
-echo "VPS IP: $VPS_IP"
+echo "VPS IP: $VPS_IP (user: $VPS_USER)"
 echo ""
 
 # Check if we can connect
 echo "📡 Testing SSH connection..."
-if ! ssh -o ConnectTimeout=5 ${VPS_USER}@${VPS_IP} "echo 'Connection successful'" 2>/dev/null; then
+if ! ssh -o ConnectTimeout=5 "${VPS_USER}@${VPS_IP}" "echo 'Connection successful'" 2>/dev/null; then
     echo "❌ Cannot connect to VPS. Please check:"
     echo "   1. VPS is running"
     echo "   2. SSH is enabled"
@@ -33,7 +45,7 @@ rsync -avz --progress \
   --exclude 'dist' \
   --exclude '.git' \
   --exclude '*.log' \
-  ./ ${VPS_USER}@${VPS_IP}:~/${REMOTE_DIR}/
+  ./ "${VPS_USER}@${VPS_IP}:~/${REMOTE_DIR}/"
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to sync files"

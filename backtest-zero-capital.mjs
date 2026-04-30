@@ -12,7 +12,7 @@
 import fetch from 'node-fetch';
 
 const JUPITER_API = 'https://api.jup.ag/swap/v1';
-const JUPITER_API_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
+const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
 const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 const USDT_MINT = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';

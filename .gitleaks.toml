@@ -1,0 +1,42 @@
+# Gitleaks configuration — secret scanning for this repository.
+# Install gitleaks: https://github.com/gitleaks/gitleaks
+# Run manually: gitleaks detect --source . --config .gitleaks.toml
+# Or add to CI: see .github/workflows/ for CI integration.
+
+title = "sol_bot secret scanning rules"
+
+[extend]
+# Use the official gitleaks ruleset as the base
+useDefault = true
+
+[[rules]]
+id = "solana-private-key-base58"
+description = "Solana private key (base58 encoded, 87-88 chars)"
+regex = '''(?i)(private[_\-]?key|secret[_\-]?key|signing[_\-]?key)\s*[:=]\s*['"]?[1-9A-HJ-NP-Za-km-z]{87,88}['"]?'''
+tags = ["solana", "private-key"]
+
+[[rules]]
+id = "helius-api-key"
+description = "Helius API key in URL"
+regex = '''helius-rpc\.com/\?api-key=[0-9a-f\-]{36}'''
+tags = ["api-key", "helius"]
+
+[[rules]]
+id = "jupiter-api-key"
+description = "Jupiter API key (UUID format)"
+regex = '''(?i)jupiter[_\-]?api[_\-]?key\s*[:=]\s*['"]?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}['"]?'''
+tags = ["api-key", "jupiter"]
+
+[[rules]]
+id = "solana-private-key-array"
+description = "Solana private key as JSON byte array"
+regex = '''\[\s*\d+(?:\s*,\s*\d+){60,}\s*\]'''
+tags = ["solana", "private-key"]
+
+[allowlist]
+description = "Ignore known-safe patterns"
+paths = [
+  ".env.example",
+  "SECRET_ROTATION_CHECKLIST.md",
+  "SECURITY.md",
+]
