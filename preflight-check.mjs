@@ -57,7 +57,7 @@ if (hasNodeModules) {
 // Check 4: RPC Connection
 console.log('\n4️⃣ Testing RPC Connection...');
 try {
-  const rpcUrl = process.env.HELIUS_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+  const rpcUrl = process.env.HELIUS_RPC_URL;
   const connection = new Connection(rpcUrl, 'confirmed');
 
   const startTime = Date.now();
@@ -85,7 +85,7 @@ try {
 // Check 5: Wallet
 console.log('\n5️⃣ Checking Wallet...');
 try {
-  const privateKey = process.env.WALLET_PRIVATE_KEY || '2bYF7j9KWjEfuLLpiYezrH9z7HUpBc3J29zE7j6ZviNkavRkZZFPNurog251FNxHzgs56PwwcrX4DbEN4FSpqkcx';
+  const privateKey = process.env.WALLET_PRIVATE_KEY;
   const wallet = Keypair.fromSecretKey(bs58.decode(privateKey));
 
   console.log(`   ✅ Wallet loaded`);
@@ -93,7 +93,7 @@ try {
   checks.passed++;
 
   // Check balance
-  const rpcUrl = process.env.HELIUS_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+  const rpcUrl = process.env.HELIUS_RPC_URL;
   const connection = new Connection(rpcUrl, 'confirmed');
   const balance = await connection.getBalance(wallet.publicKey);
   const solBalance = balance / 1e9;
@@ -119,7 +119,7 @@ try {
 console.log('\n6️⃣ Testing Jupiter API...');
 try {
   const response = await fetch('https://api.jup.ag/swap/v1/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=1000000&slippageBps=50', {
-    headers: { 'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05' },
+    headers: { 'x-api-key': process.env.JUPITER_API_KEY },
     timeout: 10000
   });
 

@@ -6,8 +6,12 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
 
+fn jupiter_api_key() -> String {
+    std::env::var("JUPITER_API_KEY")
+        .expect("JUPITER_API_KEY environment variable is required")
+}
+
 const JUPITER_API: &str = "https://api.jup.ag/swap/v1";
-const JUPITER_API_KEY: &str = "f6663264-66de-4a78-b115-c14a9efc5a05";
 
 const SOL_MINT: &str = "So11111111111111111111111111111111111111112";
 const USDC_MINT: &str = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
@@ -63,7 +67,7 @@ async fn get_quote(
     let start = Instant::now();
     let response = client
         .get(&url)
-        .header("x-api-key", JUPITER_API_KEY)
+        .header("x-api-key", &jupiter_api_key())
         .send()
         .await?
         .json::<JupiterQuote>()

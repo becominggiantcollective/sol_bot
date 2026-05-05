@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-const API_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
+const API_KEY = process.env.JUPITER_API_KEY;
 const SOL = 'So11111111111111111111111111111111111111112';
 const USDC = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 

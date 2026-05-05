@@ -27,7 +27,7 @@ import fs from 'fs';
 // =============================================================================
 
 const DEVNET_RPC = 'https://api.devnet.solana.com';
-const MAINNET_RPC = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const MAINNET_RPC = process.env.HELIUS_RPC_URL;
 
 // Your wallet (for mainnet gas verification)
 const MAINNET_WALLET = '9VZkKLpzCwfHXpHFRW7T2NXZ68T9E5vwgFaXtCzdtgzQ';

@@ -12,7 +12,7 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import fetch from 'node-fetch';
 
-const RPC_URL = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const RPC_URL = process.env.HELIUS_RPC_URL;
 const JUPITER_API = 'https://public.jupiterapi.com';
 const connection = new Connection(RPC_URL, 'confirmed');
 

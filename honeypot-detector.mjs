@@ -15,7 +15,7 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import fetch from 'node-fetch';
 
-const RPC_URL = process.env.HELIUS_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const RPC_URL = process.env.HELIUS_RPC_URL;
 const JUPITER_API = 'https://api.jup.ag/swap/v1';
 const connection = new Connection(RPC_URL, 'confirmed');
 
@@ -231,7 +231,7 @@ async function simulateSell(mint) {
     const quoteUrl = `${JUPITER_API}/quote?inputMint=${mint}&outputMint=So11111111111111111111111111111111111111112&amount=${testAmount}&slippageBps=5000`;
 
     const response = await fetch(quoteUrl, {
-      headers: { 'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05' },
+      headers: { 'x-api-key': process.env.JUPITER_API_KEY },
       timeout: 10000 // 10 second timeout
     });
 
@@ -303,7 +303,7 @@ async function checkLiquidity(mint) {
 async function checkTopHolders(mint) {
   try {
     // Use Helius to get top holders
-    const response = await fetch(`https://api.helius.xyz/v0/token-metadata?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe`, {
+    const response = await fetch(`https://api.helius.xyz/v0/token-metadata?api-key=${process.env.HELIUS_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mintAccounts: [mint] })

@@ -1,0 +1,28 @@
+#!/bin/sh
+# pre-commit hook: run gitleaks secret scanning before every commit.
+#
+# Install this hook:
+#   git config core.hooksPath .githooks
+#
+# Or copy to .git/hooks/:
+#   cp .githooks/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+#
+# Install gitleaks: https://github.com/gitleaks/gitleaks#installing
+
+if command -v gitleaks >/dev/null 2>&1; then
+    echo "🔍 Running gitleaks secret scan..."
+    gitleaks protect --staged --config .gitleaks.toml
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "❌ gitleaks detected secrets in staged files."
+        echo "   Review the findings above and remove any secrets before committing."
+        echo "   If this is a false positive, add an allowlist entry in .gitleaks.toml"
+        exit 1
+    fi
+    echo "✅ No secrets detected."
+else
+    echo "⚠️  gitleaks is not installed — secret scanning skipped."
+    echo "   Install it: https://github.com/gitleaks/gitleaks#installing"
+    echo "   Then run: git config core.hooksPath .githooks"
+fi

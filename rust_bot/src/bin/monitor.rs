@@ -8,9 +8,18 @@ use solana_client::rpc_client::RpcClient;
 use solana_sdk::{commitment_config::CommitmentConfig, signature::Keypair, signer::Signer};
 use std::time::{Duration, Instant};
 
-const HELIUS_RPC: &str = "https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe";
+fn helius_rpc_url() -> String {
+    let key = std::env::var("HELIUS_API_KEY")
+        .expect("HELIUS_API_KEY environment variable is required");
+    format!("https://mainnet.helius-rpc.com/?api-key={}", key)
+}
+
+fn jupiter_api_key() -> String {
+    std::env::var("JUPITER_API_KEY")
+        .expect("JUPITER_API_KEY environment variable is required")
+}
+
 const JUPITER_API: &str = "https://api.jup.ag/swap/v1";
-const JUPITER_API_KEY: &str = "f6663264-66de-4a78-b115-c14a9efc5a05";
 const GECKO_API: &str = "https://api.geckoterminal.com/api/v2";
 
 const SOL_MINT: &str = "So11111111111111111111111111111111111111112";
@@ -42,7 +51,7 @@ async fn get_sol_price(client: &Client) -> Result<f64> {
 
     let response: JupiterQuote = client
         .get(&url)
-        .header("x-api-key", JUPITER_API_KEY)
+        .header("x-api-key", &jupiter_api_key())
         .send()
         .await?
         .json()
@@ -92,7 +101,7 @@ async fn check_triangular_opportunity(client: &Client) -> Result<Option<(String,
     );
     let q1: JupiterQuote = client
         .get(&url1)
-        .header("x-api-key", JUPITER_API_KEY)
+        .header("x-api-key", &jupiter_api_key())
         .send()
         .await?
         .json()
@@ -106,7 +115,7 @@ async fn check_triangular_opportunity(client: &Client) -> Result<Option<(String,
     );
     let q2: JupiterQuote = client
         .get(&url2)
-        .header("x-api-key", JUPITER_API_KEY)
+        .header("x-api-key", &jupiter_api_key())
         .send()
         .await?
         .json()
@@ -120,7 +129,7 @@ async fn check_triangular_opportunity(client: &Client) -> Result<Option<(String,
     );
     let q3: JupiterQuote = client
         .get(&url3)
-        .header("x-api-key", JUPITER_API_KEY)
+        .header("x-api-key", &jupiter_api_key())
         .send()
         .await?
         .json()
@@ -167,7 +176,7 @@ async fn main() -> Result<()> {
         .timeout(Duration::from_secs(10))
         .build()?;
     let rpc = RpcClient::new_with_commitment(
-        HELIUS_RPC.to_string(),
+        helius_rpc_url(),
         CommitmentConfig::confirmed(),
     );
 

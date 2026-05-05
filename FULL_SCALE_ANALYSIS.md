@@ -85,7 +85,7 @@ target/:   5.6 GB (can delete - Rust build cache)
 RECOMMENDATION: Run `rm -rf target/` to free 5.6 GB
 ```
 
-### 2.2 VPS (83.229.86.150)
+### 2.2 VPS (<VPS_IP>)
 
 | Status | Details |
 |--------|---------|

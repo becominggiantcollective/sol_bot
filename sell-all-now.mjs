@@ -4,10 +4,10 @@ import bs58 from 'bs58';
 import { Keypair, Connection, VersionedTransaction } from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
-const PRIVATE_KEY = '2bYF7j9KWjEfuLLpiYezrH9z7HUpBc3J29zE7j6ZviNkavRkZZFPNurog251FNxHzgs56PwwcrX4DbEN4FSpqkcx';
-const HELIUS_RPC = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY;
+const HELIUS_RPC = process.env.HELIUS_RPC_URL;
 const JUPITER_API = 'https://api.jup.ag/swap/v1';
-const API_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
+const API_KEY = process.env.JUPITER_API_KEY;
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
 
 // Skip these (wrapped SOL, stablecoins we want to keep)

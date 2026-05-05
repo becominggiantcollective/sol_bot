@@ -10,7 +10,7 @@ import bs58 from 'bs58';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const RPC = process.env.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const RPC = process.env.SOLANA_RPC_URL;
 const JUPITER_API = process.env.JUPITER_API_URL || 'https://api.jup.ag/swap/v1';
 const JUPITER_KEY = process.env.JUPITER_API_KEY || '';
 const SOL_MINT = 'So11111111111111111111111111111111111111112';

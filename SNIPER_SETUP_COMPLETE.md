@@ -86,17 +86,17 @@ CONFIG = {
 ## 🔑 API Keys Used
 
 ### Jupiter API
-- **Key:** `f6663264-66de-4a78-b115-c14a9efc5a05`
+- **Key:** `<YOUR_JUPITER_API_KEY>`
 - **Usage:** Trade quotes and swaps
 - **Status:** ✅ Working
 
 ### Helius RPC
-- **Key:** `7f243329-aabe-4227-b05f-0ed8d59b4efe`
+- **Key:** `<YOUR_HELIUS_API_KEY>`
 - **Usage:** Solana blockchain access
 - **Status:** ✅ Working
 
 ### Birdeye API
-- **Key:** `037a1fc7b81142ddb212d8a2c7956e7f`
+- **Key:** `<YOUR_BIRDEYE_API_KEY>`
 - **Usage:** Not currently used (simulate endpoint unavailable)
 - **Status:** ⚠️ Available but not needed
 

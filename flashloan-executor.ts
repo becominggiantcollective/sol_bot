@@ -35,7 +35,7 @@ dotenv.config();
 // ============================================
 // CONFIGURATION
 // ============================================
-const RPC_URL = process.env.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const RPC_URL = process.env.SOLANA_RPC_URL;
 const JUPITER_API = process.env.JUPITER_API_URL || 'https://api.jup.ag/swap/v1';
 const JUPITER_KEY = process.env.JUPITER_API_KEY || '';
 const JITO_BLOCK_ENGINE = process.env.JITO_BLOCK_ENGINE_URL || 'https://mainnet.block-engine.jito.wtf';

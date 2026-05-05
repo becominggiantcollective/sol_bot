@@ -20,10 +20,10 @@ const CONFIG = {
   apis: {
     jupiter: {
       url: 'https://api.jup.ag/swap/v1',
-      key: 'f6663264-66de-4a78-b115-c14a9efc5a05',
+      key: process.env.JUPITER_API_KEY,
     },
     dexscreener: 'https://api.dexscreener.com/latest/dex',
-    helius: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+    helius: process.env.HELIUS_RPC_URL,
   },
   
   // Token mints

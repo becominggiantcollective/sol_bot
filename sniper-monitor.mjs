@@ -14,9 +14,9 @@ import bs58 from 'bs58';
 const LIVE_MODE = false; // Set to true to execute real trades
 const GECKO_API = 'https://api.geckoterminal.com/api/v2';
 const JUPITER_API = 'https://api.jup.ag/swap/v1';
-const JUPITER_API_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
+const JUPITER_API_KEY = process.env.JUPITER_API_KEY;
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
-const RPC_URL = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const RPC_URL = process.env.HELIUS_RPC_URL;
 
 // WALLET (only used if LIVE_MODE)
 const WALLET_PRIVATE_KEY = '4F6kxQH1rDhqrFXY2JNmYzZNJE2MLJWRyNoYCYVBMgfVmCVHtGXThHJHtGdLJT6vWdrkQvSC1oPjCkPVXJBCjYFk';

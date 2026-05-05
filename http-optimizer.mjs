@@ -269,7 +269,7 @@ async function testApiLatencies() {
     { name: 'Jupiter Price', url: 'https://api.jup.ag/price/v2?ids=So11111111111111111111111111111111111111112' },
     { name: 'Jupiter Quote', url: 'https://api.jup.ag/swap/v1/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=1000000000&slippageBps=50' },
     { name: 'GeckoTerminal', url: 'https://api.geckoterminal.com/api/v2/networks/solana/new_pools?page=1' },
-    { name: 'Helius RPC', url: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe', method: 'POST', body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getHealth' }) },
+    { name: 'Helius RPC', url: process.env.HELIUS_RPC_URL, method: 'POST', body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getHealth' }) },
   ];
 
   const results = [];

@@ -8,10 +8,10 @@ import { Connection, Keypair, VersionedTransaction } from '@solana/web3.js';
 import bs58 from 'bs58';
 
 const CONFIG = {
-  privateKey: 'YFBxhJvJXXEyzNF6gzMZqifEC9DdrfLtW8Bto4V9fyFp3ALoakJD6W11PvPnezt8cFQWDJUZAqkLcyPzeJ2syzs',
-  rpcUrl: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+  privateKey: process.env.WALLET_PRIVATE_KEY,
+  rpcUrl: process.env.HELIUS_RPC_URL,
   jupiterApi: 'https://api.jup.ag/swap/v1',
-  jupiterApiKey: 'f6663264-66de-4a78-b115-c14a9efc5a05',
+  jupiterApiKey: process.env.JUPITER_API_KEY,
 };
 
 const SOL_MINT = 'So11111111111111111111111111111111111111112';

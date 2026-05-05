@@ -9,10 +9,10 @@
 import fetch from 'node-fetch';
 
 const CONFIG = {
-  walletKey: 'YFBxhJvJXXEyzNF6gzMZqifEC9DdrfLtW8Bto4V9fyFp3ALoakJD6W11PvPnezt8cFQWDJUZAqkLcyPzeJ2syzs',
+  walletKey: process.env.WALLET_PRIVATE_KEY,
   walletAddress: 'EZpCKtCMj3dMjnPt2f1egkBQ2khhXP8uK5bWiSt6Y1VV',
-  heliusRpc: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
-  jupiterApiKey: 'f6663264-66de-4a78-b115-c14a9efc5a05',
+  heliusRpc: process.env.HELIUS_RPC_URL,
+  jupiterApiKey: process.env.JUPITER_API_KEY,
 };
 
 const SOL_MINT = 'So11111111111111111111111111111111111111112';

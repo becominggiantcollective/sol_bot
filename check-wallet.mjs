@@ -2,7 +2,7 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import fetch from 'node-fetch';
 
-const conn = new Connection('https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe');
+const conn = new Connection(process.env.HELIUS_RPC_URL);
 const wallet = new PublicKey('52chXL7rNGm5hFWXRK6VsxmRiVvjSq3YPC8LSUaMg6wS');
 
 async function check() {

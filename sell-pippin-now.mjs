@@ -2,14 +2,14 @@ import { Connection, Keypair, VersionedTransaction, PublicKey } from '@solana/we
 import { getAssociatedTokenAddress } from '@solana/spl-token';
 import bs58 from 'bs58';
 
-const HELIUS_RPC = 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const HELIUS_RPC = process.env.HELIUS_RPC_URL;
 const JUPITER_API = 'https://public.jupiterapi.com';
-const API_KEY = 'f6663264-66de-4a78-b115-c14a9efc5a05';
+const API_KEY = process.env.JUPITER_API_KEY;
 
 const PIPPIN_MINT = 'Dfh5DzRgSvvCFDoYc2ciTkMrbDfRKybA4SoFbPmApump';
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
 
-const PRIVATE_KEY = '2bYF7j9KWjEfuLLpiYezrH9z7HUpBc3J29zE7j6ZviNkavRkZZFPNurog251FNxHzgs56PwwcrX4DbEN4FSpqkcx';
+const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY;
 
 async function sellPippin() {
   console.log('🔴 SELLING PIPPIN NOW...\n');

@@ -16,9 +16,9 @@ import {
 // ============================================
 const CONFIG = {
   // API Keys
-  heliusRpc: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+  heliusRpc: process.env.HELIUS_RPC_URL,
   jupiterApi: 'https://api.jup.ag',
-  jupiterKey: 'f6663264-66de-4a78-b115-c14a9efc5a05',
+  jupiterKey: process.env.JUPITER_API_KEY,
   
   // Flashloan Settings
   flashloanTiers: [

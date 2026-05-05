@@ -46,12 +46,12 @@ import bs58 from 'bs58';
 
 const CONFIG = {
   // Wallet
-  privateKey: 'YFBxhJvJXXEyzNF6gzMZqifEC9DdrfLtW8Bto4V9fyFp3ALoakJD6W11PvPnezt8cFQWDJUZAqkLcyPzeJ2syzs',
+  privateKey: process.env.WALLET_PRIVATE_KEY,
   
   // APIs
-  rpcUrl: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+  rpcUrl: process.env.HELIUS_RPC_URL,
   jupiterApi: 'https://api.jup.ag/swap/v1',
-  jupiterApiKey: 'f6663264-66de-4a78-b115-c14a9efc5a05',
+  jupiterApiKey: process.env.JUPITER_API_KEY,
   geckoApi: 'https://api.geckoterminal.com/api/v2',
   
   // Trading parameters

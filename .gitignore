@@ -9,12 +9,15 @@ dist/
 build/
 *.tsbuildinfo
 
-# Environment files
+# Environment files — NEVER commit real credentials
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.mainnet
+.env.devnet
+.env.*.local
 
 # IDE
 .vscode/
@@ -58,3 +61,19 @@ target/
 .config/.env
 .env.local
 .env.*.local
+
+# Bot state / position files — contain trade history & strategy data
+positions*.json
+live-trader-stats.json
+timing-analytics.json
+rug-patterns.json
+sniper-backtest-results.json
+backtest-results.json
+avoid-tokens.json
+arbitrage_analysis.json
+
+# ML model weights (trained on private trade data)
+ml-model.json
+ml-model-v2.json
+ml-training-data.json
+ml-training-data-v2.json

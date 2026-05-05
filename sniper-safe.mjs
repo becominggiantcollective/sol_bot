@@ -48,11 +48,11 @@ const CONFIG = {
 };
 
 // === SETUP ===
-const HELIUS_RPC = process.env.HELIUS_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe';
+const HELIUS_RPC = process.env.HELIUS_RPC_URL;
 const JUPITER_API = process.env.JUPITER_API_URL || 'https://api.jup.ag/swap/v1';
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
 
-const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY || '2bYF7j9KWjEfuLLpiYezrH9z7HUpBc3J29zE7j6ZviNkavRkZZFPNurog251FNxHzgs56PwwcrX4DbEN4FSpqkcx';
+const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY;
 const wallet = Keypair.fromSecretKey(bs58.decode(PRIVATE_KEY));
 const connection = new Connection(HELIUS_RPC, 'confirmed');
 
@@ -310,7 +310,7 @@ async function buyToken(mint, symbol) {
     // Get quote
     const quoteUrl = `${JUPITER_API}/quote?inputMint=${SOL_MINT}&outputMint=${mint}&amount=${amountLamports}&slippageBps=1000`;
     const quoteRes = await fetch(quoteUrl, {
-      headers: { 'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05' }
+      headers: { 'x-api-key': process.env.JUPITER_API_KEY }
     });
     const quote = await quoteRes.json();
     
@@ -324,7 +324,7 @@ async function buyToken(mint, symbol) {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05'
+        'x-api-key': process.env.JUPITER_API_KEY
       },
       body: JSON.stringify({
         quoteResponse: quote,
@@ -404,7 +404,7 @@ async function sellToken(mint, position) {
     // Get quote for actual balance
     const quoteUrl = `${JUPITER_API}/quote?inputMint=${mint}&outputMint=${SOL_MINT}&amount=${tokenAmount.toString()}&slippageBps=3000`;
     const quoteRes = await fetch(quoteUrl, {
-      headers: { 'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05' }
+      headers: { 'x-api-key': process.env.JUPITER_API_KEY }
     });
     const quote = await quoteRes.json();
     
@@ -429,7 +429,7 @@ async function sellToken(mint, position) {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05'
+        'x-api-key': process.env.JUPITER_API_KEY
       },
       body: JSON.stringify({
         quoteResponse: quote,
@@ -529,7 +529,7 @@ async function checkPositions() {
       // Get current price
       const quoteUrl = `${JUPITER_API}/quote?inputMint=${mint}&outputMint=${SOL_MINT}&amount=${pos.tokenAmount}&slippageBps=3000`;
       const res = await fetch(quoteUrl, {
-        headers: { 'x-api-key': 'f6663264-66de-4a78-b115-c14a9efc5a05' }
+        headers: { 'x-api-key': process.env.JUPITER_API_KEY }
       });
       const quote = await res.json();
       

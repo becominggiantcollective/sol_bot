@@ -52,7 +52,7 @@ const CONFIG = {
   ],
   
   // RPC
-  HELIUS_RPC: 'https://mainnet.helius-rpc.com/?api-key=7f243329-aabe-4227-b05f-0ed8d59b4efe',
+  HELIUS_RPC: process.env.HELIUS_RPC_URL,
   
   // Persistence
   POSITIONS_FILE: 'positions-live.json',

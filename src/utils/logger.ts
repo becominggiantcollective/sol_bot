@@ -33,7 +33,43 @@ if (!fs.existsSync(LOG_DIR)) {
 // CUSTOM LOG FORMATS
 // ============================================================================
 
+// ============================================================================
+// SECRET SCRUBBING
+// ============================================================================
+
+// Patterns that should never appear in logs (API keys, private keys, etc.)
+const SECRET_PATTERNS: RegExp[] = [
+  // Generic base58 private keys (87–88 chars) and long hex secrets
+  /\b[1-9A-HJ-NP-Za-km-z]{87,88}\b/g,
+  // API key query params
+  /api-key=[A-Za-z0-9\-]{8,}/g,
+  // Bearer tokens
+  /Bearer\s+[A-Za-z0-9\-._~+/]+=*/g,
+  // JSON array private keys [1,2,...,64]
+  /\[\s*\d+(?:\s*,\s*\d+){60,}\s*\]/g,
+];
+
+function scrubSecrets(text: string): string {
+  let result = text;
+  for (const pattern of SECRET_PATTERNS) {
+    result = result.replace(pattern, '[REDACTED]');
+  }
+  return result;
+}
+
+// Winston format that scrubs secrets from message and metadata
+const scrubFormat = winston.format((info) => {
+  if (typeof info.message === 'string') {
+    info.message = scrubSecrets(info.message);
+  }
+  if (info.metadata && typeof info.metadata === 'object') {
+    info.metadata = JSON.parse(scrubSecrets(JSON.stringify(info.metadata)));
+  }
+  return info;
+})();
+
 const customFormat = winston.format.combine(
+  scrubFormat,
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
   winston.format.errors({ stack: true }),
   winston.format.metadata({ fillExcept: ['message', 'level', 'timestamp', 'label'] }),
@@ -41,6 +77,7 @@ const customFormat = winston.format.combine(
 );
 
 const consoleFormat = winston.format.combine(
+  scrubFormat,
   winston.format.timestamp({ format: 'HH:mm:ss.SSS' }),
   winston.format.colorize(),
   winston.format.printf(({ timestamp, level, message, ...meta }) => {
