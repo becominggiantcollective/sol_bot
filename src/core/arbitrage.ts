@@ -77,6 +77,24 @@ function logToFile(message: string): void {
   }
 }
 
+/**
+ * Flush any pending log queue entries synchronously.
+ * Call this during graceful shutdown so queued lines are not lost.
+ */
+export function flushArbitrageLog(): void {
+  if (logQueue.length === 0) return;
+  if (logFlushTimer) {
+    clearTimeout(logFlushTimer);
+    logFlushTimer = null;
+  }
+  const batch = logQueue.splice(0, logQueue.length).join('');
+  try {
+    fs.appendFileSync(LOG_FILE, batch);
+  } catch {
+    // Ignore errors during shutdown
+  }
+}
+
 function logJsonTrade(log: any): void {
   try {
     let logs: any[] = [];

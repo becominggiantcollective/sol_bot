@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { SolanaConnection } from './core/connection.js';
-import { detectOpportunities, compareCrossDexPrices, calculateFlashLoan, isFlashLoanProfitable, tradeLogs } from './core/arbitrage.js';
+import { detectOpportunities, compareCrossDexPrices, calculateFlashLoan, isFlashLoanProfitable, tradeLogs, flushArbitrageLog } from './core/arbitrage.js';
 import { FlashloanManager } from './core/flashloan.js';
 import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy } from './strategies/mev.js';
 import { DirectSwapStrategy } from './strategies/direct-swap.js';
@@ -92,6 +92,9 @@ export class SolanaArbitrageBot {
     if (this.metricsDisplayInterval) {
       clearInterval(this.metricsDisplayInterval);
     }
+    
+    // Flush any pending async log queue entries before exit
+    flushArbitrageLog();
     
     // Display final metrics
     this.profitTracker.displayMetrics();

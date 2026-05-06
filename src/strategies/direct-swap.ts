@@ -26,6 +26,8 @@ export class DirectSwapStrategy implements MEVStrategy {
   private flashloanManager: FlashloanManager;
   private feeManager: DynamicPriorityFeeManager;
   private jito: JitoBundleSender;
+  private jitoAttempts = 0;
+  private jitoFallbacks = 0;
 
   constructor(private solanaConnection: SolanaConnection) {
     // Support both base58 and JSON array formats
@@ -143,10 +145,21 @@ export class DirectSwapStrategy implements MEVStrategy {
     const useJito = process.env.JITO_BUNDLES === 'true';
 
     if (useJito && route.length <= 5) {
+      this.jitoAttempts++;
       try {
         return await this.executeRoundTripJito(opportunity);
       } catch (err) {
+        this.jitoFallbacks++;
+        const fallbackRate = this.jitoAttempts > 0
+          ? (this.jitoFallbacks / this.jitoAttempts) * 100
+          : 0;
         this.logger.warn(`⚠️  Jito bundle failed (${err}), falling back to sequential`);
+        if (fallbackRate > 10 && this.jitoAttempts >= 5) {
+          this.logger.warn(
+            `🚨 Jito fallback rate is ${fallbackRate.toFixed(1)}% (${this.jitoFallbacks}/${this.jitoAttempts}). ` +
+            `Check JITO_BUNDLES configuration or Jito endpoint availability.`
+          );
+        }
       }
     }
 
