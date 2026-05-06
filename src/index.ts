@@ -124,8 +124,8 @@ export class SolanaArbitrageBot {
           this.logger.debug('No profitable triangular arbitrage opportunities found');
         }
         
-        // Wait between scans to avoid rate limiting
-        await sleep(10000); // 10 seconds for triangular (more API calls per scan)
+        // Wait between scans — parallelised scanning is much faster now so 2 s is sufficient
+        await sleep(2000);
       } catch (error) {
         this.logger.error('Error in trading loop:', error);
         await sleep(5000); // Wait longer on error

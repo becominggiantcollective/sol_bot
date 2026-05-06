@@ -8,12 +8,12 @@ export class SolanaConnection {
   private wallet: Keypair | null = null;
 
   constructor(skipWallet: boolean = false) {
-    // Use HTTP-only connection without WebSocket to avoid subscription issues
-    // Many RPC providers don't support signatureSubscribe via WebSocket
+    // Enable WebSocket when a dedicated wsUrl is configured (e.g. Alchemy/Helius).
+    // Falls back to HTTP-only to avoid subscription issues with plain RPC providers.
+    const wsEndpoint = config.solana.wsUrl || undefined;
     this.connection = new Connection(config.solana.rpcUrl, {
       commitment: config.solana.commitment,
-      // Disable WebSocket by not providing wsEndpoint
-      // wsEndpoint: config.solana.wsUrl,
+      wsEndpoint,
       confirmTransactionInitialTimeout: 60000, // 60 seconds
     });
     

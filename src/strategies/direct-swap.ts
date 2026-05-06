@@ -1,10 +1,12 @@
-import { PublicKey, VersionedTransaction, Keypair, Transaction } from '@solana/web3.js';
+import { PublicKey, VersionedTransaction, Keypair, Transaction, Connection } from '@solana/web3.js';
 // @ts-ignore - bs58 types
 import bs58 from 'bs58';
 import { ArbitrageOpportunity, MEVStrategy } from '../types/index.js';
 import { SolanaConnection } from '../core/connection.js';
 import { FlashloanManager, SolendFlashloanProvider } from '../core/flashloan.js';
 import { Logger } from '../utils/index.js';
+import { DynamicPriorityFeeManager } from '../utils/dynamicFees.js';
+import { JitoBundleSender } from '../core/jitoBundle.js';
 import axios from 'axios';
 import { config } from '../config/index.js';
 
@@ -22,6 +24,8 @@ export class DirectSwapStrategy implements MEVStrategy {
   private logger = Logger.getInstance();
   private wallet: Keypair;
   private flashloanManager: FlashloanManager;
+  private feeManager: DynamicPriorityFeeManager;
+  private jito: JitoBundleSender;
 
   constructor(private solanaConnection: SolanaConnection) {
     // Support both base58 and JSON array formats
@@ -32,13 +36,14 @@ export class DirectSwapStrategy implements MEVStrategy {
       this.wallet = Keypair.fromSecretKey(bs58.decode(config.wallet.privateKey));
     }
     this.flashloanManager = new FlashloanManager(solanaConnection);
+    this.feeManager = new DynamicPriorityFeeManager(process.env.HELIUS_API_KEY);
+    this.jito = new JitoBundleSender(solanaConnection.getConnection());
   }
 
   isViable(opportunity: ArbitrageOpportunity): boolean {
-    // For flash loan opportunities, check if profit covers fees
+    // For flash loan opportunities: Solend fee is 0% (verified on-chain), only gas applies
     if (opportunity.flashloanProvider) {
-      const flashLoanFee = 0.003; // 0.3%
-      return opportunity.profitPercent > (flashLoanFee + 0.001); // Need > 0.4%
+      return opportunity.profitPercent > 0.001; // Need > 0.1% to cover gas
     }
     // Regular opportunities just need positive profit
     const minProfit = config.trading.minProfitThreshold || 0.001;
@@ -109,9 +114,7 @@ export class DirectSwapStrategy implements MEVStrategy {
     if (!tx1) throw new Error('Failed to build tx1');
     const sig1 = await this.sendAndConfirm(tx1);
     this.logger.info(`   Leg 1 done: ${sig1.slice(0, 20)}...`);
-    
-    await this.sleep(1000);
-    
+
     // Get actual balance and execute second swap
     const actualMidBalance = await this.getTokenBalance(new PublicKey(midMint));
     if (!actualMidBalance) throw new Error('No balance after leg 1');
@@ -128,13 +131,26 @@ export class DirectSwapStrategy implements MEVStrategy {
   }
 
   /**
-   * Execute a round-trip arbitrage (A → B → A)
-   * Each leg is executed sequentially with fresh quotes
+   * Execute a round-trip arbitrage (A → B → A).
+   * When JITO_BUNDLES=true, builds all leg transactions upfront and submits as a
+   * single atomic Jito bundle — protecting against sandwich attacks and guaranteeing
+   * all legs land in the same block. Falls back to sequential execution if bundling fails.
    */
   private async executeRoundTrip(opportunity: ArbitrageOpportunity): Promise<string> {
     const route = opportunity.route!;
     this.logger.info(`🔄 Executing round-trip: ${route.length} legs`);
-    
+
+    const useJito = process.env.JITO_BUNDLES === 'true';
+
+    if (useJito && route.length <= 5) {
+      try {
+        return await this.executeRoundTripJito(opportunity);
+      } catch (err) {
+        this.logger.warn(`⚠️  Jito bundle failed (${err}), falling back to sequential`);
+      }
+    }
+
+    // Sequential fallback
     let lastSig = '';
     
     for (let i = 0; i < route.length; i++) {
@@ -173,12 +189,46 @@ export class DirectSwapStrategy implements MEVStrategy {
       
       lastSig = await this.sendAndConfirm(tx);
       this.logger.info(`  ✅ Leg ${i + 1} done: ${lastSig.slice(0, 20)}...`);
-      
-      // Small delay to let state propagate
-      await this.sleep(800);
     }
     
     this.logger.info(`✅ Round-trip complete: ${lastSig}`);
+    return lastSig;
+  }
+
+  /**
+   * Execute round-trip via a Jito bundle — all legs in one atomic submission.
+   * Quotes are fetched upfront (leg output amounts are simulated, not chained on-chain
+   * because each tx is independent). Includes Jito tip in the first transaction.
+   */
+  private async executeRoundTripJito(opportunity: ArbitrageOpportunity): Promise<string> {
+    const route = opportunity.route!;
+    this.logger.info(`📦 Building Jito bundle for ${route.length}-leg round-trip`);
+
+    const txs: VersionedTransaction[] = [];
+
+    for (let i = 0; i < route.length; i++) {
+      const leg = route[i];
+      const inputMint = leg.inputMint.toString();
+      const outputMint = leg.outputMint.toString();
+      const amount = leg.inputAmount;
+
+      const quote = await this.getQuote(inputMint, outputMint, Math.floor(amount), 150);
+      if (!quote) throw new Error(`Jito: failed to get quote for leg ${i + 1}`);
+
+      const tx = await this.buildSwapTransaction(quote);
+      if (!tx) throw new Error(`Jito: failed to build tx for leg ${i + 1}`);
+
+      txs.push(tx);
+    }
+
+    const result = await this.jito.sendBundle(txs, 'high');
+
+    if (!result.success) {
+      throw new Error(`Jito bundle failed: ${result.error}`);
+    }
+
+    const lastSig = result.signatures?.[result.signatures.length - 1] ?? result.bundleId ?? 'bundle-ok';
+    this.logger.info(`✅ Jito bundle landed (tip ${result.landedTip} lamports): ${lastSig}`);
     return lastSig;
   }
 
@@ -267,6 +317,12 @@ export class DirectSwapStrategy implements MEVStrategy {
         headers['x-api-key'] = config.jupiter.apiKey;
       }
       
+      // Fetch dynamic priority fee (falls back to cached value if fetch fails)
+      const connection = this.solanaConnection.getConnection();
+      const dynamicFeeMicroLamports = await this.feeManager.getOptimalFee(connection, 'high');
+      // Convert microlamports to lamports (max cap 0.001 SOL = 1_000_000 µSOL)
+      const maxLamports = Math.min(Math.ceil(dynamicFeeMicroLamports / 1000), 1_000_000);
+      
       const response = await axios.post(
         `${config.jupiter?.apiUrl || 'https://api.jup.ag/swap/v1'}/swap`,
         {
@@ -274,11 +330,10 @@ export class DirectSwapStrategy implements MEVStrategy {
           userPublicKey: this.wallet.publicKey.toString(),
           wrapAndUnwrapSol: true,
           dynamicComputeUnitLimit: true,
-          // Dynamic priority fee based on urgency
           prioritizationFeeLamports: {
             priorityLevelWithMaxLamports: {
-              maxLamports: 100000, // Max 0.0001 SOL priority fee
-              priorityLevel: 'high', // high priority for competitive execution
+              maxLamports,
+              priorityLevel: 'high',
             }
           },
         },
