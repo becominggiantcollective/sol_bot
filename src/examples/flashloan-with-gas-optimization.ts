@@ -7,7 +7,7 @@
  * 3. Using Jito bundles to avoid burning gas on failed transactions
  */
 
-import { Connection, Keypair, PublicKey, Transaction } from '@solana/web3.js';
+import { Keypair, PublicKey, Transaction } from '@solana/web3.js';
 import { SolanaConnection } from '../core/connection.js';
 import { FlashloanManager } from '../core/flashloan.js';
 import { GasOptimizer } from '../utils/gas-optimizer.js';
@@ -37,8 +37,10 @@ class FlashLoanArbitrageBot {
   private wallet: Keypair;
 
   constructor(rpcUrl: string, privateKey: string) {
-    const conn = new Connection(rpcUrl, 'confirmed');
-    this.connection = new SolanaConnection(conn);
+    // SolanaConnection reads its RPC URL from config; we obtain the underlying
+    // Connection from it so the GasOptimizer can share the same connection.
+    this.connection = new SolanaConnection();
+    const conn = this.connection.getConnection();
     this.flashloanManager = new FlashloanManager(this.connection);
     this.gasOptimizer = new GasOptimizer(conn);
     this.wallet = Keypair.fromSecretKey(bs58.decode(privateKey));

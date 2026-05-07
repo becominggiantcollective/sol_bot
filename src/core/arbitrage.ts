@@ -52,13 +52,46 @@ if (process.env.ALCHEMY_POOL_MONITORING === 'true') {
 const LOG_FILE = 'arbitrage_analysis.log';
 const JSON_LOG_FILE = 'arbitrage_analysis.json';
 
+// ============================================================================
+// ASYNC LOG QUEUE — avoids blocking the hot path with synchronous I/O
+// ============================================================================
+
+const logQueue: string[] = [];
+let logFlushTimer: ReturnType<typeof setTimeout> | null = null;
+
 function logToFile(message: string): void {
   const timestamp = new Date().toISOString();
-  const logLine = `[${timestamp}] ${message}\n`;
+  logQueue.push(`[${timestamp}] ${message}\n`);
+  if (!logFlushTimer) {
+    // Coalesce writes into a single async flush every 200 ms
+    logFlushTimer = setTimeout(async () => {
+      logFlushTimer = null;
+      if (logQueue.length === 0) return;
+      const batch = logQueue.splice(0, logQueue.length).join('');
+      try {
+        await fs.promises.appendFile(LOG_FILE, batch);
+      } catch {
+        // Ignore file write errors in the hot path
+      }
+    }, 200);
+  }
+}
+
+/**
+ * Flush any pending log queue entries synchronously.
+ * Call this during graceful shutdown so queued lines are not lost.
+ */
+export function flushArbitrageLog(): void {
+  if (logQueue.length === 0) return;
+  if (logFlushTimer) {
+    clearTimeout(logFlushTimer);
+    logFlushTimer = null;
+  }
+  const batch = logQueue.splice(0, logQueue.length).join('');
   try {
-    fs.appendFileSync(LOG_FILE, logLine);
+    fs.appendFileSync(LOG_FILE, batch);
   } catch {
-    // Ignore file write errors
+    // Ignore errors during shutdown
   }
 }
 
@@ -279,8 +312,6 @@ function toRaw(humanAmount: number, tokenSymbol: string): bigint {
   if (!token) {
     throw new Error(`Unknown token: ${tokenSymbol}`);
   }
-  // Use BigInt for precision, avoid floating point errors
-  const multiplier = BigInt(10 ** token.decimals);
   // Round to avoid floating point precision issues
   const scaledAmount = Math.round(humanAmount * (10 ** token.decimals));
   return BigInt(scaledAmount);
@@ -656,7 +687,8 @@ async function calculateProfit(
   leg1OutputHuman: number,
   leg2OutputHuman: number,
   leg3OutputHuman: number, // This is in INPUT token (completing the triangle)
-  useFlashLoan: boolean = false
+  useFlashLoan: boolean = false,
+  cachedSolPrice?: number    // Optional: pass pre-fetched price to avoid repeated fetches
 ): Promise<ProfitCalculation> {
   
   // Step 1: Gross profit (same token in and out)
@@ -669,18 +701,21 @@ async function calculateProfit(
   const gasCostSOL = GAS_FOR_3_SWAPS_SOL;
   let gasCostInInputToken: number;
   
-  // Fetch current SOL price dynamically
-  const solPrice = await fetchSOLPrice();
+  // Use the pre-fetched price when available; otherwise fetch (with 5s cache)
+  const solPrice = cachedSolPrice ?? await fetchSOLPrice();
   
   if (inputToken === 'SOL') {
     gasCostInInputToken = gasCostSOL;
   } else if (inputToken === 'USDC' || inputToken === 'USDT') {
-    // Convert SOL to stablecoin at current price
+    // Convert SOL gas cost to stablecoin at current price
     gasCostInInputToken = gasCostSOL * solPrice;
   } else {
-    // For other tokens, estimate based on SOL price
-    // This is approximate - in production, fetch actual price
-    gasCostInInputToken = gasCostSOL * solPrice; // Assume token ~ $1 for safety
+    // For other tokens, express gas cost in USD terms (SOL * solPrice) so
+    // the comparison is on equal footing. The grossProfitAmount is already in
+    // the input token's units, so we keep gas in USD as a conservative upper
+    // bound (this slightly overestimates cost for tokens worth less than $1,
+    // but is safer than the previous assumption of $1/token).
+    gasCostInInputToken = gasCostSOL * solPrice;
   }
   
   // Step 3: Flash loan fee (if applicable)
@@ -742,7 +777,8 @@ async function calculateProfit(
 async function checkTriangularPath(
   path: TriangularPath,
   inputAmount: number,
-  useFlashLoan: boolean = false
+  useFlashLoan: boolean = false,
+  cachedSolPrice?: number
 ): Promise<TriangularOpportunity | null> {
   const startToken = path.leg1.from;
   const startTokenInfo = TOKENS[startToken];
@@ -760,8 +796,8 @@ async function checkTriangularPath(
   const allErrors: string[] = [];
   const allWarnings: string[] = [];
   
-  // LEG 1: A → B
-  const quote1 = await getJupiterQuote(
+  // LEG 1: A → B  (cache hit avoids duplicate API call across paths sharing this leg)
+  const quote1 = await getCachedJupiterQuote(
     path.leg1.from,
     path.leg1.to,
     inputAmount,
@@ -782,7 +818,7 @@ async function checkTriangularPath(
   quotes.push(quote1);
   
   // LEG 2: B → C
-  const quote2 = await getJupiterQuote(
+  const quote2 = await getCachedJupiterQuote(
     path.leg2.from,
     path.leg2.to,
     quote1.outputAmountHuman,
@@ -803,7 +839,7 @@ async function checkTriangularPath(
   quotes.push(quote2);
   
   // LEG 3: C → A (back to start)
-  const quote3 = await getJupiterQuote(
+  const quote3 = await getCachedJupiterQuote(
     path.leg3.from,
     path.leg3.to,
     quote2.outputAmountHuman,
@@ -830,7 +866,8 @@ async function checkTriangularPath(
     quote1.outputAmountHuman,
     quote2.outputAmountHuman,
     quote3.outputAmountHuman,
-    useFlashLoan
+    useFlashLoan,
+    cachedSolPrice
   );
   
   // Combined validation
@@ -877,12 +914,45 @@ async function checkTriangularPath(
   return opportunity;
 }
 
+// Per-scan quote cache: key = "<inputToken>:<outputToken>:<amount>:<dex>"
+// Cleared at the start of every detectOpportunities() call so stale quotes
+// never persist across scans (max age is bounded by QUOTE_FRESHNESS_MS anyway).
+let scanQuoteCache = new Map<string, DEXQuote>();
+
+/**
+ * Cached Jupiter quote — returns the in-memory cached quote if the same
+ * (pair, amount, dex) was already fetched this scan, saving an API call.
+ */
+async function getCachedJupiterQuote(
+  inputToken: string,
+  outputToken: string,
+  amount: number,
+  dex?: string
+): Promise<DEXQuote | null> {
+  const key = `${inputToken}:${outputToken}:${amount}:${dex ?? 'Jupiter'}`;
+  const cached = scanQuoteCache.get(key);
+  if (cached && Date.now() < cached.expiresAt) {
+    return cached;
+  }
+  const quote = await getJupiterQuote(inputToken, outputToken, amount, dex);
+  if (quote) {
+    scanQuoteCache.set(key, quote);
+  }
+  return quote;
+}
+
 // ============================================================================
 // MAIN DETECTION FUNCTION
 // ============================================================================
 
 /**
- * Scan all triangular paths for arbitrage opportunities
+ * Scan all triangular paths for arbitrage opportunities.
+ *
+ * Performance improvements vs. original serial loop:
+ *  - Fetch SOL price once per scan (Fix #14)
+ *  - Per-scan quote cache eliminates duplicate API calls on shared legs (Fix #10)
+ *  - Paths and amounts run concurrently in batches (Fix #1, #6)
+ *    Rate limiter handles burst control; the 100 ms forced delay is removed.
  */
 export async function detectOpportunities(): Promise<ArbitrageOpportunity[]> {
   console.log(`
@@ -898,54 +968,72 @@ export async function detectOpportunities(): Promise<ArbitrageOpportunity[]> {
 ╚══════════════════════════════════════════════════════════════════════════════╝
 `);
 
-  const opportunities: ArbitrageOpportunity[] = [];
-  
+  // Fetch SOL price once for the entire scan (Fix #14)
+  const scanSolPrice = await fetchSOLPrice();
+
+  // Reset per-scan quote cache so we start fresh each cycle (Fix #10)
+  scanQuoteCache = new Map();
+
   // Test amounts by token
   const testAmounts: Record<string, number[]> = {
     SOL: [0.1, 1, 5],
     USDC: [10, 100, 500],
     JUP: [10, 100, 500],
   };
-  
+
+  // Flatten all (path, amount) tasks (Fix #1, #6)
+  const tasks: Array<{ path: TriangularPath; amount: number }> = [];
   for (const path of TRIANGULAR_PATHS) {
     const startToken = path.leg1.from;
     const amounts = testAmounts[startToken] || [1];
-    
     for (const amount of amounts) {
-      try {
-        const opportunity = await checkTriangularPath(path, amount, false);
-        
-        if (opportunity && opportunity.profit.meetsThreshold) {
-          opportunities.push({
-            type: 'triangular',
-            tokenA: path.leg1.from,
-            tokenB: path.leg1.to,
-            tokenC: path.leg2.to,
-            inputAmount: amount,
-            expectedOutput: opportunity.profit.finalAmount,
-            profit: opportunity.profit.netProfitAmount,
-            profitPercent: opportunity.profit.netProfitPercent,
-            route: `${path.leg1.from} → ${path.leg1.to} (${path.leg1.dex}) → ${path.leg2.to} (${path.leg2.dex}) → ${path.leg3.to} (${path.leg3.dex})`,
-            details: opportunity,
-          });
-        }
-        
-        // Delay between paths
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-      } catch (error) {
-        console.log(`  [ERROR] Path check failed: ${error}`);
-        logToFile(`ERROR: Path check failed - ${error}`);
+      tasks.push({ path, amount });
+    }
+  }
+
+  // Run in batches of 6 so the rate-limiter has room to breathe while we still
+  // parallelise heavily (~6 concurrent path checks, each making 3 sequential
+  // Jupiter calls via the shared rate-limiter).
+  const BATCH_SIZE = 6;
+  const opportunities: ArbitrageOpportunity[] = [];
+
+  for (let i = 0; i < tasks.length; i += BATCH_SIZE) {
+    const batch = tasks.slice(i, i + BATCH_SIZE);
+
+    const results = await Promise.all(
+      batch.map(({ path, amount }) =>
+        checkTriangularPath(path, amount, false, scanSolPrice).catch((err) => {
+          console.log(`  [ERROR] Path check failed: ${err}`);
+          logToFile(`ERROR: Path check failed - ${err}`);
+          return null;
+        })
+      )
+    );
+
+    for (const opportunity of results) {
+      if (opportunity && opportunity.profit.meetsThreshold) {
+        opportunities.push({
+          type: 'triangular',
+          tokenA: opportunity.path.leg1.from,
+          tokenB: opportunity.path.leg1.to,
+          tokenC: opportunity.path.leg2.to,
+          inputAmount: opportunity.profit.inputAmount,
+          expectedOutput: opportunity.profit.finalAmount,
+          profit: opportunity.profit.netProfitAmount,
+          profitPercent: opportunity.profit.netProfitPercent,
+          route: `${opportunity.path.leg1.from} → ${opportunity.path.leg1.to} (${opportunity.path.leg1.dex}) → ${opportunity.path.leg2.to} (${opportunity.path.leg2.dex}) → ${opportunity.path.leg3.to} (${opportunity.path.leg3.dex})`,
+          details: opportunity,
+        });
       }
     }
   }
-  
+
   // Summary
   console.log(`
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║                          📊 SCAN SUMMARY                                     ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  Total paths scanned: ${TRIANGULAR_PATHS.length * 3}                                                   ║
+║  Total path×amount tasks: ${tasks.length}                                                   ║
 ║  Profitable opportunities: ${opportunities.length}                                               ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 `);

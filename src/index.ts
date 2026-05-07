@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { SolanaConnection } from './core/connection.js';
-import { detectOpportunities, compareCrossDexPrices, calculateFlashLoan, isFlashLoanProfitable, tradeLogs } from './core/arbitrage.js';
+import { detectOpportunities, compareCrossDexPrices, calculateFlashLoan, isFlashLoanProfitable, tradeLogs, flushArbitrageLog } from './core/arbitrage.js';
 import { FlashloanManager } from './core/flashloan.js';
 import { FlashloanArbitrageStrategy, SandwichAttackStrategy, LiquidationStrategy } from './strategies/mev.js';
 import { DirectSwapStrategy } from './strategies/direct-swap.js';
@@ -108,6 +108,9 @@ export class SolanaArbitrageBot {
       this.agentCoordinator.stop();
     }
     
+    // Flush any pending async log queue entries before exit
+    flushArbitrageLog();
+    
     // Display final metrics
     this.profitTracker.displayMetrics();
   }
@@ -139,8 +142,8 @@ export class SolanaArbitrageBot {
           this.logger.debug('No profitable triangular arbitrage opportunities found');
         }
         
-        // Wait between scans to avoid rate limiting
-        await sleep(10000); // 10 seconds for triangular (more API calls per scan)
+        // Wait between scans — parallelised scanning is much faster now so 2 s is sufficient
+        await sleep(2000);
       } catch (error) {
         this.logger.error('Error in trading loop:', error);
         await sleep(5000); // Wait longer on error

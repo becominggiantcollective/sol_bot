@@ -2,16 +2,12 @@ import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
 import { getAssociatedTokenAddress, createAssociatedTokenAccountInstruction } from '@solana/spl-token';
 import { FlashloanProvider } from '../types/index.js';
 import { SolanaConnection } from './connection.js';
+import { GasOptimizer } from '../utils/gas-optimizer.js';
 import BN from 'bn.js';
-import { createRequire } from 'module';
 
-const require = createRequire(import.meta.url);
-
-// Import official Solend SDK instructions directly
-const flashBorrowMod = require('@solendprotocol/solend-sdk/instructions/flashBorrowReserveLiquidity');
-const flashRepayMod = require('@solendprotocol/solend-sdk/instructions/flashRepayReserveLiquidity');
-const { flashBorrowReserveLiquidityInstruction } = flashBorrowMod;
-const { flashRepayReserveLiquidityInstruction } = flashRepayMod;
+// Import official Solend SDK instructions directly using static imports
+import { flashBorrowReserveLiquidityInstruction } from '@solendprotocol/solend-sdk/instructions/flashBorrowReserveLiquidity';
+import { flashRepayReserveLiquidityInstruction } from '@solendprotocol/solend-sdk/instructions/flashRepayReserveLiquidity';
 
 // Solend Main Pool reserve configurations
 const SOLEND_RESERVES: Record<string, {
@@ -79,11 +75,9 @@ export class SolendFlashloanProvider implements FlashloanProvider {
     destinationLiquidity: PublicKey,
     reserve: PublicKey,
   ): TransactionInstruction {
-    // Use official Solend SDK function to create the instruction
-    // SDK wraps liquidityAmount in new BN(), so pass as BigInt to avoid double-wrapping
-    const amount = BigInt(liquidityAmount.toString());
+    // The Solend SDK accepts BN directly – pass liquidityAmount as-is.
     return flashBorrowReserveLiquidityInstruction(
-      amount,
+      liquidityAmount,
       sourceLiquidity,
       destinationLiquidity,
       reserve,

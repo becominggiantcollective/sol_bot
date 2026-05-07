@@ -8,7 +8,6 @@
  */
 
 import { Connection, Transaction, VersionedTransaction, PublicKey } from '@solana/web3.js';
-import fetch from 'node-fetch';
 
 // Jito Block Engine endpoints
 const JITO_ENDPOINTS = {
