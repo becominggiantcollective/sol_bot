@@ -23,12 +23,24 @@ function generateId(): string {
 
 function hasProfitPercent(
   value: unknown
-): value is { profitPercent: number } & Record<string, unknown> {
+): value is {
+  profitPercent: number;
+  profit: number;
+  inputAmount: number;
+  route: Array<{ priceImpact: number }>;
+} & Record<string, unknown> {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as {
+    profitPercent?: unknown;
+    profit?: unknown;
+    inputAmount?: unknown;
+    route?: unknown;
+  };
   return (
-    typeof value === 'object' &&
-    value !== null &&
-    'profitPercent' in value &&
-    typeof (value as { profitPercent?: unknown }).profitPercent === 'number'
+    typeof candidate.profitPercent === 'number' &&
+    typeof candidate.profit === 'number' &&
+    typeof candidate.inputAmount === 'number' &&
+    Array.isArray(candidate.route)
   );
 }
 

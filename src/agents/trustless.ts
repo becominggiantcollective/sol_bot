@@ -187,7 +187,11 @@ export class TrustlessSettlementManager {
   private readonly records = new Map<string, TrustlessSettlementRecord>();
 
   constructor(programId: string, executionTimeoutMs: number, disputeWindowMs: number) {
-    this.programId = new PublicKey(programId);
+    try {
+      this.programId = new PublicKey(programId);
+    } catch {
+      throw new Error('Invalid TRUSTLESS_SETTLEMENT_PROGRAM_ID');
+    }
     if (executionTimeoutMs <= 0) {
       throw new Error('TRUSTLESS_EXECUTION_TIMEOUT_MS must be > 0');
     }
@@ -199,11 +203,16 @@ export class TrustlessSettlementManager {
   }
 
   deriveEscrowPda(opportunityId: string, opportunityIntentHash: string): PublicKey {
+    const idSeed = crypto.createHash('sha256').update(opportunityId).digest();
+    const intentSeed = crypto
+      .createHash('sha256')
+      .update(Buffer.from(opportunityIntentHash, 'hex'))
+      .digest();
     const [pda] = PublicKey.findProgramAddressSync(
       [
         Buffer.from(SETTLEMENT_PDA_SEED),
-        Buffer.from(opportunityId).subarray(0, 32),
-        Buffer.from(opportunityIntentHash, 'hex').subarray(0, 32),
+        idSeed,
+        intentSeed,
       ],
       this.programId
     );

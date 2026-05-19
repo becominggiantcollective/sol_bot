@@ -123,7 +123,7 @@ export interface ExecutionProofBundle {
   transactionSignature: string;
   strategyName: string;
   expectedProfit: number;
-  actualProfit: number;
+  actualProfit?: number;
   startedAtMs: number;
   finishedAtMs: number;
   observedAtMs: number;

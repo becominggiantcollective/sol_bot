@@ -288,14 +288,22 @@ export class AgentCoordinator {
     this.pendingOpportunities.delete(assessment.opportunityId);
 
     if (this.trustlessEnabled) {
-      const opportunityIntentHash =
-        this.opportunityIntentHashes.get(assessment.opportunityId) ??
-        computeSha256Hex(canonicalizeIntentData(opportunity));
-      if (!this.opportunityIntentHashes.get(assessment.opportunityId)) {
+      const storedIntentHash = this.opportunityIntentHashes.get(assessment.opportunityId);
+      if (!storedIntentHash && this.trustlessEnforceSignatures) {
+        this.metrics.opportunitiesDenied++;
+        this.logger.warn(
+          `[AgentCoordinator] trustless intent hash missing for ${assessment.opportunityId}; rejecting in enforce mode`
+        );
+        this.opportunityIntentHashes.delete(assessment.opportunityId);
+        return;
+      }
+      if (!storedIntentHash) {
         this.logger.warn(
           `[AgentCoordinator] trustless fallback hash used for opportunity ${assessment.opportunityId}`
         );
       }
+      const opportunityIntentHash =
+        storedIntentHash ?? computeSha256Hex(canonicalizeIntentData(opportunity));
       const escrow = this.settlementManager?.openEscrow(
         assessment.opportunityId,
         opportunityIntentHash
@@ -363,12 +371,9 @@ export class AgentCoordinator {
       }
 
       if (this.trustlessAutoFinalize && record.status === 'pending-dispute') {
-        const finalized = this.settlementManager?.finalize(
-          result.opportunityId,
-          'release',
-          Date.now()
-        );
-        if (!finalized) {
+        if (Date.now() >= record.disputeDeadlineMs) {
+          this.settlementManager?.finalize(result.opportunityId, 'release', Date.now());
+        } else {
           this.logger.info(
             `[AgentCoordinator] trustless dispute window active for ${result.opportunityId}; finalization deferred`
           );

@@ -117,7 +117,6 @@ export class ExecutionAgent implements TradingAgent {
         transactionSignature: signature,
         strategyName: strategy.name,
         expectedProfit: opportunity.profit,
-        actualProfit: opportunity.profit,
         startedAtMs: start,
         finishedAtMs,
         observedAtMs: finishedAtMs,
