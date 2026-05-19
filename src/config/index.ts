@@ -62,4 +62,13 @@ export const config: Config = {
     rpcUrl: process.env.HELIUS_RPC_URL || '',
     wsUrl: process.env.HELIUS_WS_URL || '',
   },
+  trustless: {
+    enabled: process.env.TRUSTLESS_ENABLED === 'true',
+    shadowMode: process.env.TRUSTLESS_SHADOW_MODE !== 'false',
+    enforceSignatures: process.env.TRUSTLESS_ENFORCE_SIGNATURES === 'true',
+    settlementProgramId: process.env.TRUSTLESS_SETTLEMENT_PROGRAM_ID || '',
+    executionTimeoutMs: parseInt(process.env.TRUSTLESS_EXECUTION_TIMEOUT_MS || '30000'),
+    disputeWindowMs: parseInt(process.env.TRUSTLESS_DISPUTE_WINDOW_MS || '15000'),
+    autoFinalize: process.env.TRUSTLESS_AUTO_FINALIZE !== 'false',
+  },
 };

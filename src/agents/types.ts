@@ -36,6 +36,27 @@ export type SignalType =
   | 'execution-result'
   | 'halt';
 
+export type TrustlessIntentPayloadKind =
+  | 'arbitrage-opportunity'
+  | 'risk-assessment'
+  | 'execution-result';
+
+export interface TrustlessAgentIntent {
+  schemaVersion: string;
+  workflowId: string;
+  payloadKind: TrustlessIntentPayloadKind;
+  canonicalJson: string;
+  hash: string;
+}
+
+export interface TrustlessAgentSignature {
+  algorithm: 'HMAC-SHA256';
+  signerId: string;
+  keyId: string;
+  signature: string;
+  signedAt: number;
+}
+
 export interface AgentSignal {
   /** Unique signal identifier */
   id: string;
@@ -48,6 +69,12 @@ export interface AgentSignal {
   /** Confidence score [0, 1] – 1 = highest confidence */
   confidence: number;
   timestamp: number;
+  /**
+   * Trustless envelope fields used in signed-routing mode.
+   * Optional for backwards compatibility and phased rollout.
+   */
+  intent?: TrustlessAgentIntent;
+  signature?: TrustlessAgentSignature;
 }
 
 // ---------------------------------------------------------------------------
@@ -67,6 +94,7 @@ export interface RiskAssessmentRequest {
   opportunityId: string;
   opportunity: ArbitrageOpportunity;
   marketCondition?: MarketCondition;
+  trustlessOpportunityIntentHash?: string;
 }
 
 export interface RiskAssessment {
@@ -88,6 +116,43 @@ export interface ExecutionResult {
   profit?: number;
   error?: string;
   executionTimeMs: number;
+  proof?: ExecutionProofBundle;
+}
+
+export interface ExecutionProofBundle {
+  transactionSignature: string;
+  strategyName: string;
+  expectedProfit: number;
+  actualProfit: number;
+  startedAtMs: number;
+  finishedAtMs: number;
+  observedAtMs: number;
+  slotLowerBound?: number;
+  slotUpperBound?: number;
+  maxExecutionTimeMs: number;
+}
+
+export type SettlementLifecycleState =
+  | 'pending-execution'
+  | 'pending-dispute'
+  | 'released'
+  | 'timed-out'
+  | 'cancelled'
+  | 'slashed';
+
+export interface TrustlessSettlementRecord {
+  workflowId: string;
+  schemaVersion: string;
+  opportunityId: string;
+  opportunityIntentHash: string;
+  escrowPda: string;
+  status: SettlementLifecycleState;
+  openedAtMs: number;
+  executionDeadlineMs: number;
+  disputeDeadlineMs: number;
+  proofSubmittedAtMs?: number;
+  executionProofHash?: string;
+  closedAtMs?: number;
 }
 
 // ---------------------------------------------------------------------------

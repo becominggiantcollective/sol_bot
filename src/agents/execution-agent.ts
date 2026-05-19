@@ -9,14 +9,17 @@
 import { EventEmitter } from 'events';
 import { Logger } from '../utils/index.js';
 import { MEVStrategy, ArbitrageOpportunity } from '../types/index.js';
+import { config } from '../config/index.js';
 import {
   AgentRole,
   AgentStatus,
   AgentSignal,
+  ExecutionProofBundle,
   ExecutionResult,
   RiskAssessment,
   TradingAgent,
 } from './types.js';
+import { attachTrustlessEnvelope } from './trustless.js';
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -109,12 +112,24 @@ export class ExecutionAgent implements TradingAgent {
 
     try {
       const signature = await strategy.execute(opportunity);
+      const finishedAtMs = Date.now();
+      const proof: ExecutionProofBundle = {
+        transactionSignature: signature,
+        strategyName: strategy.name,
+        expectedProfit: opportunity.profit,
+        actualProfit: opportunity.profit,
+        startedAtMs: start,
+        finishedAtMs,
+        observedAtMs: finishedAtMs,
+        maxExecutionTimeMs: config.trustless?.executionTimeoutMs ?? 30_000,
+      };
       const result: ExecutionResult = {
         opportunityId,
         success: true,
         signature,
         profit: opportunity.profit,
-        executionTimeMs: Date.now() - start,
+        executionTimeMs: finishedAtMs - start,
+        proof,
       };
       this.successCount++;
       this.logger.info(
@@ -144,7 +159,6 @@ export class ExecutionAgent implements TradingAgent {
       confidence: result.success ? 1 : 0,
       timestamp: Date.now(),
     };
-    this.emitter.emit('agent-signal', signal);
+    this.emitter.emit('agent-signal', attachTrustlessEnvelope(signal));
   }
 }
-

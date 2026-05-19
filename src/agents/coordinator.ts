@@ -26,6 +26,7 @@ import {
   SandwichAttackStrategy,
 } from '../strategies/mev.js';
 import { ArbitrageOpportunity } from '../types/index.js';
+import { config } from '../config/index.js';
 import {
   AgentSignal,
   ExecutionResult,
@@ -38,6 +39,14 @@ import { MarketAnalystAgent } from './market-analyst.js';
 import { ArbitrageScoutAgent } from './arbitrage-scout.js';
 import { RiskManagerAgent } from './risk-manager.js';
 import { ExecutionAgent } from './execution-agent.js';
+import {
+  AgentIdentityRegistry,
+  TrustlessSettlementManager,
+  canonicalizeIntentData,
+  computeSha256Hex,
+  shouldUseTrustlessPath,
+  validateExecutionProofBundle,
+} from './trustless.js';
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -67,6 +76,15 @@ export class AgentCoordinator {
   private latestMarketCondition: MarketCondition | null = null;
   /** Map from opportunityId → opportunity (waiting for risk assessment) */
   private pendingOpportunities: Map<string, ArbitrageOpportunity> = new Map();
+  private readonly opportunityIntentHashes = new Map<string, string>();
+
+  // Trustless controls
+  private readonly trustlessEnabled: boolean;
+  private readonly trustlessShadowMode: boolean;
+  private readonly trustlessEnforceSignatures: boolean;
+  private readonly trustlessAutoFinalize: boolean;
+  private readonly identityRegistry: AgentIdentityRegistry;
+  private readonly settlementManager: TrustlessSettlementManager | null;
 
   private metrics: CoordinatorMetrics = {
     opportunitiesReceived: 0,
@@ -81,6 +99,24 @@ export class AgentCoordinator {
   constructor(connection: SolanaConnection, flashloanManager: FlashloanManager) {
     this.logger = Logger.getInstance();
     this.emitter = new EventEmitter();
+    this.trustlessEnabled = shouldUseTrustlessPath();
+    this.trustlessShadowMode = config.trustless?.shadowMode ?? true;
+    this.trustlessEnforceSignatures = config.trustless?.enforceSignatures ?? false;
+    this.trustlessAutoFinalize = config.trustless?.autoFinalize ?? true;
+    this.identityRegistry = new AgentIdentityRegistry();
+    const settlementProgramId = config.trustless?.settlementProgramId || '';
+    if (this.trustlessEnabled && !settlementProgramId) {
+      throw new Error(
+        'TRUSTLESS_SETTLEMENT_PROGRAM_ID must be set when TRUSTLESS_ENABLED=true'
+      );
+    }
+    this.settlementManager = this.trustlessEnabled
+      ? new TrustlessSettlementManager(
+          settlementProgramId,
+          config.trustless?.executionTimeoutMs ?? 30_000,
+          config.trustless?.disputeWindowMs ?? 15_000
+        )
+      : null;
 
     // Build ordered strategy list (DirectSwap → FlashloanArbitrage → Sandwich)
     const strategies = [
@@ -94,6 +130,10 @@ export class AgentCoordinator {
     this.arbitrageScout = new ArbitrageScoutAgent(this.emitter);
     this.riskManager = new RiskManagerAgent(this.emitter);
     this.executionAgent = new ExecutionAgent(this.emitter, strategies);
+    this.identityRegistry.register(this.marketAnalyst.id, this.marketAnalyst.role);
+    this.identityRegistry.register(this.arbitrageScout.id, this.arbitrageScout.role);
+    this.identityRegistry.register(this.riskManager.id, this.riskManager.role);
+    this.identityRegistry.register(this.executionAgent.id, this.executionAgent.role);
 
     // Wire up signal routing
     this.emitter.on('agent-signal', (signal: AgentSignal) => {
@@ -148,6 +188,10 @@ export class AgentCoordinator {
   // ---------------------------------------------------------------------------
 
   private route(signal: AgentSignal): void {
+    if (!this.verifyTrustlessSignal(signal)) {
+      return;
+    }
+
     switch (signal.type) {
       case 'market-condition':
         this.handleMarketCondition(signal);
@@ -189,6 +233,9 @@ export class AgentCoordinator {
 
     // Store opportunity keyed by signal id
     this.pendingOpportunities.set(opportunityId, opportunity);
+    if (signal.intent?.hash) {
+      this.opportunityIntentHashes.set(opportunityId, signal.intent.hash);
+    }
 
     this.logger.info(
       `[AgentCoordinator] opportunity received (id=${opportunityId}, ` +
@@ -200,6 +247,7 @@ export class AgentCoordinator {
       opportunityId,
       opportunity,
       marketCondition: this.latestMarketCondition ?? undefined,
+      trustlessOpportunityIntentHash: this.opportunityIntentHashes.get(opportunityId),
     };
 
     const requestSignal: AgentSignal = {
@@ -224,6 +272,7 @@ export class AgentCoordinator {
         `[AgentCoordinator] opportunity ${assessment.opportunityId} denied: ${assessment.reason}`
       );
       this.pendingOpportunities.delete(assessment.opportunityId);
+      this.opportunityIntentHashes.delete(assessment.opportunityId);
       return;
     }
 
@@ -237,6 +286,28 @@ export class AgentCoordinator {
 
     this.metrics.opportunitiesApproved++;
     this.pendingOpportunities.delete(assessment.opportunityId);
+
+    if (this.trustlessEnabled) {
+      const opportunityIntentHash =
+        this.opportunityIntentHashes.get(assessment.opportunityId) ??
+        computeSha256Hex(canonicalizeIntentData(opportunity));
+      if (!this.opportunityIntentHashes.get(assessment.opportunityId)) {
+        this.logger.warn(
+          `[AgentCoordinator] trustless fallback hash used for opportunity ${assessment.opportunityId}`
+        );
+      }
+      const escrow = this.settlementManager?.openEscrow(
+        assessment.opportunityId,
+        opportunityIntentHash
+      );
+      if (escrow) {
+        this.logger.info(
+          `[AgentCoordinator] trustless escrow opened pda=${escrow.escrowPda} ` +
+            `execDeadline=${escrow.executionDeadlineMs} disputeDeadline=${escrow.disputeDeadlineMs}`
+        );
+      }
+    }
+    this.opportunityIntentHashes.delete(assessment.opportunityId);
 
     this.logger.info(
       `[AgentCoordinator] ✅ opportunity ${assessment.opportunityId} approved ` +
@@ -252,6 +323,63 @@ export class AgentCoordinator {
   private handleExecutionResult(signal: AgentSignal): void {
     const result = signal.data as ExecutionResult;
 
+    if (this.trustlessEnabled) {
+      if (!result.success) {
+        this.settlementManager?.finalize(result.opportunityId, 'cancel');
+      }
+      const proofValidation = validateExecutionProofBundle(result.proof);
+      if (!proofValidation.ok) {
+        this.metrics.executionsFailed++;
+        this.logger.warn(
+          `[AgentCoordinator] trustless proof rejected for ${result.opportunityId}: ${proofValidation.reason}`
+        );
+        this.settlementManager?.finalize(
+          result.opportunityId,
+          result.success ? 'slash' : 'cancel'
+        );
+        return;
+      }
+
+      const proofHash = computeSha256Hex(canonicalizeIntentData(result.proof));
+      const record = this.settlementManager?.markProofSubmitted(
+        result.opportunityId,
+        proofHash
+      );
+
+      if (!record) {
+        this.metrics.executionsFailed++;
+        this.logger.warn(
+          `[AgentCoordinator] trustless settlement missing for ${result.opportunityId}`
+        );
+        return;
+      }
+
+      if (record.status === 'timed-out') {
+        this.metrics.executionsFailed++;
+        this.logger.warn(
+          `[AgentCoordinator] trustless settlement timed out for ${result.opportunityId}`
+        );
+        return;
+      }
+
+      if (this.trustlessAutoFinalize && record.status === 'pending-dispute') {
+        const finalized = this.settlementManager?.finalize(
+          result.opportunityId,
+          'release',
+          Date.now()
+        );
+        if (!finalized) {
+          this.logger.info(
+            `[AgentCoordinator] trustless dispute window active for ${result.opportunityId}; finalization deferred`
+          );
+        }
+      } else if (record.status === 'pending-dispute') {
+        this.logger.info(
+          `[AgentCoordinator] trustless settlement pending dispute window for ${result.opportunityId}`
+        );
+      }
+    }
+
     if (result.success) {
       this.metrics.executionsSucceeded++;
       this.metrics.totalProfitEstimate += result.profit ?? 0;
@@ -265,6 +393,32 @@ export class AgentCoordinator {
         `[AgentCoordinator] execution failed: ${result.error} (${result.executionTimeMs}ms)`
       );
     }
+  }
+
+  private verifyTrustlessSignal(signal: AgentSignal): boolean {
+    if (!this.trustlessEnabled) return true;
+    if (
+      signal.type !== 'arbitrage-opportunity' &&
+      signal.type !== 'risk-assessment' &&
+      signal.type !== 'execution-result'
+    ) {
+      return true;
+    }
+
+    const verification = this.identityRegistry.verify(signal);
+    if (verification.ok) return true;
+
+    if (this.trustlessShadowMode || !this.trustlessEnforceSignatures) {
+      this.logger.warn(
+        `[AgentCoordinator] trustless verification warning (${signal.type}): ${verification.reason}`
+      );
+      return true;
+    }
+
+    this.logger.warn(
+      `[AgentCoordinator] trustless verification rejected (${signal.type}): ${verification.reason}`
+    );
+    return false;
   }
 
   private broadcast(signal: AgentSignal): void {

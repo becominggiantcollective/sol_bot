@@ -15,9 +15,21 @@ import {
   AgentSignal,
   TradingAgent,
 } from './types.js';
+import { attachTrustlessEnvelope } from './trustless.js';
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function hasProfitPercent(
+  value: unknown
+): value is { profitPercent: number } & Record<string, unknown> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'profitPercent' in value &&
+    typeof (value as { profitPercent?: unknown }).profitPercent === 'number'
+  );
 }
 
 export class ArbitrageScoutAgent implements TradingAgent {
@@ -95,7 +107,11 @@ export class ArbitrageScoutAgent implements TradingAgent {
     }
   }
 
-  private emitOpportunity(opportunity: any): void {
+  private emitOpportunity(opportunity: unknown): void {
+    if (!hasProfitPercent(opportunity)) {
+      this.logger.warn('[ArbitrageScoutAgent] skipping malformed opportunity payload');
+      return;
+    }
     // Confidence is proportional to profitability (capped at 0.95)
     const confidence = Math.min(0.95, opportunity.profitPercent * 10);
 
@@ -108,6 +124,6 @@ export class ArbitrageScoutAgent implements TradingAgent {
       confidence,
       timestamp: Date.now(),
     };
-    this.emitter.emit('agent-signal', signal);
+    this.emitter.emit('agent-signal', attachTrustlessEnvelope(signal));
   }
 }

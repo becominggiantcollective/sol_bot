@@ -9,6 +9,13 @@ import { EventEmitter } from 'events';
 import { MarketAnalystAgent } from '../agents/market-analyst';
 import { ArbitrageScoutAgent } from '../agents/arbitrage-scout';
 import { RiskManagerAgent } from '../agents/risk-manager';
+import {
+  AgentIdentityRegistry,
+  TrustlessSettlementManager,
+  attachTrustlessEnvelope,
+  canonicalizeIntentData,
+  createTrustlessIntent,
+} from '../agents/trustless';
 
 // ---------------------------------------------------------------------------
 // Module mocks – must be declared before static imports that pull in
@@ -316,3 +323,63 @@ describe('AgentCoordinator', () => {
   });
 });
 
+describe('Trustless agent envelopes', () => {
+  const originalSecret = process.env.TRUSTLESS_AGENT_SECRET_ARBITRAGE_SCOUT;
+
+  afterEach(() => {
+    process.env.TRUSTLESS_AGENT_SECRET_ARBITRAGE_SCOUT = originalSecret;
+  });
+
+  it('creates deterministic canonical JSON for payloads', () => {
+    const a = canonicalizeIntentData({ b: 1, a: { y: 2, x: 1 } });
+    const b = canonicalizeIntentData({ a: { x: 1, y: 2 }, b: 1 });
+    expect(a).toBe(b);
+  });
+
+  it('attaches and verifies a signed trustless envelope', () => {
+    process.env.TRUSTLESS_AGENT_SECRET_ARBITRAGE_SCOUT = 'test-secret';
+    const registry = new AgentIdentityRegistry();
+    const signal = attachTrustlessEnvelope({
+      id: 'sig-abc',
+      agentId: 'arb-1',
+      agentRole: 'arbitrage-scout',
+      type: 'arbitrage-opportunity',
+      data: makeOpportunity(0.01),
+      confidence: 0.9,
+      timestamp: Date.now(),
+    });
+
+    registry.register('arb-1', 'arbitrage-scout');
+    expect(signal.intent).toBeDefined();
+    expect(signal.signature).toBeDefined();
+    expect(registry.verify(signal).ok).toBe(true);
+  });
+
+  it('settlement lifecycle enforces timeout and dispute window', () => {
+    const manager = new TrustlessSettlementManager(
+      '11111111111111111111111111111111',
+      1_000,
+      500
+    );
+    const intent = createTrustlessIntent({
+      id: 'opp-1',
+      agentId: 'arb-1',
+      agentRole: 'arbitrage-scout',
+      type: 'arbitrage-opportunity',
+      data: makeOpportunity(0.01),
+      confidence: 0.8,
+      timestamp: 1,
+    })!;
+    const opened = manager.openEscrow('opp-1', intent.hash, 10_000);
+    expect(opened.status).toBe('pending-execution');
+
+    const submitted = manager.markProofSubmitted('opp-1', 'proof-hash', 10_500)!;
+    expect(submitted.status).toBe('pending-dispute');
+
+    const blockedFinalize = manager.finalize('opp-1', 'release', 10_600);
+    expect(blockedFinalize).toBeNull();
+
+    const finalized = manager.finalize('opp-1', 'release', 11_600)!;
+    expect(finalized.status).toBe('released');
+  });
+});

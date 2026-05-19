@@ -20,6 +20,7 @@ import {
   RiskAssessmentRequest,
   TradingAgent,
 } from './types.js';
+import { attachTrustlessEnvelope } from './trustless.js';
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -183,6 +184,6 @@ export class RiskManagerAgent implements TradingAgent {
       confidence: 1 - assessment.riskScore,
       timestamp: Date.now(),
     };
-    this.emitter.emit('agent-signal', signal);
+    this.emitter.emit('agent-signal', attachTrustlessEnvelope(signal));
   }
 }

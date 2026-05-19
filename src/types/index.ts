@@ -49,6 +49,15 @@ export interface Config {
     rpcUrl: string;
     wsUrl: string;
   };
+  trustless?: {
+    enabled: boolean;
+    shadowMode: boolean;
+    enforceSignatures: boolean;
+    settlementProgramId: string;
+    executionTimeoutMs: number;
+    disputeWindowMs: number;
+    autoFinalize: boolean;
+  };
 }
 
 export interface ArbitrageOpportunity {

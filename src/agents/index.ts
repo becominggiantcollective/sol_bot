@@ -14,3 +14,12 @@ export type {
   ExecutionResult,
   TradingAgent,
 } from './types.js';
+export {
+  AgentIdentityRegistry,
+  TrustlessSettlementManager,
+  attachTrustlessEnvelope,
+  canonicalizeIntentData,
+  computeSha256Hex,
+  createTrustlessIntent,
+  validateExecutionProofBundle,
+} from './trustless.js';
