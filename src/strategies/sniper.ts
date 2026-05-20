@@ -2,9 +2,9 @@ import axios from 'axios';
 import { scoreTokenFromMessages } from '../ml/sentimentClient.js';
 import { Connection, PublicKey, Keypair, VersionedTransaction } from '@solana/web3.js';
 import { config } from '../config/index.js';
-
-// @ts-ignore - bs58 types
-import bs58 from 'bs58';
+import { isValidPublicKey } from '../utils/index.js';
+import { loadEnvKeypair } from '../core/wallet.js';
+import { sanitizeIdentifier, sanitizeTextInput } from '../utils/security.js';
 
 /**
  * NEW TOKEN SNIPER
@@ -50,17 +50,13 @@ export class NewTokenSniper {
   
   constructor() {
     this.connection = new Connection(config.solana.rpcUrl, 'confirmed');
-    
-    const privateKey = config.wallet.privateKey;
-    if (Array.isArray(privateKey)) {
-      this.wallet = Keypair.fromSecretKey(Uint8Array.from(privateKey));
-    } else if (privateKey.startsWith('[')) {
-      // JSON array format
-      this.wallet = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(privateKey)));
-    } else {
-      // Base58 format
-      this.wallet = Keypair.fromSecretKey(bs58.decode(privateKey));
+
+    if (config.wallet.provider === 'hardware') {
+      throw new Error(
+        'NewTokenSniper requires local signing and does not support hardware wallet mode in-process.'
+      );
     }
+    this.wallet = loadEnvKeypair(config.wallet.privateKey);
   }
   
   /**
@@ -149,8 +145,8 @@ export class NewTokenSniper {
         
         const token: NewToken = {
           address: rels.base_token?.data?.id?.replace('solana_', '') || '',
-          name: attrs.name?.split('/')[0] || 'Unknown',
-          symbol: attrs.name?.split('/')[0] || '?',
+          name: sanitizeTextInput(attrs.name?.split('/')[0] || 'Unknown', 64),
+          symbol: sanitizeIdentifier(attrs.name?.split('/')[0] || '?', 16),
           createdAt: new Date(attrs.pool_created_at || Date.now()),
           initialPrice: 0,
           currentPrice: parseFloat(attrs.base_token_price_usd || '0'),
@@ -160,7 +156,7 @@ export class NewTokenSniper {
           dex: rels.dex?.data?.id || 'unknown',
         };
         
-        if (token.address) {
+        if (token.address && isValidPublicKey(token.address)) {
           tokens.push(token);
         }
       }
@@ -210,9 +206,9 @@ export class NewTokenSniper {
     try {
       // craft a few short messages about the token for quick sentiment check
       const texts = [
-        `${token.name} token just launched on ${token.dex}`,
-        `${token.symbol} price movement ${token.priceChange}%`,
-        `${token.name} liquidity ${token.liquidity}`,
+        sanitizeTextInput(`${token.name} token just launched on ${token.dex}`, 180),
+        sanitizeTextInput(`${token.symbol} price movement ${token.priceChange}%`, 180),
+        sanitizeTextInput(`${token.name} liquidity ${token.liquidity}`, 180),
       ];
 
       const s = await scoreTokenFromMessages(token.address || token.symbol, texts);
@@ -250,6 +246,10 @@ export class NewTokenSniper {
     try {
       // Get quote from Jupiter
       const SOL = 'So11111111111111111111111111111111111111112';
+      if (!isValidPublicKey(token.address)) {
+        console.log('   ❌ Invalid token address');
+        return;
+      }
       const amountLamports = Math.floor(tradeSize * 1e9);
       
       const quoteResponse = await axios.get(`${this.JUPITER_API}/quote`, {
@@ -358,6 +358,10 @@ export class NewTokenSniper {
   private async exitPosition(tokenAddress: string, position: { entry: number; amount: number; token: string }): Promise<void> {
     try {
       const SOL = 'So11111111111111111111111111111111111111112';
+      if (!isValidPublicKey(tokenAddress)) {
+        console.log('   ❌ Invalid token address');
+        return;
+      }
       
       // Get quote to sell
       const quoteResponse = await axios.get(`${this.JUPITER_API}/quote`, {

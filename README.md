@@ -76,8 +76,10 @@ SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 SOLANA_WS_URL=wss://api.mainnet-beta.solana.com
 
 # Wallet (Use a dedicated trading wallet)
+WALLET_PROVIDER=env                  # env or hardware
 WALLET_PRIVATE_KEY=[your_private_key_array]
 WALLET_PUBLIC_KEY=your_public_key
+WALLET_HARDWARE_PUBLIC_KEY=your_hardware_wallet_pubkey
 
 # Trading Parameters - Optimized for Production
 MAX_SLIPPAGE=0.005                # 0.5% maximum slippage (tighter for better execution)
@@ -96,6 +98,12 @@ PRIORITY_FEE_MULTIPLIER=3.0      # 3x multiplier for priority fees
 # Environment
 NODE_ENV=production
 LOG_LEVEL=info
+
+# Sentiment security hardening
+SENTIMENT_RATE_LIMIT_PER_MINUTE=60
+SENTIMENT_RATE_LIMIT_WINDOW_MS=60000
+SENTIMENT_MAX_MESSAGE_LENGTH=500
+PROMPT_INJECTION_DEFENSE_ENABLED=true
 ```
 
 ## Usage

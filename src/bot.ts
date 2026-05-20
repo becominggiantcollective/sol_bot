@@ -11,14 +11,13 @@
 import { Connection, PublicKey, Keypair } from '@solana/web3.js';
 import * as fs from 'fs';
 import * as path from 'path';
-// @ts-ignore - bs58 has types but TS can't find them
-import bs58 from 'bs58';
 import { config } from './config/index.js';
 import { FlashLoanScalper, ScalpOpportunity } from './core/flashLoanScalper.js';
 import { CrossDEXArbitrageDetector } from './core/crossDexArbitrage.js';
 import { JitoBundleSender, MEVProtectedExecutor } from './core/jitoBundle.js';
 import { SolanaConnection } from './core/connection.js';
 import { establishedScanner } from './core/establishedArbitrage.js';
+import { loadEnvKeypair, parsePublicKey } from './core/wallet.js';
 // Phase 2.5: Critical Latency Fixes
 import { HeliusPoolMonitor } from './utils/heliusPoolMonitor.js';
 import { RustTransactionExecutor } from './utils/rustTransactionExecutor.js';
@@ -250,26 +249,26 @@ class UnifiedBot {
   
   private async loadWallet(): Promise<void> {
     try {
+      if (config.wallet.provider === 'hardware') {
+        const hardwarePk = config.wallet.hardwarePublicKey || process.env.WALLET_PUBLIC_KEY || '';
+        if (!hardwarePk) {
+          throw new Error(
+            'WALLET_HARDWARE_PUBLIC_KEY is required when WALLET_PROVIDER=hardware'
+          );
+        }
+        const publicKey = parsePublicKey(hardwarePk, 'WALLET_HARDWARE_PUBLIC_KEY').toBase58();
+        this.logger.info(
+          `✅ Hardware wallet mode enabled (watch-only): ${publicKey.slice(0, 8)}...${publicKey.slice(-4)}`
+        );
+        this.logger.warn('   Local transaction signing is disabled in hardware wallet mode');
+        this.wallet = null;
+        return;
+      }
+
       // Try to load from environment (support multiple env var names)
       const privateKeyStr = process.env.WALLET_IDK_PRIVATE_KEY || process.env.WALLET_PRIVATE_KEY || process.env.SOLANA_PRIVATE_KEY;
       if (privateKeyStr) {
-        let secretKey: Uint8Array;
-        
-        // Try different formats
-        if (privateKeyStr.startsWith('[')) {
-          // JSON array format: [1,2,3,...]
-          const privateKey = JSON.parse(privateKeyStr);
-          secretKey = Uint8Array.from(privateKey);
-        } else if (privateKeyStr.length > 60) {
-          // Base58 format (typical Solana private key)
-          secretKey = bs58.decode(privateKeyStr);
-        } else {
-          // Comma-separated format: 1,2,3,...
-          const privateKey = privateKeyStr.split(',').map(n => parseInt(n.trim()));
-          secretKey = Uint8Array.from(privateKey);
-        }
-        
-        this.wallet = Keypair.fromSecretKey(secretKey);
+        this.wallet = loadEnvKeypair(privateKeyStr);
         const publicKey = this.wallet.publicKey.toBase58();
         this.logger.info(`✅ Wallet loaded: ${publicKey.slice(0, 8)}...${publicKey.slice(-4)}`);
         this.logger.info(`   Full address: ${publicKey}`);

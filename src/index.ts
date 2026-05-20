@@ -253,8 +253,16 @@ export class SolanaArbitrageBot {
   }
 
   private validateConfig(): void {
-    if (!config.wallet.privateKey) {
-      throw new Error('Wallet private key not configured. Set WALLET_IDK_PRIVATE_KEY (or legacy WALLET_PRIVATE_KEY) environment variable.');
+    if (config.wallet.provider === 'hardware') {
+      if (!config.wallet.hardwarePublicKey) {
+        throw new Error(
+          'Hardware wallet mode requires WALLET_HARDWARE_PUBLIC_KEY (or WALLET_PUBLIC_KEY).'
+        );
+      }
+    } else if (!config.wallet.privateKey) {
+      throw new Error(
+        'Wallet private key not configured. Set WALLET_IDK_PRIVATE_KEY (or legacy WALLET_PRIVATE_KEY) environment variable.'
+      );
     }
     
     if (!config.solana.rpcUrl) {

@@ -1,6 +1,4 @@
 import { PublicKey, VersionedTransaction, Keypair, Transaction, Connection } from '@solana/web3.js';
-// @ts-ignore - bs58 types
-import bs58 from 'bs58';
 import { ArbitrageOpportunity, MEVStrategy } from '../types/index.js';
 import { SolanaConnection } from '../core/connection.js';
 import { FlashloanManager, SolendFlashloanProvider } from '../core/flashloan.js';
@@ -9,6 +7,7 @@ import { DynamicPriorityFeeManager } from '../utils/dynamicFees.js';
 import { JitoBundleSender } from '../core/jitoBundle.js';
 import axios from 'axios';
 import { config } from '../config/index.js';
+import { loadEnvKeypair } from '../core/wallet.js';
 
 /**
  * OPTIMIZED DIRECT SWAP STRATEGY WITH FLASH LOAN SUPPORT
@@ -30,13 +29,12 @@ export class DirectSwapStrategy implements MEVStrategy {
   private jitoFallbacks = 0;
 
   constructor(private solanaConnection: SolanaConnection) {
-    // Support both base58 and JSON array formats
-    if (config.wallet.privateKey.startsWith('[')) {
-      const privateKeyArray = JSON.parse(config.wallet.privateKey);
-      this.wallet = Keypair.fromSecretKey(new Uint8Array(privateKeyArray));
-    } else {
-      this.wallet = Keypair.fromSecretKey(bs58.decode(config.wallet.privateKey));
+    if (config.wallet.provider === 'hardware') {
+      throw new Error(
+        'DirectSwapStrategy does not support in-process hardware signing. Use WALLET_PROVIDER=env or an external signer flow.'
+      );
     }
+    this.wallet = loadEnvKeypair(config.wallet.privateKey);
     this.flashloanManager = new FlashloanManager(solanaConnection);
     this.feeManager = new DynamicPriorityFeeManager(process.env.HELIUS_API_KEY);
     this.jito = new JitoBundleSender(solanaConnection.getConnection());

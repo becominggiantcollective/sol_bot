@@ -7,8 +7,10 @@ export interface Config {
     commitment: 'confirmed' | 'finalized' | 'processed';
   };
   wallet: {
+    provider: 'env' | 'hardware';
     privateKey: string;
     publicKey: string;
+    hardwarePublicKey: string;
   };
   trading: {
     maxSlippage: number;
@@ -57,6 +59,12 @@ export interface Config {
     executionTimeoutMs: number;
     disputeWindowMs: number;
     autoFinalize: boolean;
+  };
+  security?: {
+    sentimentRateLimitPerMinute: number;
+    sentimentRateLimitWindowMs: number;
+    maxSentimentMessageLength: number;
+    promptInjectionDefenseEnabled: boolean;
   };
 }
 

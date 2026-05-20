@@ -1,7 +1,6 @@
 import { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction, TransactionConfirmationStrategy, SystemProgram, SystemInstruction } from '@solana/web3.js';
-// @ts-ignore - bs58 types
-import bs58 from 'bs58';
 import { config } from '../config/index.js';
+import { loadEnvKeypair, parsePublicKey } from './wallet.js';
 
 // Maximum SOL value that a single transaction is allowed to transfer.
 // Configurable via MAX_TX_SOL_CAP env var; default is 500 SOL.
@@ -12,6 +11,7 @@ const MAX_TX_LAMPORTS = BigInt(Math.floor(MAX_TX_SOL_CAP * 1e9));
 export class SolanaConnection {
   private connection: Connection;
   private wallet: Keypair | null = null;
+  private walletPublicKey: PublicKey | null = null;
 
   constructor(skipWallet: boolean = false) {
     // Enable WebSocket when a dedicated wsUrl is configured (e.g. Alchemy/Helius).
@@ -27,28 +27,37 @@ export class SolanaConnection {
       return; // Skip wallet loading for observation-only mode
     }
     
-    if (!config.wallet.privateKey) {
-      console.warn('⚠️  Wallet private key not configured - running in observation mode');
-      return;
-    }
-    
     try {
-      // Try base58 format first (most common)
-      if (config.wallet.privateKey.startsWith('[')) {
-        // JSON array format: [1,2,3,...]
-        this.wallet = Keypair.fromSecretKey(
-          Uint8Array.from(JSON.parse(config.wallet.privateKey))
+      if (config.wallet.provider === 'hardware') {
+        if (!config.wallet.hardwarePublicKey) {
+          throw new Error(
+            'WALLET_HARDWARE_PUBLIC_KEY is required when WALLET_PROVIDER=hardware'
+          );
+        }
+        this.walletPublicKey = parsePublicKey(
+          config.wallet.hardwarePublicKey,
+          'WALLET_HARDWARE_PUBLIC_KEY'
         );
-      } else {
-        // Base58 format (default Solana CLI export)
-        this.wallet = Keypair.fromSecretKey(
-          bs58.decode(config.wallet.privateKey)
+        console.log(
+          `✅ Hardware wallet mode enabled (watch-only): ${this.walletPublicKey.toBase58()}`
         );
+        return;
       }
+
+      if (!config.wallet.privateKey) {
+        console.warn('⚠️  Wallet private key not configured - running in observation mode');
+        return;
+      }
+
+      this.wallet = loadEnvKeypair(config.wallet.privateKey);
+      this.walletPublicKey = this.wallet.publicKey;
       console.log(`✅ Wallet loaded: ${this.wallet.publicKey.toBase58()}`);
     } catch (error) {
       console.warn('⚠️  Failed to load wallet from config:', error);
-      console.warn('   Supported formats: base58 string or JSON array [1,2,3,...]');
+      console.warn(
+        '   For env mode: set WALLET_IDK_PRIVATE_KEY/WALLET_PRIVATE_KEY (base58 or [1,2,3,...,64]).'
+      );
+      console.warn('   For hardware mode: set WALLET_PROVIDER=hardware and WALLET_HARDWARE_PUBLIC_KEY.');
     }
   }
 
@@ -61,17 +70,23 @@ export class SolanaConnection {
   }
 
   getWalletPublicKey(): PublicKey | null {
-    return this.wallet?.publicKey || null;
+    return this.walletPublicKey || this.wallet?.publicKey || null;
   }
 
   async getBalance(): Promise<number> {
-    if (!this.wallet) return 0;
-    const balance = await this.connection.getBalance(this.wallet.publicKey);
+    const publicKey = this.getWalletPublicKey();
+    if (!publicKey) return 0;
+    const balance = await this.connection.getBalance(publicKey);
     return balance / 1e9; // Convert lamports to SOL
   }
 
   async sendTransaction(transaction: Transaction): Promise<string> {
     if (!this.wallet) {
+      if (config.wallet.provider === 'hardware') {
+        throw new Error(
+          'Hardware wallet mode is watch-only in this runtime. Use an external signer pipeline to broadcast transactions.'
+        );
+      }
       throw new Error('Wallet not loaded - cannot send transaction');
     }
 
@@ -138,6 +153,11 @@ export class SolanaConnection {
 
   async simulateTransaction(transaction: Transaction): Promise<any> {
     if (!this.wallet) {
+      if (config.wallet.provider === 'hardware') {
+        throw new Error(
+          'Hardware wallet mode is watch-only in this runtime. Use an external signer pipeline for simulation/signing.'
+        );
+      }
       throw new Error('Wallet not loaded - cannot simulate transaction');
     }
     transaction.recentBlockhash = (

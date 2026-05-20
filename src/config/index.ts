@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { Config } from '../types/index.js';
+import { parseWalletProvider } from '../core/wallet.js';
 
 // Ensure dotenv is loaded before accessing process.env (quiet mode to reduce log spam)
 dotenv.config({ debug: false });
@@ -11,9 +12,11 @@ export const config: Config = {
     commitment: 'confirmed',
   },
   wallet: {
+    provider: parseWalletProvider(process.env.WALLET_PROVIDER),
     // Prefer IDK_* keys if provided, fall back to legacy names for compatibility
     privateKey: process.env.WALLET_IDK_PRIVATE_KEY || process.env.WALLET_PRIVATE_KEY || '',
     publicKey: process.env.WALLET_IDK_PUBLIC_KEY || process.env.WALLET_PUBLIC_KEY || '',
+    hardwarePublicKey: process.env.WALLET_HARDWARE_PUBLIC_KEY || process.env.WALLET_PUBLIC_KEY || '',
   },
   trading: {
     maxSlippage: parseFloat(process.env.MAX_SLIPPAGE || '0.02'), // 2% - allow for volatile opportunities
@@ -70,5 +73,11 @@ export const config: Config = {
     executionTimeoutMs: parseInt(process.env.TRUSTLESS_EXECUTION_TIMEOUT_MS || '30000'),
     disputeWindowMs: parseInt(process.env.TRUSTLESS_DISPUTE_WINDOW_MS || '15000'),
     autoFinalize: process.env.TRUSTLESS_AUTO_FINALIZE !== 'false',
+  },
+  security: {
+    sentimentRateLimitPerMinute: parseInt(process.env.SENTIMENT_RATE_LIMIT_PER_MINUTE || '60'),
+    sentimentRateLimitWindowMs: parseInt(process.env.SENTIMENT_RATE_LIMIT_WINDOW_MS || '60000'),
+    maxSentimentMessageLength: parseInt(process.env.SENTIMENT_MAX_MESSAGE_LENGTH || '500'),
+    promptInjectionDefenseEnabled: process.env.PROMPT_INJECTION_DEFENSE_ENABLED !== 'false',
   },
 };
