@@ -1,4 +1,3 @@
-const CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 const MULTI_SPACE = /\s+/g;
 const SAFE_IDENTIFIER = /[^A-Za-z0-9._:-]/g;
 
@@ -32,10 +31,16 @@ export class SlidingWindowRateLimiter {
 }
 
 export function sanitizeTextInput(input: string, maxLength: number): string {
-  const trimmed = String(input ?? '')
-    .replace(CONTROL_CHARS, ' ')
-    .replace(MULTI_SPACE, ' ')
-    .trim();
+  const noControls = Array.from(String(input ?? ''))
+    .map(ch => {
+      const code = ch.charCodeAt(0);
+      return (code <= 0x1f && code !== 0x09 && code !== 0x0a && code !== 0x0d) || code === 0x7f
+        ? ' '
+        : ch;
+    })
+    .join('');
+
+  const trimmed = noControls.replace(MULTI_SPACE, ' ').trim();
 
   if (maxLength <= 0) return '';
   return trimmed.length > maxLength ? trimmed.slice(0, maxLength) : trimmed;
