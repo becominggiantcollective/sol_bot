@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { scoreTokenFromMessages } from '../ml/sentimentClient.js';
-import { Connection, PublicKey, Keypair, VersionedTransaction } from '@solana/web3.js';
+import { Connection, Keypair, VersionedTransaction } from '@solana/web3.js';
 import { config } from '../config/index.js';
 import { isValidPublicKey } from '../utils/index.js';
 import { loadEnvKeypair } from '../core/wallet.js';
@@ -138,6 +138,8 @@ export class NewTokenSniper {
         const liquidity = parseFloat(attrs.reserve_in_usd || '0');
         const volume = parseFloat(attrs.volume_usd?.h24 || '0');
         const priceChange = parseFloat(attrs.price_change_percentage?.h24 || '0');
+        const baseTokenName = sanitizeTextInput(attrs.name?.split('/')[0] || 'Unknown', 64);
+        const baseTokenSymbol = sanitizeIdentifier(attrs.name?.split('/')[0] || '?', 16);
         
         // Filter criteria
         if (liquidity < this.MIN_LIQUIDITY) continue;
@@ -145,8 +147,8 @@ export class NewTokenSniper {
         
         const token: NewToken = {
           address: rels.base_token?.data?.id?.replace('solana_', '') || '',
-          name: sanitizeTextInput(attrs.name?.split('/')[0] || 'Unknown', 64),
-          symbol: sanitizeIdentifier(attrs.name?.split('/')[0] || '?', 16),
+          name: baseTokenName,
+          symbol: baseTokenSymbol,
           createdAt: new Date(attrs.pool_created_at || Date.now()),
           initialPrice: 0,
           currentPrice: parseFloat(attrs.base_token_price_usd || '0'),
@@ -162,7 +164,7 @@ export class NewTokenSniper {
       }
       
       return tokens;
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -222,7 +224,7 @@ export class NewTokenSniper {
           score -= 15; // strong negative - penalize
         }
       }
-    } catch (err) {
+    } catch {
       // sentiment service failed — ignore and proceed
     }
     
@@ -247,7 +249,7 @@ export class NewTokenSniper {
       // Get quote from Jupiter
       const SOL = 'So11111111111111111111111111111111111111112';
       if (!isValidPublicKey(token.address)) {
-        console.log('   ❌ Invalid token address');
+        console.log(`   ❌ Invalid token address: ${token.address}`);
         return;
       }
       const amountLamports = Math.floor(tradeSize * 1e9);
@@ -346,7 +348,7 @@ export class NewTokenSniper {
           console.log(`   📊 ${position.token}: ${pnlPercent > 0 ? '+' : ''}${(pnlPercent * 100).toFixed(1)}%`);
         }
         
-      } catch (error) {
+      } catch {
         // Skip on error
       }
     }
@@ -359,7 +361,7 @@ export class NewTokenSniper {
     try {
       const SOL = 'So11111111111111111111111111111111111111112';
       if (!isValidPublicKey(tokenAddress)) {
-        console.log('   ❌ Invalid token address');
+        console.log(`   ❌ Invalid token address: ${tokenAddress}`);
         return;
       }
       

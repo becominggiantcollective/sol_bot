@@ -1,5 +1,10 @@
 const MULTI_SPACE = /\s+/g;
 const SAFE_IDENTIFIER = /[^A-Za-z0-9._:-]/g;
+const CONTROL_CHAR_MAX = 0x1f;
+const TAB = 0x09;
+const LINE_FEED = 0x0a;
+const CARRIAGE_RETURN = 0x0d;
+const DELETE = 0x7f;
 
 const PROMPT_INJECTION_PATTERNS: RegExp[] = [
   /ignore\s+(all\s+)?previous\s+instructions?/i,
@@ -34,7 +39,13 @@ export function sanitizeTextInput(input: string, maxLength: number): string {
   const noControls = Array.from(String(input ?? ''))
     .map(ch => {
       const code = ch.charCodeAt(0);
-      return (code <= 0x1f && code !== 0x09 && code !== 0x0a && code !== 0x0d) || code === 0x7f
+      const isControl =
+        (code <= CONTROL_CHAR_MAX &&
+          code !== TAB &&
+          code !== LINE_FEED &&
+          code !== CARRIAGE_RETURN) ||
+        code === DELETE;
+      return isControl
         ? ' '
         : ch;
     })

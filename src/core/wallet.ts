@@ -27,8 +27,13 @@ export function loadEnvKeypair(privateKeyRaw: string): Keypair {
     if (!Array.isArray(parsed)) {
       throw new Error('Wallet private key JSON must be an array');
     }
-    if (parsed.length !== 64 || !parsed.every(v => Number.isInteger(v) && v >= 0 && v <= 255)) {
+    if (parsed.length !== 64) {
       throw new Error('Wallet private key JSON must contain 64 bytes');
+    }
+    for (const value of parsed) {
+      if (!Number.isInteger(value) || value < 0 || value > 255) {
+        throw new Error('Wallet private key JSON must contain only byte values');
+      }
     }
     return Keypair.fromSecretKey(Uint8Array.from(parsed));
   }

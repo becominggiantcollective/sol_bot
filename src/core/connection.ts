@@ -1,4 +1,4 @@
-import { Connection, PublicKey, Keypair, Transaction, sendAndConfirmTransaction, TransactionConfirmationStrategy, SystemProgram, SystemInstruction } from '@solana/web3.js';
+import { Connection, PublicKey, Keypair, Transaction, SystemProgram, SystemInstruction } from '@solana/web3.js';
 import { config } from '../config/index.js';
 import { loadEnvKeypair, parsePublicKey } from './wallet.js';
 
@@ -84,7 +84,7 @@ export class SolanaConnection {
     if (!this.wallet) {
       if (config.wallet.provider === 'hardware') {
         throw new Error(
-          'Hardware wallet mode is watch-only in this runtime. Use an external signer pipeline to broadcast transactions.'
+          'Hardware wallet mode is watch-only in this runtime. Use an external signer pipeline to broadcast transactions (see README wallet configuration).'
         );
       }
       throw new Error('Wallet not loaded - cannot send transaction');
@@ -155,7 +155,7 @@ export class SolanaConnection {
     if (!this.wallet) {
       if (config.wallet.provider === 'hardware') {
         throw new Error(
-          'Hardware wallet mode is watch-only in this runtime. Use an external signer pipeline for simulation/signing.'
+          'Hardware wallet mode is watch-only in this runtime. Use an external signer pipeline for simulation/signing (see README wallet configuration).'
         );
       }
       throw new Error('Wallet not loaded - cannot simulate transaction');

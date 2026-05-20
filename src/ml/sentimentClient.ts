@@ -45,7 +45,17 @@ export async function analyzeMessages(messages: MessagePayload[]): Promise<Messa
   const promptDefenseEnabled = config.security?.promptInjectionDefenseEnabled !== false;
 
   for (const message of messages) {
-    const sanitizedText = sanitizeTextInput(message.text || '', maxMessageLength);
+    if (typeof message.text !== 'string') {
+      blocked.push({
+        id: message.id,
+        source: message.source,
+        text: '',
+        error: 'Missing message text',
+      });
+      continue;
+    }
+
+    const sanitizedText = sanitizeTextInput(message.text, maxMessageLength);
     const sanitizedSource = message.source
       ? sanitizeIdentifier(message.source, 40)
       : undefined;

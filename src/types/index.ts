@@ -7,6 +7,7 @@ export interface Config {
     commitment: 'confirmed' | 'finalized' | 'processed';
   };
   wallet: {
+    /** env = in-process keypair signing; hardware = watch-only mode with external signer flow */
     provider: 'env' | 'hardware';
     privateKey: string;
     publicKey: string;
